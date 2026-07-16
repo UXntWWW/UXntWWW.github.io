@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Главная</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    .top-bar {
-      background-color: green; /* Цвет заливки внутри плашки */
-      border: 4px green;    /* Цвет и толщина рамки */
-      color: white;             /* Цвет текста поверх заливки */
-      
-      padding-top: 20px;
-      padding-bottom: 20px;
-      padding-left: 15px;
-      box-sizing: border-box;
-      width: 100%;
-    }
-    .top-bar h1 {
-      margin: 0;                /* Убирает лишние отступы у заголовка */
-    }
-    .content {
-      padding: 20px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Главная</title>
+<style>
+ body { margin: 0; padding: 0; font-family: sans-serif; }
+ .top-bar { background-color: green; border: 4px solid green; color: white; padding-top: 20px; padding-bottom: 20px; padding-left: 15px; box-sizing: border-box; width: 100%; }
+ .top-bar h1 { margin: 0; }
+ .content { padding: 20px; position: relative; } /* position: relative нужен для координат кнопки */
+
+ /* НАСТРОЙКА КНОПКИ "ФАЙЛЫ" */
+ #files-btn {
+   position: absolute;
+   
+   /* МЕНЯЙТЕ ЭТИ ЦИФРЫ, ЧТОБЫ ПЕРЕМЕЩАТЬ КНОПКУ */
+   left: 50px;   /* Положение по оси X (отступ слева) */
+   top: 140px;   /* Положение по оси Y (отступ сверху от контента) */
+   
+   background-color: green; /* Зеленый цвет */
+   color: white; /* Белый текст */
+   padding: 12px 24px; /* Размер кнопки */
+   text-decoration: none; /* Убирает подчеркивание ссылки */
+   border-radius: 12px; /* Закругленные края */
+   font-weight: bold;
+   display: inline-block;
+   box-sizing: border-box;
+ }
+ #files-btn:hover { background-color: darkgreen; } /* Эффект при наведении */
+</style>
 </head>
 <body>
-
-  <div class="top-bar">
-    <h1>UXNTWWW.io - Сайт с файлами</h1>
-  </div>
-
-  <div class="content">
-    <p>Сайт был написан на HTML</p>
-    <br>
-    <p>Всем привет, каждый день сайт будет улучшаться (не точно каждый)</p>
-  </div>
-
+ <div class="top-bar">
+ <h1>UXNTWWW.io - Сайт с файлами</h1>
+ </div>
+ <div class="content">
+ <p>Сайт был написан на HTML</p>
+ <br>
+ <p>Всем привет, каждый день сайт будет улучшаться (не точно каждый)</p>
+ 
+ <!-- Сама кнопка перехода на новую страницу -->
+ <a href="files.html" id="files-btn">Файлы</a>
+ </div>
 </body>
 </html>
