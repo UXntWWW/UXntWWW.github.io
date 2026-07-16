@@ -10,8 +10,8 @@
  .content { padding: 20px; position: relative; }
  #zip-btn {
    position: absolute;
-   left: 20px;   
-   top: 450px;   
+   left: 50px;   
+   top: 520px;   
    background-color: green; 
    color: white; 
    padding: 12px 24px; 
@@ -24,8 +24,8 @@
  #zip-btn:hover { background-color: darkgreen; }
  #exe-btn {
    position: absolute;
-   left: 190px;   
-   top: 450px;   
+   left: 220px;   
+   top: 520px;   
    background-color: green; 
    color: white; 
    padding: 12px 24px; 
@@ -36,6 +36,13 @@
    box-sizing: border-box;
  }
  #exe-btn:hover { background-color: darkgreen; }
+ #broom-img {
+   position: absolute;
+   left: 300px;
+   top: 150px;
+   width: 128px;
+   height: 128px;
+ }
 </style>
 </head>
 <body>
@@ -53,6 +60,7 @@
   <p>~ Чистка Temp,%Temp%.</p>
   <p>~ Удаляет только то, что не использует система.</p>
   <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Power_Clean_Ico.png" id="broom-img" alt="Broom">
   <a href="Ux-WPC.zip" download id="zip-btn">Скачать.zip</a>
   <a href="Ux-WPC.exe" download id="exe-btn">Скачать.exe</a>
  </div>
