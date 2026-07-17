@@ -8,10 +8,7 @@
  .top-bar { background-color: green; border: 4px solid green; color: white; padding-top: 20px; padding-bottom: 20px; padding-left: 15px; box-sizing: border-box; width: 100%; }
  .top-bar h1 { margin: 0; }
  .content { padding: 20px; position: relative; }
- #zip-btn {
-   position: absolute;
-   left: 20px;   
-   top: 450px;   
+ .zip-btn {
    background-color: green; 
    color: white; 
    padding: 12px 24px; 
@@ -20,12 +17,11 @@
    font-weight: bold;
    display: inline-block;
    box-sizing: border-box;
+   margin-right: 10px;
+   margin-top: 15px;
  }
- #zip-btn:hover { background-color: darkgreen; }
- #exe-btn {
-   position: absolute;
-   left: 190px;   
-   top: 450px;   
+ .zip-btn:hover { background-color: darkgreen; }
+ .exe-btn {
    background-color: green; 
    color: white; 
    padding: 12px 24px; 
@@ -34,12 +30,11 @@
    font-weight: bold;
    display: inline-block;
    box-sizing: border-box;
+   margin-right: 10px;
+   margin-top: 15px;
  }
- #exe-btn:hover { background-color: darkgreen; }
- #torrent-btn {
-   position: absolute;
-   left: 360px;   
-   top: 450px;   
+ .exe-btn:hover { background-color: darkgreen; }
+ .torrent-btn {
    background-color: green; 
    color: white; 
    padding: 12px 24px; 
@@ -48,12 +43,11 @@
    font-weight: bold;
    display: inline-block;
    box-sizing: border-box;
+   margin-right: 10px;
+   margin-top: 15px;
  }
- #torrent-btn:hover { background-color: darkgreen; }
- #github-btn {
-   position: absolute;
-   left: 550px;   
-   top: 450px;   
+ .torrent-btn:hover { background-color: darkgreen; }
+ .github-btn {
    background-color: green; 
    color: white; 
    padding: 12px 24px; 
@@ -63,14 +57,14 @@
    display: inline-block;
    box-sizing: border-box;
    white-space: nowrap;
+   margin-top: 15px;
  }
- #github-btn:hover { background-color: darkgreen; }
- #broom-img {
-   position: absolute;
-   left: 760px;
-   top: 150px;
+ .github-btn:hover { background-color: darkgreen; }
+ .broom-img {
+   float: right;
    width: 256px;
    height: 256px;
+   margin-left: 20px;
  }
  #home-link {
    position: absolute;
@@ -85,6 +79,17 @@
  #home-link:hover {
    text-decoration: underline;
  }
+ .version-block {
+   overflow: hidden;
+   margin-bottom: 40px;
+   padding-bottom: 20px;
+ }
+ .page-divider {
+   border: 0;
+   height: 4px;
+   background: green;
+   margin: 40px 0;
+ }
 </style>
 </head>
 <body>
@@ -92,6 +97,9 @@
  <h1>UXNTWWW.io - Сайт с файлами</h1>
  </div>
  <div class="content">
+ <a href="index.html" id="home-link">~Главная</a>
+
+ <div class="version-block">
  <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.0</h2>
  <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
   <h1>Что за программа?</h1>
@@ -102,12 +110,34 @@
   <p>~ Чистка Temp,%Temp%.</p>
   <p>~ Удаляет только то, что не использует система.</p>
   <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
-  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" id="broom-img" alt="Broom">
-  <a href="Ux-WPC.zip" download id="zip-btn">Скачать.zip</a>
-  <a href="Ux-WPC.exe" download id="exe-btn">Скачать.exe</a>
-  <a href="Ux-WPC.torrent" download id="torrent-btn">Скачать.torrent</a>
-  <a href="https://github.com/UXntWWW/UXntWWW.github.io/tree/main" id="github-btn">Перейти на гитхаб</a>
-  <a href="index.html" id="home-link">~Главная</a>
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
+  <br>
+  <a href="Ux-WPC.zip" download class="zip-btn">Скачать.zip</a>
+  <a href="Ux-WPC.exe" download class="exe-btn">Скачать.exe</a>
+  <a href="Ux-WPC.torrent" download class="torrent-btn">Скачать.torrent</a>
+  <a href="https://github.com/UXntWWW/UXntWWW.github.io/tree/main" class="github-btn">Перейти на гитхаб</a>
+ </div>
+
+ <hr class="page-divider">
+
+ <div class="version-block">
+ <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.0</h2>
+ <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
+  <h1>Что за программа?</h1>
+  <p>~ Эта утилита позволяет выполнить быструю чистку вашего компьютера.</p>
+  <p>~ Эта программа выполняет функции чистки:</p>
+  <p>~ DNS, Netsh</p>
+  <p>~ Кэш браузеров до поддержки от Chrome до Opera.(Chrome,Edge,Yandex,Firefox,Opera)</p>
+  <p>~ Чистка Temp,%Temp%.</p>
+  <p>~ Удаляет только то, что не использует система.</p>
+  <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
+  <br>
+  <a href="Ux-WPC.zip" download class="zip-btn">Скачать.zip</a>
+  <a href="Ux-WPC.exe" download class="exe-btn">Скачать.exe</a>
+  <a href="Ux-WPC.torrent" download class="torrent-btn">Скачать.torrent</a>
+  <a href="https://github.com/UXntWWW/UXntWWW.github.io/tree/main" class="github-btn">Перейти на гитхаб</a>
+ </div>
  </div>
 </body>
 </html>
