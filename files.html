@@ -82,13 +82,7 @@
 
 <div class="top-bar">
   <h1>UXNTWWW.io - Сайт с файлами</h1>
-  <nav class="top-nav">
-    <a href="index.html">Главная</a>
-    <a href="about.html">О сайте</a>
-    <a href="contacts.html">Контакты</a>
-    <a href="faq.html">FAQ</a>
-    <a href="GlobalSettings.html">Настройки</a>
-  </nav>
+  <nav class="top-nav"></nav>
 </div>
 
 <div class="content fade-in">
@@ -97,7 +91,7 @@
     <input type="text" id="search" class="search-input" placeholder="Поиск по странице...">
   </div>
 
-  <!-- ================= v1.3 ================= -->
+  <!-- ================= v1.3 (АКТУАЛЬНАЯ) ================= -->
   <div class="version-block" data-version-file="version.txt" data-totaldata-file="totaldata.txt">
     <h2>Скачать UXNTWWW SYSTEM TOOLKIT v<span class="version-value">1.3</span></h2>
     <div class="version-meta">
@@ -134,83 +128,94 @@
     <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.3" class="github-btn">Скачать на гитхаб</a>
   </div>
 
-  <hr class="page-divider">
+  <!-- Кнопка "Показать старые версии" -->
+  <button type="button" class="toggle-old-versions" id="toggle-old-versions">
+    <span class="toggle-arrow">▼</span> Показать старые версии
+  </button>
 
-  <!-- ================= v1.2 ================= -->
-  <div class="version-block">
-    <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.2</h2>
-    <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
-    <h1>Что за программа?</h1>
-    <p>~ Эта утилита позволяет выполнить быструю чистку вашего компьютера.</p>
-    <p>~ Эта программа выполняет функции чистки:</p>
-    <p>~ DNS, Netsh</p>
-    <p>~ Кэш браузеров до поддержки от Chrome до Opera.(Chrome,Edge,Yandex,Firefox,Opera)</p>
-    <p>~ Чистка Temp,%Temp%.</p>
-    <p>~ Удаляет только то, что не использует система.</p>
-    <p>~ Глубокая очистка (Кэш Обновлений,WinStore,Корзина)</p>
-    <p>~ Кол-во удаленного мусора в МБ или КБ.</p>
-    <p>~ Автоматическое слежение за обновлениями.</p>
-    <h1>ЧТО НОВОГО?</h1>
-    <p>CHKDSK Для диска по выбору.</p>
-    <p>Починка Файлов Системы (SFC + DISM)</p>
-    <p>Игровой режим (Откл. телеметрии, SysMain и др.)</p>
-    <p>Информация о системе (Процессор, карта, озу, память...)</p>
-    <p>Обновленное Меню.</p>
-    <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
-    <br>
-    <a href="PCCleaner1.2.zip" download class="zip-btn">Скачать.zip</a>
-    <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.2" class="github-btn">Скачать на гитхаб</a>
-  </div>
+  <!-- ================= СТАРЫЕ ВЕРСИИ (свёрнуты) ================= -->
+  <div class="old-versions" id="old-versions">
 
-  <hr class="page-divider">
+    <hr class="page-divider">
 
-  <!-- ================= v1.1 ================= -->
-  <div class="version-block">
-    <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.1</h2>
-    <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
-    <h1>Что за программа?</h1>
-    <p>~ Эта утилита позволяет выполнить быструю чистку вашего компьютера.</p>
-    <p>~ Эта программа выполняет функции чистки:</p>
-    <p>~ DNS, Netsh</p>
-    <p>~ Кэш браузеров до поддержки от Chrome до Opera.(Chrome,Edge,Yandex,Firefox,Opera)</p>
-    <p>~ Чистка Temp,%Temp%.</p>
-    <p>~ Удаляет только то, что не использует система.</p>
-    <h1>ЧТО НОВОГО?</h1>
-    <p>~ Глубокая очистка (Кэш Обновлений,WinStore,Корзина)</p>
-    <p>~ Прогресс бар во время чистки.</p>
-    <p>~ Кол-во удаленного мусора в МБ или КБ.</p>
-    <p>~ Автоматическое слежение за обновлениями.</p>
-    <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
-    <br>
-    <a href="PCCleaner1.1.zip" download class="zip-btn">Скачать.zip</a>
-    <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.1" class="github-btn">Скачать на гитхаб</a>
-  </div>
+    <!-- v1.2 -->
+    <div class="version-block">
+      <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.2</h2>
+      <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
+      <h1>Что за программа?</h1>
+      <p>~ Эта утилита позволяет выполнить быструю чистку вашего компьютера.</p>
+      <p>~ Эта программа выполняет функции чистки:</p>
+      <p>~ DNS, Netsh</p>
+      <p>~ Кэш браузеров до поддержки от Chrome до Opera.(Chrome,Edge,Yandex,Firefox,Opera)</p>
+      <p>~ Чистка Temp,%Temp%.</p>
+      <p>~ Удаляет только то, что не использует система.</p>
+      <p>~ Глубокая очистка (Кэш Обновлений,WinStore,Корзина)</p>
+      <p>~ Кол-во удаленного мусора в МБ или КБ.</p>
+      <p>~ Автоматическое слежение за обновлениями.</p>
+      <h1>ЧТО НОВОГО?</h1>
+      <p>CHKDSK Для диска по выбору.</p>
+      <p>Починка Файлов Системы (SFC + DISM)</p>
+      <p>Игровой режим (Откл. телеметрии, SysMain и др.)</p>
+      <p>Информация о системе (Процессор, карта, озу, память...)</p>
+      <p>Обновленное Меню.</p>
+      <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
+      <br>
+      <a href="PCCleaner1.2.zip" download class="zip-btn">Скачать.zip</a>
+      <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.2" class="github-btn">Скачать на гитхаб</a>
+    </div>
 
-  <hr class="page-divider">
+    <hr class="page-divider">
 
-  <!-- ================= v1.0 ================= -->
-  <div class="version-block">
-    <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.0</h2>
-    <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
-    <h1>Что за программа?</h1>
-    <p>~ Эта утилита позволяет выполнить быструю чистку вашего компьютера.</p>
-    <p>~ Эта программа выполняет функции чистки:</p>
-    <p>~ DNS, Netsh</p>
-    <p>~ Кэш браузеров до поддержки от Chrome до Opera.(Chrome,Edge,Yandex,Firefox,Opera)</p>
-    <p>~ Чистка Temp,%Temp%.</p>
-    <p>~ Удаляет только то, что не использует система.</p>
-    <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
-    <br>
-    <a href="PCCleaner1.0.zip" download class="zip-btn">Скачать.zip</a>
-    <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.0" class="github-btn">Скачать на гитхаб</a>
-  </div>
+    <!-- v1.1 -->
+    <div class="version-block">
+      <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.1</h2>
+      <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
+      <h1>Что за программа?</h1>
+      <p>~ Эта утилита позволяет выполнить быструю чистку вашего компьютера.</p>
+      <p>~ Эта программа выполняет функции чистки:</p>
+      <p>~ DNS, Netsh</p>
+      <p>~ Кэш браузеров до поддержки от Chrome до Opera.(Chrome,Edge,Yandex,Firefox,Opera)</p>
+      <p>~ Чистка Temp,%Temp%.</p>
+      <p>~ Удаляет только то, что не использует система.</p>
+      <h1>ЧТО НОВОГО?</h1>
+      <p>~ Глубокая очистка (Кэш Обновлений,WinStore,Корзина)</p>
+      <p>~ Прогресс бар во время чистки.</p>
+      <p>~ Кол-во удаленного мусора в МБ или КБ.</p>
+      <p>~ Автоматическое слежение за обновлениями.</p>
+      <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
+      <br>
+      <a href="PCCleaner1.1.zip" download class="zip-btn">Скачать.zip</a>
+      <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.1" class="github-btn">Скачать на гитхаб</a>
+    </div>
+
+    <hr class="page-divider">
+
+    <!-- v1.0 -->
+    <div class="version-block">
+      <h2>Скачать UXNTWWW SYSTEM TOOLKIT v1.0</h2>
+      <p>~ Здесь вы можете скачать утилиту для очистки вашего компьютера.</p>
+      <h1>Что за программа?</h1>
+      <p>~ Эта утилита позволяет выполнить быструю чистку вашего компьютера.</p>
+      <p>~ Эта программа выполняет функции чистки:</p>
+      <p>~ DNS, Netsh</p>
+      <p>~ Кэш браузеров до поддержки от Chrome до Opera.(Chrome,Edge,Yandex,Firefox,Opera)</p>
+      <p>~ Чистка Temp,%Temp%.</p>
+      <p>~ Удаляет только то, что не использует система.</p>
+      <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10" class="broom-img" alt="Broom">
+      <br>
+      <a href="PCCleaner1.0.zip" download class="zip-btn">Скачать.zip</a>
+      <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.0" class="github-btn">Скачать на гитхаб</a>
+    </div>
+
+  </div><!-- /old-versions -->
 
 </div>
 
 <script>
+  // Подгрузка версии/размера/даты в первый блок
   (function () {
     const block = document.querySelector('.version-block[data-version-file]');
     if (!block) return;
@@ -240,6 +245,7 @@
     });
   })();
 
+  // Поиск по странице
   (function () {
     const input = document.getElementById('search');
     if (!input) return;
@@ -271,9 +277,24 @@
       empty.style.display = (q && found === 0) ? 'block' : 'none';
     });
   })();
+
+  // Кнопка "Показать/Скрыть старые версии"
+  (function () {
+    const btn = document.getElementById('toggle-old-versions');
+    const oldVersions = document.getElementById('old-versions');
+    if (!btn || !oldVersions) return;
+
+    btn.addEventListener('click', function () {
+      const isOpen = oldVersions.classList.toggle('open');
+      if (isOpen) {
+        btn.innerHTML = '<span class="toggle-arrow" style="transform: rotate(180deg);">▲</span> Скрыть старые версии';
+      } else {
+        btn.innerHTML = '<span class="toggle-arrow">▼</span> Показать старые версии';
+      }
+    });
+  })();
 </script>
 
-<script src="reviews.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
