@@ -5,62 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Настройки — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<link rel="stylesheet" href="common.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon.png">
 <style>
   :root {
-    --bg: #ffffff;
-    --text: #000000;
-    --bar: #008000;
-    --bar-text: #ffffff;
-    --btn-bg: #008000;
-    --btn-text: #ffffff;
-    --btn-hover: #006400;
-    --card: #f2f2f2;
+    --bg: #ffffff; --text: #000000;
+    --bar: #008000; --bar-text: #ffffff;
+    --btn-bg: #008000; --btn-text: #ffffff;
+    --btn-hover: #006400; --card: #f2f2f2;
   }
-
-  * { box-sizing: border-box; }
   body {
-    margin: 0;
-    font-family: sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    margin: 0; font-family: sans-serif;
+    background: var(--bg); color: var(--text);
     transition: background .25s, color .25s;
   }
-
   .top-bar {
-    background: var(--bar);
-    color: var(--bar-text);
-    padding: 20px 15px;
-    position: relative;
+    background: var(--bar); color: var(--bar-text);
+    padding: 20px 15px; position: relative;
     transition: background-color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
 
-  .back-home {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: white;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    border: 2px solid white;
-    font-size: 0.9rem;
-  }
-  .back-home:hover { background: #e6e6e6; }
+  .content { padding: 20px; max-width: 820px; margin: 0 auto; }
 
-  .content {
-    padding: 20px;
-    max-width: 780px;
-    margin: 0 auto;
-  }
-
-  /* ===== Табы ===== */
   .tabs {
-    display: flex;
-    gap: 8px;
+    display: flex; gap: 8px;
     border-bottom: 2px solid var(--card);
     margin-bottom: 24px;
   }
@@ -74,111 +44,58 @@
     border: none;
     border-bottom: 3px solid transparent;
     font-size: 1rem;
+    font-family: inherit;
     transition: opacity .2s, border-color .2s;
   }
   .tab:hover { opacity: 1; }
-  .tab.active {
-    opacity: 1;
-    border-bottom-color: var(--btn-bg);
-  }
+  .tab.active { opacity: 1; border-bottom-color: var(--btn-bg); }
 
-  /* ===== Слайдер-контейнер ===== */
-  .slider {
-    position: relative;
-    overflow: hidden;
-    min-height: 420px;
-  }
+  .slider { position: relative; overflow: hidden; min-height: 480px; }
   .slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    position: absolute; top: 0; left: 0; width: 100%;
     transition: transform .35s ease, opacity .35s ease;
   }
-  .slide.hidden-right {
-    transform: translateX(110%);
-    opacity: 0;
-    pointer-events: none;
-  }
-  .slide.hidden-left {
-    transform: translateX(-110%);
-    opacity: 0;
-    pointer-events: none;
-  }
-  .slide.active {
-    transform: translateX(0);
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .slide.hidden-right { transform: translateX(110%); opacity: 0; pointer-events: none; }
+  .slide.hidden-left  { transform: translateX(-110%); opacity: 0; pointer-events: none; }
+  .slide.active       { transform: translateX(0); opacity: 1; pointer-events: auto; }
 
-  /* ===== Темы ===== */
   .theme-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 14px;
   }
   .theme-card {
-    border-radius: 12px;
-    padding: 14px;
-    cursor: pointer;
-    border: 3px solid transparent;
-    background: var(--card);
+    border-radius: 12px; padding: 14px; cursor: pointer;
+    border: 3px solid transparent; background: var(--card);
     transition: transform .15s, border-color .15s;
     user-select: none;
   }
   .theme-card:hover { transform: translateY(-3px); }
   .theme-card.active { border-color: var(--btn-bg); }
   .theme-preview {
-    height: 60px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    overflow: hidden;
-    border: 1px solid #00000022;
+    height: 60px; border-radius: 8px; margin-bottom: 10px;
+    overflow: hidden; border: 1px solid #00000022;
   }
-  .theme-preview .bar {
-    height: 40%;
-    width: 100%;
-  }
-  .theme-preview .body {
-    height: 60%;
-    width: 100%;
-  }
-  .theme-name {
-    font-weight: bold;
-    font-size: 0.95rem;
-    text-align: center;
-  }
+  .theme-preview .bar { height: 40%; width: 100%; }
+  .theme-preview .body { height: 60%; width: 100%; }
+  .theme-name { font-weight: bold; font-size: 0.95rem; text-align: center; }
 
-  /* ===== Кастом — палитры ===== */
   .palette-title {
-    margin: 20px 0 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-left: 4px solid var(--btn-bg);
-    padding-left: 10px;
+    margin: 20px 0 10px; font-size: 1rem; font-weight: bold;
+    border-left: 4px solid var(--btn-bg); padding-left: 10px;
   }
   .palette-hint {
-    color: var(--text);
-    opacity: 0.65;
-    font-size: 0.85rem;
+    color: var(--text); opacity: 0.65; font-size: 0.85rem;
     margin: 0 0 12px;
   }
-  .palette {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+  .palette { display: flex; flex-wrap: wrap; gap: 10px; }
   .swatch {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    border: 2px solid #00000022;
-    cursor: pointer;
+    width: 42px; height: 42px; border-radius: 10px;
+    border: 2px solid #00000022; cursor: pointer;
     transition: transform .15s, border-color .15s, box-shadow .15s;
   }
   .swatch:hover {
-    transform: scale(1.12);
-    border-color: var(--text);
+    transform: scale(1.12); border-color: var(--text);
     box-shadow: 0 4px 12px #00000033;
   }
   .swatch.active {
@@ -186,42 +103,23 @@
     box-shadow: 0 0 0 3px var(--btn-bg);
   }
 
-  /* ===== Предпросмотр ===== */
   .preview {
-    margin-top: 26px;
-    padding: 18px;
-    border-radius: 12px;
-    background: var(--card);
-    border: 2px dashed #00000022;
+    margin-top: 26px; padding: 18px; border-radius: 12px;
+    background: var(--card); border: 2px dashed #00000022;
   }
   .preview-title { margin: 0 0 6px; font-weight: bold; }
   .preview-text { margin: 0; opacity: 0.85; font-size: 0.9rem; }
 
-  /* ===== Кнопки внизу ===== */
-  .actions {
-    margin-top: 30px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+  .actions { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
   .btn {
-    padding: 12px 26px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 1rem;
-    text-decoration: none;
-    cursor: pointer;
-    border: none;
-    transition: background .2s;
+    padding: 12px 26px; border-radius: 12px; font-weight: bold;
+    font-size: 1rem; text-decoration: none; cursor: pointer;
+    border: none; font-family: inherit; transition: background .2s;
   }
-  .btn-primary {
-    background: var(--btn-bg);
-    color: var(--btn-text);
-  }
+  .btn-primary { background: var(--btn-bg); color: var(--btn-text); }
   .btn-primary:hover { background: var(--btn-hover); }
   .btn-secondary {
-    background: transparent;
-    color: var(--text);
+    background: transparent; color: var(--text);
     border: 2px solid var(--btn-bg);
   }
   .btn-secondary:hover { background: var(--card); }
@@ -231,31 +129,31 @@
 
 <div class="top-bar">
   <h1>Настройки — UXNTWWW.io</h1>
-  <a href="index.html" class="back-home">Вернуться на главную</a>
+  <nav class="top-nav">
+    <a href="index.html">Главная</a>
+    <a href="about.html">О сайте</a>
+    <a href="contacts.html">Контакты</a>
+    <a href="faq.html">FAQ</a>
+  </nav>
 </div>
 
 <div class="content">
 
-  <!-- Табы -->
   <div class="tabs">
     <button class="tab active" data-tab="presets">Темы</button>
     <button class="tab" data-tab="custom">Кастом</button>
   </div>
 
-  <!-- Слайдер -->
   <div class="slider">
 
-    <!-- ===== Раздел "Темы" ===== -->
     <div class="slide active" id="slide-presets">
       <div class="theme-grid" id="theme-grid"></div>
-
       <div class="preview">
         <p class="preview-title">Предпросмотр</p>
         <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
       </div>
     </div>
 
-    <!-- ===== Раздел "Кастом" ===== -->
     <div class="slide hidden-right" id="slide-custom">
       <p class="palette-title">Цвет шапки</p>
       <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
@@ -273,7 +171,6 @@
 
   </div>
 
-  <!-- Кнопки -->
   <div class="actions">
     <button class="btn btn-primary" id="apply-btn">Применить</button>
     <a class="btn btn-secondary" href="index.html">Отмена</a>
@@ -285,15 +182,14 @@
 (function () {
   'use strict';
 
-  // ===== Пресеты тем =====
   const PRESETS = [
-    { id: 'base',  name: 'Базовая', bar: '#008000', bg: '#ffffff' },
-    { id: 'light', name: 'Светлая', bar: '#d9d9d9', bg: '#fafafa' },
-    { id: 'gray',  name: 'Серая',   bar: '#5a5a5a', bg: '#e0e0e0' },
-    { id: 'dark',  name: 'Тёмная',  bar: '#1f1f1f', bg: '#0f1115' }
+    { id: 'base',   name: 'Базовая',   bar: '#008000', bg: '#ffffff' },
+    { id: 'light',  name: 'Светлая',   bar: '#d9d9d9', bg: '#fafafa' },
+    { id: 'gray',   name: 'Серая',     bar: '#5a5a5a', bg: '#e0e0e0' },
+    { id: 'dark',   name: 'Тёмная',    bar: '#1f1f1f', bg: '#0f1115' },
+    { id: 'system', name: 'Системная (Автоопределение)', bar: null, bg: null }
   ];
 
-  // ===== Палитра для кастома =====
   const COLORS = [
     '#008000', '#4f8cff', '#a06bff', '#ff5c8a',
     '#ff8c42', '#e6c200', '#3ecf8e', '#ef4444',
@@ -301,13 +197,11 @@
     '#5a5a5a', '#d9d9d9', '#000000', '#fafafa'
   ];
 
-  // ===== Текущее состояние (то, что реально сохранено) =====
   const savedMode = localStorage.getItem('themeMode') || 'presets';
   const savedPreset = localStorage.getItem('presetName') || 'base';
   const savedBar = localStorage.getItem('colorBar') || '#008000';
   const savedBg  = localStorage.getItem('colorBg')  || '#ffffff';
 
-  // Выбранные значения (то, что применяется по "Применить")
   const selected = {
     mode: savedMode,
     preset: savedPreset,
@@ -315,12 +209,20 @@
     bg: savedBg
   };
 
-  // Найдём пресет по id
   function findPreset(id) {
     return PRESETS.find(p => p.id === id) || PRESETS[0];
   }
 
-  // ===== Применение цветов на страницу =====
+  function colorsFor(preset) {
+    if (preset.id === 'system') {
+      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return dark
+        ? { bar: '#1f1f1f', bg: '#0f1115' }
+        : { bar: '#008000', bg: '#ffffff' };
+    }
+    return { bar: preset.bar, bg: preset.bg };
+  }
+
   function applyColors(bar, bg) {
     const root = document.documentElement.style;
     root.setProperty('--bar', bar);
@@ -333,17 +235,16 @@
     root.setProperty('--card', Theme.shade(bg, -0.05));
   }
 
-  // Показать "сохранённое" (то, что выбрано)
   function showSelected() {
     if (selected.mode === 'presets') {
       const p = findPreset(selected.preset);
-      applyColors(p.bar, p.bg);
+      const c = colorsFor(p);
+      applyColors(c.bar, c.bg);
     } else {
       applyColors(selected.bar, selected.bg);
     }
   }
 
-  // ===== Табы =====
   const tabs = document.querySelectorAll('.tab');
   const slidePresets = document.getElementById('slide-presets');
   const slideCustom  = document.getElementById('slide-custom');
@@ -352,12 +253,12 @@
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
 
     if (name === 'presets') {
-      slidePresets.classList.remove('hidden-right');
+      slidePresets.classList.remove('hidden-right', 'hidden-left');
       slidePresets.classList.add('active');
       slideCustom.classList.remove('active');
       slideCustom.classList.add('hidden-right');
     } else {
-      slideCustom.classList.remove('hidden-right');
+      slideCustom.classList.remove('hidden-right', 'hidden-left');
       slideCustom.classList.add('active');
       slidePresets.classList.remove('active');
       slidePresets.classList.add('hidden-left');
@@ -365,29 +266,14 @@
     showSelected();
   }
 
-  // Сброс классов для повторного срабатывания анимации
-  function resetSlideClasses() {
-    slidePresets.classList.remove('hidden-left', 'hidden-right', 'active');
-    slideCustom.classList.remove('hidden-left', 'hidden-right', 'active');
-  }
-
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      resetSlideClasses();
-      switchTab(tab.dataset.tab);
-    });
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
   });
 
-  // Начальное состояние
   switchTab(selected.mode);
-  // Сброс, чтобы при первом клике анимация сработала
-  setTimeout(resetSlideClasses, 50);
-  // И снова применим активный слайд
-  setTimeout(() => switchTab(selected.mode), 100);
 
-  // ===== Пресеты =====
+  // Пресеты
   const grid = document.getElementById('theme-grid');
-
   PRESETS.forEach(preset => {
     const card = document.createElement('div');
     card.className = 'theme-card';
@@ -399,10 +285,13 @@
     preview.className = 'theme-preview';
     const barEl = document.createElement('div');
     barEl.className = 'bar';
-    barEl.style.background = preset.bar;
     const bodyEl = document.createElement('div');
     bodyEl.className = 'body';
-    bodyEl.style.background = preset.bg;
+
+    const c = colorsFor(preset);
+    barEl.style.background = c.bar;
+    bodyEl.style.background = c.bg;
+
     preview.appendChild(barEl);
     preview.appendChild(bodyEl);
 
@@ -413,13 +302,11 @@
     card.appendChild(preview);
     card.appendChild(name);
 
-    // Наведение = предпросмотр
     card.addEventListener('mouseenter', () => {
-      applyColors(preset.bar, preset.bg);
+      const cc = colorsFor(preset);
+      applyColors(cc.bar, cc.bg);
     });
-    // Уход = вернуть выбранное
     card.addEventListener('mouseleave', showSelected);
-    // Клик = выбрать
     card.addEventListener('click', () => {
       selected.mode = 'presets';
       selected.preset = preset.id;
@@ -431,7 +318,7 @@
     grid.appendChild(card);
   });
 
-  // ===== Палитры кастома =====
+  // Палитры
   function buildPalette(containerId, key) {
     const container = document.getElementById(containerId);
     COLORS.forEach(color => {
@@ -442,17 +329,11 @@
         sw.classList.add('active');
       }
 
-      // Наведение = предпросмотр
       sw.addEventListener('mouseenter', () => {
-        // Меняем временно, сохраняя вторую половину из selected
         if (key === 'bar') applyColors(color, selected.bg);
         else applyColors(selected.bar, color);
       });
-
-      // Уход = вернуть выбранное
       sw.addEventListener('mouseleave', showSelected);
-
-      // Клик = выбрать
       sw.addEventListener('click', () => {
         selected.mode = 'custom';
         selected[key] = color;
@@ -468,15 +349,21 @@
   buildPalette('palette-bar', 'bar');
   buildPalette('palette-bg',  'bg');
 
-  // ===== Кнопка "Применить" =====
+  // Применить
   document.getElementById('apply-btn').addEventListener('click', () => {
     localStorage.setItem('themeMode', selected.mode);
 
     if (selected.mode === 'presets') {
       const p = findPreset(selected.preset);
       localStorage.setItem('presetName', p.id);
-      localStorage.setItem('colorBar', p.bar);
-      localStorage.setItem('colorBg',  p.bg);
+      if (p.id === 'system') {
+        const c = colorsFor(p);
+        localStorage.setItem('colorBar', c.bar);
+        localStorage.setItem('colorBg',  c.bg);
+      } else {
+        localStorage.setItem('colorBar', p.bar);
+        localStorage.setItem('colorBg',  p.bg);
+      }
     } else {
       localStorage.setItem('colorBar', selected.bar);
       localStorage.setItem('colorBg',  selected.bg);
@@ -485,10 +372,11 @@
     window.location.href = 'index.html';
   });
 
-  // На всякий случай — начальный показ выбранного
   showSelected();
 })();
 </script>
 
+<script src="back-to-top.js"></script>
+<script src="pwa.js"></script>
 </body>
 </html>
