@@ -3,35 +3,55 @@
   'use strict';
 
   const PRESETS = {
-    base:   { bar: '#008000', bg: '#ffffff' },
-    light:  { bar: '#d9d9d9', bg: '#fafafa' },
-    gray:   { bar: '#5a5a5a', bg: '#e0e0e0' },
-    dark:   { bar: '#1f1f1f', bg: '#0f1115' },
-    system: { bar: null,      bg: null      }
+    base:   { bar: '#008000', bg: '#ffffff', btn: 'white' },
+    light:  { bar: '#d9d9d9', bg: '#fafafa', btn: 'black' },
+    gray:   { bar: '#5a5a5a', bg: '#e0e0e0', btn: 'black' },
+    dark:   { bar: '#1f1f1f', bg: '#0f1115', btn: 'white' },
+    system: { bar: null,      bg: null,      btn: null    }
   };
 
   const DEFAULTS = PRESETS.base;
 
-  const ICON_MAP = {
-    '#008000': 'icon-green.png',
-    '#4f8cff': 'icon-blue.png',
-    '#a06bff': 'icon-purple.png',
-    '#ff5c8a': 'icon-pink.png',
-    '#ff8c42': 'icon-orange.png',
-    '#e6c200': 'icon-yellow.png',
-    '#3ecf8e': 'icon-mint.png',
-    '#ef4444': 'icon-red.png',
-    '#0f1115': 'icon-black.png',
-    '#ffffff': 'icon-white.png',
-    '#1e5fd8': 'icon-navy.png',
-    '#8b5e3c': 'icon-brown.png',
-    '#5a5a5a': 'icon-gray.png',
-    '#d9d9d9': 'icon-light.png',
-    '#000000': 'icon-dark.png',
-    '#fafafa': 'icon-white2.png'
+  const COLOR_GROUPS = {
+    '#ffffff': 'white',
+    '#fafafa': 'white',
+    '#000000': 'black',
+    '#0f1115': 'black',
+    '#5a5a5a': 'gray',
+    '#d9d9d9': 'lightgray'
   };
 
-  const DEFAULT_ICON = 'icon-green.png';
+  function colorKey(hex) {
+    if (!hex) return '';
+    const h = hex.toLowerCase();
+    return COLOR_GROUPS[h] || h;
+  }
+
+  function colorsMatch(a, b) {
+    return colorKey(a) === colorKey(b);
+  }
+
+  function colorName(hex) {
+    const map = {
+      '#008000': 'зелёный',
+      '#4f8cff': 'синий',
+      '#a06bff': 'фиолетовый',
+      '#ff5c8a': 'розовый',
+      '#ff8c42': 'оранжевый',
+      '#e6c200': 'жёлтый',
+      '#3ecf8e': 'мятный',
+      '#ef4444': 'красный',
+      '#0f1115': 'чёрный',
+      '#ffffff': 'белый',
+      '#1e5fd8': 'тёмно-синий',
+      '#8b5e3c': 'коричневый',
+      '#5a5a5a': 'серый',
+      '#d9d9d9': 'светло-серый',
+      '#000000': 'чёрный',
+      '#fafafa': 'белый'
+    };
+    return map[(hex || '').toLowerCase()] || 'этот';
+  }
 
   function contrastColor(hex) {
     if (!hex || hex.length < 6) return '#000000';
@@ -64,47 +84,71 @@
       const id = localStorage.getItem('presetName') || 'base';
       if (id === 'system') {
         return systemPrefersDark()
-          ? { bar: '#1f1f1f', bg: '#0f1115' }
-          : { bar: '#008000', bg: '#ffffff' };
+          ? { bar: '#1f1f1f', bg: '#0f1115', btn: 'white' }
+          : { bar: '#d9d9d9', bg: '#fafafa', btn: 'black' };
       }
       const p = PRESETS[id] || DEFAULTS;
-      return { bar: p.bar, bg: p.bg };
+      return { bar: p.bar, bg: p.bg, btn: p.btn || 'white' };
     }
     return {
       bar: localStorage.getItem('colorBar') || DEFAULTS.bar,
-      bg:  localStorage.getItem('colorBg')  || DEFAULTS.bg
+      bg:  localStorage.getItem('colorBg')  || DEFAULTS.bg,
+      btn: 'white'
     };
   }
 
-  function setFavicon(hex) {
-    const file = ICON_MAP[(hex || '').toLowerCase()] || DEFAULT_ICON;
-    let link = document.querySelector('link[rel="icon"]');
-    if (!link) {
-      link = document.createElement('link');
-      link.rel = 'icon';
-      document.head.appendChild(link);
+  function getTextColors(bar, bg) {
+    const mode = localStorage.getItem('themeMode') || 'presets';
+    if (mode === 'custom') {
+      return {
+        barText:  localStorage.getItem('colorTextBar')  || contrastColor(bar),
+        pageText: localStorage.getItem('colorTextPage') || contrastColor(bg)
+      };
     }
-    link.type = 'image/png';
-    link.href = file;
+    return {
+      barText:  contrastColor(bar),
+      pageText: contrastColor(bg)
+    };
   }
 
   function apply(bar, bg) {
     const root = document.documentElement.style;
+
     root.setProperty('--bar',       bar);
-    root.setProperty('--bar-text',  contrastColor(bar));
-    root.setProperty('--btn-bg',    bar);
-    root.setProperty('--btn-text',  contrastColor(bar));
-    root.setProperty('--btn-hover', shade(bar, -0.2));
     root.setProperty('--bg',        bg);
-    root.setProperty('--text',      contrastColor(bg));
     root.setProperty('--card',      shade(bg, -0.05));
+    root.setProperty('--btn-bg',    bar);
+    root.setProperty('--btn-hover', shade(bar, -0.2));
+
+    // Кнопки — по теме
+    const mode = localStorage.getItem('themeMode') || 'presets';
+    const presetId = localStorage.getItem('presetName') || 'base';
+    let fill = 'white';
+    if (mode === 'presets') {
+      if (presetId === 'light' || presetId === 'gray') fill = 'black';
+      else if (presetId === 'system') {
+        fill = systemPrefersDark() ? 'white' : 'black';
+      } else {
+        fill = 'white';
+      }
+    } else {
+      fill = 'white';
+    }
+    const navFill   = fill === 'black' ? '#000000' : '#ffffff';
+    const navText   = fill === 'black' ? '#ffffff' : '#000000';
+    const navBorder = fill === 'black' ? '#ffffff' : '#000000';
+
+    root.setProperty('--nav-fill',   navFill);
+    root.setProperty('--nav-text',   navText);
+    root.setProperty('--nav-border', navBorder);
+
+    const tc = getTextColors(bar, bg);
+    root.setProperty('--bar-text', tc.barText);
+    root.setProperty('--text',     tc.pageText);
   }
 
   const c = getColors();
   apply(c.bar, c.bg);
-
-  const iconColor = localStorage.getItem('colorIcon') || '#008000';
-  setFavicon(iconColor);
 
   if (window.matchMedia) {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
@@ -119,22 +163,17 @@
   document.addEventListener('DOMContentLoaded', function () {
     const x = getColors();
     apply(x.bar, x.bg);
-    const ic = localStorage.getItem('colorIcon') || '#008000';
-    setFavicon(ic);
   });
 
   window.Theme = {
     contrastColor: contrastColor,
     shade: shade,
+    colorKey: colorKey,
+    colorsMatch: colorsMatch,
+    colorName: colorName,
     applyColors: apply,
-    setFavicon: setFavicon,
-    iconMap: ICON_MAP,
-    defaultIcon: DEFAULT_ICON,
-    refresh: function () {
-      const x = getColors();
-      apply(x.bar, x.bg);
-      const ic = localStorage.getItem('colorIcon') || '#008000';
-      setFavicon(ic);
-    }
+    getColors: getColors,
+    getTextColors: getTextColors,
+    refresh: function () { const x = getColors(); apply(x.bar, x.bg); }
   };
 })();
