@@ -2,10 +2,14 @@
 (function () {
   'use strict';
 
-  const DEFAULTS = {
-    bar: '#008000',
-    bg:  '#ffffff'
+  const PRESETS = {
+    base:  { bar: '#008000', bg: '#ffffff' },
+    light: { bar: '#d9d9d9', bg: '#fafafa' },
+    gray:  { bar: '#5a5a5a', bg: '#e0e0e0' },
+    dark:  { bar: '#1f1f1f', bg: '#0f1115' }
   };
+
+  const DEFAULTS = PRESETS.base;
 
   function contrastColor(hex) {
     if (!hex || hex.length < 6) return '#000000';
@@ -28,8 +32,18 @@
     return '#' + to(r) + to(g) + to(b);
   }
 
-  function getBar() { return localStorage.getItem('colorBar') || DEFAULTS.bar; }
-  function getBg()  { return localStorage.getItem('colorBg')  || DEFAULTS.bg;  }
+  function getColors() {
+    const mode = localStorage.getItem('themeMode') || 'presets';
+    if (mode === 'presets') {
+      const id = localStorage.getItem('presetName') || 'base';
+      const p = PRESETS[id] || DEFAULTS;
+      return { bar: p.bar, bg: p.bg };
+    }
+    return {
+      bar: localStorage.getItem('colorBar') || DEFAULTS.bar,
+      bg:  localStorage.getItem('colorBg')  || DEFAULTS.bg
+    };
+  }
 
   function apply(bar, bg) {
     const root = document.documentElement.style;
@@ -43,22 +57,15 @@
     root.setProperty('--card',      shade(bg, -0.05));
   }
 
-  // Применяем сразу
-  apply(getBar(), getBg());
+  // Применяем сразу, до отрисовки
+  const c = getColors();
+  apply(c.bar, c.bg);
 
-  // Публичный API для GlobalSettings.html
+  // Публичный API
   window.Theme = {
-    get bar() { return getBar(); },
-    get bg()  { return getBg();  },
-    setBar(color) { localStorage.setItem('colorBar', color); apply(getBar(), getBg()); },
-    setBg(color)  { localStorage.setItem('colorBg',  color); apply(getBar(), getBg()); },
-    applyColors(bar, bg) { apply(bar, bg); },
-    reset() {
-      localStorage.removeItem('colorBar');
-      localStorage.removeItem('colorBg');
-      apply(getBar(), getBg());
-    },
     contrastColor: contrastColor,
-    shade: shade
+    shade: shade,
+    applyColors: apply,
+    refresh: function () { const x = getColors(); apply(x.bar, x.bg); }
   };
 })();
