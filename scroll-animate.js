@@ -2,25 +2,16 @@
 (function () {
   'use strict';
 
-  // Все элементы, которые надо анимировать
   const selectors = [
-    '.version-block',
-    '.program-card',
-    '.faq-item',
-    '.content > h2',
-    '.content > p',
-    '.content > ul',
-    '.screenshots',
-    '.preview'
+    '.version-block', '.program-card', '.faq-item',
+    '.content > h2', '.content > p', '.content > ul',
+    '.screenshots', '.preview'
   ];
 
   const elements = document.querySelectorAll(selectors.join(','));
-
   if (!elements.length) return;
 
-  // Проверяем поддержку IntersectionObserver
   if (!('IntersectionObserver' in window)) {
-    // Если браузер старый — просто показываем всё
     elements.forEach(el => el.classList.add('in-view'));
     return;
   }
@@ -33,12 +24,22 @@
       }
     });
   }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -40px 0px'
+    threshold: 0,
+    rootMargin: '0px 0px 0px 0px'
   });
 
   elements.forEach(function (el) {
     el.classList.add('scroll-animate');
     observer.observe(el);
   });
+
+  // Через 600мс — принудительно показать всё, что ещё спрятано
+  setTimeout(function () {
+    document.querySelectorAll('.scroll-animate:not(.in-view)').forEach(function (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('in-view');
+      }
+    });
+  }, 600);
 })();
