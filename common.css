@@ -68,10 +68,14 @@ body.glass-mode #back-to-top:hover { background: var(--glass-bg-2); }
 
 /* ===== Появление при прокрутке ===== */
 .scroll-animate {
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1);
   will-change: opacity, transform;
+}
+.scroll-animate:not(.in-view) {
+  opacity: 0;
+  transform: translateY(30px);
 }
 .scroll-animate.in-view {
   opacity: 1;
