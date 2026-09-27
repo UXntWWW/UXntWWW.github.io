@@ -6,14 +6,14 @@
 <title>О сайте — UXNTWWW.io</title>
 <script src="theme.js"></script>
 <link rel="stylesheet" href="common.css">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-green.png">
+<link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
   :root {
     --bg: #ffffff; --text: #000000;
     --bar: #008000; --bar-text: #ffffff;
-    --btn-bg: #008000; --btn-text: #ffffff;
-    --btn-hover: #006400; --card: #f2f2f2;
+    --card: #f2f2f2;
+    --nav-fill: #ffffff; --nav-text: #000000; --nav-border: #000000;
+    --btn-bg: #008000; --btn-hover: #006400;
   }
   body {
     margin: 0; font-family: sans-serif;
@@ -23,7 +23,7 @@
   .top-bar {
     background: var(--bar); color: var(--bar-text);
     padding: 20px 15px; position: relative;
-    transition: background-color .25s;
+    transition: background-color .25s, color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
   .content { padding: 24px; max-width: 820px; margin: 0 auto; }
@@ -68,6 +68,5 @@
 </div>
 
 <script src="back-to-top.js"></script>
-<script src="pwa.js"></script>
 </body>
 </html>
