@@ -1,5 +1,5 @@
 /* sw.js — простейший service worker для офлайн-режима UXNTWWW.io */
-const CACHE = 'uxntwww-v1';
+const CACHE = 'uxntwww-v2';
 
 const ASSETS = [
   './',
@@ -21,7 +21,6 @@ const ASSETS = [
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
-      // addAll падает, если хоть один файл недоступен — поэтому оборачиваем
       return Promise.all(
         ASSETS.map(function (url) {
           return cache.add(url).catch(function () { /* пропускаем отсутствующие */ });
@@ -47,13 +46,11 @@ self.addEventListener('activate', function (event) {
 
 // Запросы — сначала сеть, при ошибке — кэш
 self.addEventListener('fetch', function (event) {
-  // Не кэшируем запросы не-GET
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     fetch(event.request)
       .then(function (response) {
-        // Обновляем кэш свежей версией
         const copy = response.clone();
         caches.open(CACHE).then(function (cache) {
           cache.put(event.request, copy).catch(function () {});
@@ -61,7 +58,6 @@ self.addEventListener('fetch', function (event) {
         return response;
       })
       .catch(function () {
-        // Сеть недоступна — берём из кэша
         return caches.match(event.request).then(function (cached) {
           return cached || caches.match('./index.html');
         });
