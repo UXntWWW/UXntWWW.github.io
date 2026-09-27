@@ -172,13 +172,11 @@
 
     if (glass) {
       if (glassDark) {
-        // Тёмная тема — плотное тёмное стекло, чтобы оставалось тёмным
         root.setProperty('--glass-bg',     'rgba(20, 22, 30, 0.78)');
         root.setProperty('--glass-bg-2',   'rgba(30, 32, 42, 0.88)');
         root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.10)');
         root.setProperty('--glass-shadow', '0 8px 32px rgba(0, 0, 0, 0.55)');
       } else {
-        // Светлая тема — светлое стекло
         root.setProperty('--glass-bg',     'rgba(255, 255, 255, 0.5)');
         root.setProperty('--glass-bg-2',   'rgba(255, 255, 255, 0.65)');
         root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.7)');
@@ -186,20 +184,16 @@
       }
       root.setProperty('--glass-blur',   'blur(20px) saturate(180%)');
 
-      // Градиент фона страницы
       if (glassDark) {
-        // Тёмная тема — тёмный градиент
         const gradColor  = shade(bar, -0.35);
         const gradColor2 = shade(bar, -0.55);
         root.setProperty('--page-gradient', 'linear-gradient(135deg, ' + gradColor + ' 0%, ' + gradColor2 + ' 100%)');
       } else {
-        // Светлая тема — светлый градиент
         const gradColor  = lighten(bar, 0.65);
         const gradColor2 = lighten(bar, 0.9);
         root.setProperty('--page-gradient', 'linear-gradient(135deg, ' + gradColor + ' 0%, ' + gradColor2 + ' 100%)');
       }
     } else {
-      // Стекло выключено — обычные цвета
       root.setProperty('--glass-bg',     'transparent');
       root.setProperty('--glass-bg-2',   'transparent');
       root.setProperty('--glass-border', 'transparent');
@@ -208,13 +202,11 @@
       root.setProperty('--page-gradient', 'none');
     }
 
-    // Класс на body
     if (document.body) {
       document.body.classList.toggle('glass-mode', glass);
     }
   }
 
-  // Применяем
   function boot() {
     const c = getColors();
     apply(c.bar, c.bg);
@@ -246,6 +238,21 @@
     applyColors: apply,
     getColors: getColors,
     getTextColors: getTextColors,
-    refresh: boot
+    refresh: boot,
+
+    // Предпросмотр для настроек — пересчитывает всё (стекло, градиент),
+    // не трогая localStorage.
+    preview: function (bar, bg) {
+      apply(bar, bg);
+
+      const root = document.documentElement.style;
+      const customBarText  = localStorage.getItem('colorTextBar');
+      const customPageText = localStorage.getItem('colorTextPage');
+      if (customBarText)  root.setProperty('--bar-text', customBarText);
+      if (customPageText) {
+        root.setProperty('--text', customPageText);
+        root.setProperty('--text-link', customPageText);
+      }
+    }
   };
 })();
