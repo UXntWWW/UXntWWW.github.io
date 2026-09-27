@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Настройки — UXNTWWW.io</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #000000;
+    --bar: green;
+    --bar-text: #ffffff;
+    --btn-bg: green;
+    --btn-text: #ffffff;
+    --btn-hover: darkgreen;
+    --card: #f2f2f2;
+  }
 
+  /* Тёмная тема */
+  body.dark {
+    --bg: #0f1115;
+    --text: #e6e8ee;
+    --bar: #1a1d24;
+    --bar-text: #e6e8ee;
+    --btn-bg: #4f8cff;
+    --btn-text: #ffffff;
+    --btn-hover: #3d78e0;
+    --card: #1a1d24;
+  }
+
+  /* Синяя тема */
+  body.blue {
+    --bg: #eaf2ff;
+    --text: #0a1a33;
+    --bar: #1e5fd8;
+    --bar-text: #ffffff;
+    --btn-bg: #1e5fd8;
+    --btn-text: #ffffff;
+    --btn-hover: #1749a8;
+    --card: #d6e6ff;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background .2s, color .2s;
+  }
+  .top-bar {
+    background: var(--bar);
+    color: var(--bar-text);
+    padding: 20px 15px;
+  }
+  .top-bar h1 { margin: 0; font-size: 1.4rem; }
+  .content { padding: 20px; }
+  .theme-list { display: grid; gap: 12px; max-width: 400px; margin-top: 20px; }
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: var(--card);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color .2s;
+  }
+  .theme-option:hover { border-color: var(--btn-bg); }
+  .theme-option.active { border-color: var(--btn-bg); }
+  .theme-option input { accent-color: var(--btn-bg); }
+  .back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 24px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: bold;
+    transition: background .2s;
+  }
+  .back-btn:hover { background: var(--btn-hover); }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>Настройки</h1>
+</div>
+
+<div class="content">
+  <p>Выбери тему оформления. Она применится на всех страницах сайта.</p>
+
+  <div class="theme-list">
+    <label class="theme-option" data-theme="light">
+      <input type="radio" name="theme" value="light">
+      <span>☀️ Светлая</span>
+    </label>
+    <label class="theme-option" data-theme="dark">
+      <input type="radio" name="theme" value="dark">
+      <span>🌙 Тёмная</span>
+    </label>
+    <label class="theme-option" data-theme="blue">
+      <input type="radio" name="theme" value="blue">
+      <span>🔵 Синяя</span>
+    </label>
+  </div>
+
+  <a href="index.html" class="back-btn">← Назад на главную</a>
+</div>
+
+<script>
+  // Применяем сохранённую тему сразу
+  const saved = localStorage.getItem('theme') || 'light';
+  document.body.classList.add(saved);
+
+  // Отмечаем активную радиокнопку
+  document.querySelectorAll('input[name="theme"]').forEach(r => {
+    if (r.value === saved) r.checked = true;
+  });
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    if (opt.dataset.theme === saved) opt.classList.add('active');
+  });
+
+  // Обработка выбора темы
+  document.querySelectorAll('input[name="theme"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const theme = radio.value;
+      localStorage.setItem('theme', theme);
+
+      document.body.classList.remove('light', 'dark', 'blue');
+      document.body.classList.add(theme);
+
+      document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.theme === theme);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
