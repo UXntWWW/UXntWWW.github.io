@@ -233,19 +233,22 @@
     return { bar: preset.bar, bg: preset.bg, btn: preset.btn || 'white' };
   }
 
+  // ===== Ключевая функция — теперь вызывает полный preview из theme.js =====
   function applyColors(bar, bg) {
-    const root = document.documentElement.style;
-    root.setProperty('--bar', bar);
-    root.setProperty('--bg', bg);
-    root.setProperty('--card', Theme.shade(bg, -0.05));
-    root.setProperty('--btn-bg', bar);
+    // Полный пересчёт — обновляет фон, стекло, градиент, всё
+    if (window.Theme && window.Theme.preview) {
+      window.Theme.preview(bar, bg);
+    }
 
+    // Дополнительно — цвета текста (если выбраны вручную)
+    const root = document.documentElement.style;
     const textBar  = selected.textBar  || Theme.contrastColor(bar);
     const textPage = selected.textPage || Theme.contrastColor(bg);
     root.setProperty('--bar-text', textBar);
     root.setProperty('--text',     textPage);
     root.setProperty('--text-link', textPage);
 
+    // Кнопки по теме
     const fill = (function () {
       if (selected.mode === 'presets') {
         const p = findPreset(selected.preset);
@@ -426,7 +429,7 @@
   glassCheckbox.addEventListener('change', () => {
     const on = glassCheckbox.checked;
     localStorage.setItem('glassEffect', on ? 'on' : 'off');
-    Theme.refresh();
+    showSelected();
   });
 
   // Применить
@@ -462,7 +465,6 @@
 })();
 </script>
 
-<script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
 </body>
