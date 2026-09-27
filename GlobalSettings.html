@@ -7,7 +7,7 @@
 <script src="theme.js"></script>
 <link rel="stylesheet" href="common.css">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon.png">
+<link rel="icon" type="image/png" href="icon-green.png">
 <style>
   :root {
     --bg: #ffffff; --text: #000000;
@@ -35,22 +35,16 @@
     margin-bottom: 24px;
   }
   .tab {
-    padding: 10px 24px;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--text);
-    opacity: 0.6;
-    background: transparent;
-    border: none;
-    border-bottom: 3px solid transparent;
-    font-size: 1rem;
-    font-family: inherit;
+    padding: 10px 24px; cursor: pointer; font-weight: bold;
+    color: var(--text); opacity: 0.6; background: transparent;
+    border: none; border-bottom: 3px solid transparent;
+    font-size: 1rem; font-family: inherit;
     transition: opacity .2s, border-color .2s;
   }
   .tab:hover { opacity: 1; }
   .tab.active { opacity: 1; border-bottom-color: var(--btn-bg); }
 
-  .slider { position: relative; overflow: hidden; min-height: 480px; }
+  .slider { position: relative; overflow: hidden; min-height: 680px; }
   .slide {
     position: absolute; top: 0; left: 0; width: 100%;
     transition: transform .35s ease, opacity .35s ease;
@@ -163,6 +157,10 @@
       <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
       <div class="palette" id="palette-bg"></div>
 
+      <p class="palette-title">Цвет иконки</p>
+      <p class="palette-hint">Наведи на квадратик — иконка во вкладке браузера применится сразу. Нажми, чтобы выбрать.</p>
+      <div class="palette" id="palette-icon"></div>
+
       <div class="preview">
         <p class="preview-title">Предпросмотр</p>
         <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
@@ -197,16 +195,18 @@
     '#5a5a5a', '#d9d9d9', '#000000', '#fafafa'
   ];
 
-  const savedMode = localStorage.getItem('themeMode') || 'presets';
+  const savedMode   = localStorage.getItem('themeMode') || 'presets';
   const savedPreset = localStorage.getItem('presetName') || 'base';
-  const savedBar = localStorage.getItem('colorBar') || '#008000';
-  const savedBg  = localStorage.getItem('colorBg')  || '#ffffff';
+  const savedBar    = localStorage.getItem('colorBar') || '#008000';
+  const savedBg     = localStorage.getItem('colorBg')  || '#ffffff';
+  const savedIcon   = localStorage.getItem('colorIcon') || '#008000';
 
   const selected = {
     mode: savedMode,
     preset: savedPreset,
     bar: savedBar,
-    bg: savedBg
+    bg: savedBg,
+    icon: savedIcon
   };
 
   function findPreset(id) {
@@ -243,6 +243,7 @@
     } else {
       applyColors(selected.bar, selected.bg);
     }
+    Theme.setFavicon(selected.icon);
   }
 
   const tabs = document.querySelectorAll('.tab');
@@ -272,7 +273,7 @@
 
   switchTab(selected.mode);
 
-  // Пресеты
+  // ===== Пресеты =====
   const grid = document.getElementById('theme-grid');
   PRESETS.forEach(preset => {
     const card = document.createElement('div');
@@ -318,26 +319,27 @@
     grid.appendChild(card);
   });
 
-  // Палитры
+  // ===== Палитры =====
   function buildPalette(containerId, key) {
     const container = document.getElementById(containerId);
     COLORS.forEach(color => {
       const sw = document.createElement('div');
       sw.className = 'swatch';
       sw.style.background = color;
-      if (selected[key] === color && selected.mode === 'custom') {
+      if (selected[key] === color) {
         sw.classList.add('active');
       }
 
       sw.addEventListener('mouseenter', () => {
-        if (key === 'bar') applyColors(color, selected.bg);
-        else applyColors(selected.bar, color);
+        if (key === 'bar')  applyColors(color, selected.bg);
+        if (key === 'bg')   applyColors(selected.bar, color);
+        if (key === 'icon') Theme.setFavicon(color);
       });
       sw.addEventListener('mouseleave', showSelected);
       sw.addEventListener('click', () => {
-        selected.mode = 'custom';
+        if (key !== 'icon') selected.mode = 'custom';
         selected[key] = color;
-        document.querySelectorAll(`#${containerId} .swatch`).forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('#' + containerId + ' .swatch').forEach(s => s.classList.remove('active'));
         sw.classList.add('active');
         showSelected();
       });
@@ -346,10 +348,11 @@
     });
   }
 
-  buildPalette('palette-bar', 'bar');
-  buildPalette('palette-bg',  'bg');
+  buildPalette('palette-bar',  'bar');
+  buildPalette('palette-bg',   'bg');
+  buildPalette('palette-icon', 'icon');
 
-  // Применить
+  // ===== Применить =====
   document.getElementById('apply-btn').addEventListener('click', () => {
     localStorage.setItem('themeMode', selected.mode);
 
@@ -368,6 +371,8 @@
       localStorage.setItem('colorBar', selected.bar);
       localStorage.setItem('colorBg',  selected.bg);
     }
+
+    localStorage.setItem('colorIcon', selected.icon);
 
     window.location.href = 'index.html';
   });
