@@ -2,119 +2,124 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Главная</title>
 <style>
- body { margin: 0; padding: 0; font-family: sans-serif; }
- .top-bar { background-color: green; border: 4px solid green; color: white; padding-top: 20px; padding-bottom: 20px; padding-left: 15px; box-sizing: border-box; width: 100%; }
- .top-bar h1 { margin: 0; }
- .content { padding: 20px; position: relative; }
- #files-btn {
-   position: absolute;
-   left: 20px;   
-   top: 140px;   
-   background-color: green; 
-   color: white; 
-   padding: 12px 24px; 
-   text-decoration: none; 
-   border-radius: 12px; 
-   font-weight: bold;
-   display: inline-block;
-   box-sizing: border-box;
- }
- #files-btn:hover { background-color: darkgreen; }
- .status-text {
-   position: absolute;
-   left: 10px;
-   top: 200px;
-   font-size: 16px;
-   color: black;
-   font-weight: normal;
-   margin: 0;
- }
- #update-text {
-   position: absolute;
-   left: 10px;
-   top: 230px;
-   font-size: 16px;
-   color: black;
-   font-weight: normal;
-   margin: 0;
- }
- 
- /* Стили для второй кнопки и её текста со смещением вниз */
- #files-btn-v10 {
-   position: absolute;
-   left: 20px;   
-   top: 290px;   
-   background-color: green; 
-   color: white; 
-   padding: 12px 24px; 
-   text-decoration: none; 
-   border-radius: 12px; 
-   font-weight: bold;
-   display: inline-block;
-   box-sizing: border-box;
- }
- #files-btn-v10:hover { background-color: darkgreen; }
- .status-text-v10 {
-   position: absolute;
-   left: 10px;
-   top: 350px;
-   font-size: 16px;
-   color: black;
-   font-weight: normal;
-   margin: 0;
- }
- #update-text-v10 {
-   position: absolute;
-   left: 10px;
-   top: 380px;
-   font-size: 16px;
-   color: black;
-   font-weight: normal;
-   margin: 0;
- }
+  :root {
+    --bg: #ffffff;
+    --text: #000000;
+    --bar: green;
+    --bar-text: #ffffff;
+    --btn-bg: green;
+    --btn-text: #ffffff;
+    --btn-hover: darkgreen;
+    --card: #f2f2f2;
+  }
+  body.dark {
+    --bg: #0f1115;
+    --text: #e6e8ee;
+    --bar: #1a1d24;
+    --bar-text: #e6e8ee;
+    --btn-bg: #4f8cff;
+    --btn-text: #ffffff;
+    --btn-hover: #3d78e0;
+    --card: #1a1d24;
+  }
+  body.blue {
+    --bg: #eaf2ff;
+    --text: #0a1a33;
+    --bar: #1e5fd8;
+    --bar-text: #ffffff;
+    --btn-bg: #1e5fd8;
+    --btn-text: #ffffff;
+    --btn-hover: #1749a8;
+    --card: #d6e6ff;
+  }
 
- /* ===== Кнопка "Настройки" (белая) ===== */
- #settings-btn {
-   position: absolute;
-   left: 560px;    /* ← меняй это значение, чтобы двигать по горизонтали */
-   top: -65px;    /* ← меняй это значение, чтобы двигать по вертикали */
-   background-color: white;
-   color: black;
-   padding: 12px 24px;
-   text-decoration: none;
-   border-radius: 12px;
-   font-weight: bold;
-   display: inline-block;
-   box-sizing: border-box;
-   border: 2px solid green; /* зелёная рамка, чтобы кнопка была видна на белом фоне */
-   transition: background-color 0.2s;
- }
- #settings-btn:hover {
-   background-color: #e6e6e6;
- }
+  body {
+    margin: 0; padding: 0;
+    font-family: sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background .2s, color .2s;
+  }
+  .top-bar {
+    background-color: var(--bar);
+    border: 4px solid var(--bar);
+    color: var(--bar-text);
+    padding: 20px 15px;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  .top-bar h1 { margin: 0; }
+  .content { padding: 20px; position: relative; }
+
+  #files-btn, #files-btn-v10 {
+    position: absolute;
+    left: 20px;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: bold;
+    display: inline-block;
+    box-sizing: border-box;
+    transition: background .2s;
+  }
+  #files-btn { top: 140px; }
+  #files-btn-v10 { top: 290px; }
+  #files-btn:hover, #files-btn-v10:hover { background-color: var(--btn-hover); }
+
+  .status-text { position: absolute; left: 10px; top: 200px; margin: 0; }
+  #update-text { position: absolute; left: 10px; top: 230px; margin: 0; }
+  .status-text-v10 { position: absolute; left: 10px; top: 350px; margin: 0; }
+  #update-text-v10 { position: absolute; left: 10px; top: 380px; margin: 0; }
+
+  /* Кнопка "Настройки" — белая, на уровне заголовка в шапке */
+  #settings-btn {
+    position: absolute;
+    right: 560px;
+    top: -65%;
+    transform: translateY(-50%);
+    background-color: white;
+    color: black;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: bold;
+    border: 2px solid white;
+    display: inline-block;
+    box-sizing: border-box;
+    transition: background .2s;
+  }
+  #settings-btn:hover { background-color: #e6e6e6; }
 </style>
 </head>
 <body>
  <div class="top-bar">
- <h1>UXNTWWW.io - Сайт с файлами</h1>
+   <h1>UXNTWWW.io - Сайт с файлами</h1>
+   <a href="https://uxntwww.github.io/GlobalSettings" id="settings-btn">Настройки</a>
  </div>
  <div class="content">
- <p>Приветствую,ты попал(а) на сайт файлов и программ.</p>
- <p>Все файлы АБСОЛЮТНО проверены!</p>
-  <p>Приятного использования!</p>
-  
- <a href="files.html" id="files-btn">Файлы</a>
- <p class="status-text">PCCleaner(Проверено✅)</p>
- <p id="update-text">Обновлено:13.08.2026</p>
- 
- <a href="files1.html" id="files-btn-v10">Файлы</a>
- <p class="status-text-v10">UXWEditor Free(Проверено✅)</p>
- <p id="update-text-v10">Обновлено:21.07.2026</p>
+   <p>Приветствую,ты попал(а) на сайт файлов и программ.</p>
+   <p>Все файлы АБСОЛЮТНО проверены!</p>
+   <p>Приятного использования!</p>
 
- <!-- ===== Кнопка "Настройки" ===== -->
- <a href="https://uxntwww.github.io/GlobalSettings" id="settings-btn">Настройки</a>
+   <a href="files.html" id="files-btn">Файлы</a>
+   <p class="status-text">PCCleaner(Проверено✅)</p>
+   <p id="update-text">Обновлено:13.08.2026</p>
+
+   <a href="files1.html" id="files-btn-v10">Файлы</a>
+   <p class="status-text-v10">UXWEditor Free(Проверено✅)</p>
+   <p id="update-text-v10">Обновлено:21.07.2026</p>
  </div>
+
+<script>
+  // Применяем сохранённую тему
+  const saved = localStorage.getItem('theme') || 'light';
+  document.body.classList.add(saved);
+</script>
 </body>
 </html>
