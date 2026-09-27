@@ -6,14 +6,13 @@
 <title>Настройки — UXNTWWW.io</title>
 <script src="theme.js"></script>
 <link rel="stylesheet" href="common.css">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-green.png">
+<link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
   :root {
     --bg: #ffffff; --text: #000000;
     --bar: #008000; --bar-text: #ffffff;
-    --btn-bg: #008000; --btn-text: #ffffff;
-    --btn-hover: #006400; --card: #f2f2f2;
+    --btn-bg: #008000; --card: #f2f2f2;
+    --nav-fill: #ffffff; --nav-text: #000000; --nav-border: #000000;
   }
   body {
     margin: 0; font-family: sans-serif;
@@ -23,7 +22,7 @@
   .top-bar {
     background: var(--bar); color: var(--bar-text);
     padding: 20px 15px; position: relative;
-    transition: background-color .25s;
+    transition: background-color .25s, color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
 
@@ -44,7 +43,7 @@
   .tab:hover { opacity: 1; }
   .tab.active { opacity: 1; border-bottom-color: var(--btn-bg); }
 
-  .slider { position: relative; overflow: hidden; min-height: 680px; }
+  .slider { position: relative; overflow: hidden; min-height: 900px; }
   .slide {
     position: absolute; top: 0; left: 0; width: 100%;
     transition: transform .35s ease, opacity .35s ease;
@@ -108,15 +107,11 @@
   .btn {
     padding: 12px 26px; border-radius: 12px; font-weight: bold;
     font-size: 1rem; text-decoration: none; cursor: pointer;
-    border: none; font-family: inherit; transition: background .2s;
+    border: 2px solid var(--nav-border);
+    background: var(--nav-fill); color: var(--nav-text);
+    font-family: inherit; transition: opacity .2s;
   }
-  .btn-primary { background: var(--btn-bg); color: var(--btn-text); }
-  .btn-primary:hover { background: var(--btn-hover); }
-  .btn-secondary {
-    background: transparent; color: var(--text);
-    border: 2px solid var(--btn-bg);
-  }
-  .btn-secondary:hover { background: var(--card); }
+  .btn:hover { opacity: 0.85; }
 </style>
 </head>
 <body>
@@ -157,9 +152,13 @@
       <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
       <div class="palette" id="palette-bg"></div>
 
-      <p class="palette-title">Цвет иконки</p>
-      <p class="palette-hint">Наведи на квадратик — иконка во вкладке браузера применится сразу. Нажми, чтобы выбрать.</p>
-      <div class="palette" id="palette-icon"></div>
+      <p class="palette-title">Цвет текста в шапке</p>
+      <p class="palette-hint">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом шапки.</p>
+      <div class="palette" id="palette-text-bar"></div>
+
+      <p class="palette-title">Цвет текста на странице</p>
+      <p class="palette-hint">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом фона.</p>
+      <div class="palette" id="palette-text-page"></div>
 
       <div class="preview">
         <p class="preview-title">Предпросмотр</p>
@@ -170,8 +169,8 @@
   </div>
 
   <div class="actions">
-    <button class="btn btn-primary" id="apply-btn">Применить</button>
-    <a class="btn btn-secondary" href="index.html">Отмена</a>
+    <button class="btn" id="apply-btn">Применить</button>
+    <a class="btn" href="index.html">Отмена</a>
   </div>
 
 </div>
@@ -181,11 +180,11 @@
   'use strict';
 
   const PRESETS = [
-    { id: 'base',   name: 'Базовая',   bar: '#008000', bg: '#ffffff' },
-    { id: 'light',  name: 'Светлая',   bar: '#d9d9d9', bg: '#fafafa' },
-    { id: 'gray',   name: 'Серая',     bar: '#5a5a5a', bg: '#e0e0e0' },
-    { id: 'dark',   name: 'Тёмная',    bar: '#1f1f1f', bg: '#0f1115' },
-    { id: 'system', name: 'Системная (Автоопределение)', bar: null, bg: null }
+    { id: 'base',   name: 'Базовая',   bar: '#008000', bg: '#ffffff', btn: 'white' },
+    { id: 'light',  name: 'Светлая',   bar: '#d9d9d9', bg: '#fafafa', btn: 'black' },
+    { id: 'gray',   name: 'Серая',     bar: '#5a5a5a', bg: '#e0e0e0', btn: 'black' },
+    { id: 'dark',   name: 'Тёмная',    bar: '#1f1f1f', bg: '#0f1115', btn: 'white' },
+    { id: 'system', name: 'Системная (Автоопределение)', bar: null, bg: null, btn: null }
   ];
 
   const COLORS = [
@@ -195,18 +194,20 @@
     '#5a5a5a', '#d9d9d9', '#000000', '#fafafa'
   ];
 
-  const savedMode   = localStorage.getItem('themeMode') || 'presets';
-  const savedPreset = localStorage.getItem('presetName') || 'base';
-  const savedBar    = localStorage.getItem('colorBar') || '#008000';
-  const savedBg     = localStorage.getItem('colorBg')  || '#ffffff';
-  const savedIcon   = localStorage.getItem('colorIcon') || '#008000';
+  const savedMode     = localStorage.getItem('themeMode') || 'presets';
+  const savedPreset   = localStorage.getItem('presetName') || 'base';
+  const savedBar      = localStorage.getItem('colorBar') || '#008000';
+  const savedBg       = localStorage.getItem('colorBg')  || '#ffffff';
+  const savedTextBar  = localStorage.getItem('colorTextBar')  || '';
+  const savedTextPage = localStorage.getItem('colorTextPage') || '';
 
   const selected = {
     mode: savedMode,
     preset: savedPreset,
     bar: savedBar,
     bg: savedBg,
-    icon: savedIcon
+    textBar: savedTextBar,
+    textPage: savedTextPage
   };
 
   function findPreset(id) {
@@ -217,22 +218,56 @@
     if (preset.id === 'system') {
       const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       return dark
-        ? { bar: '#1f1f1f', bg: '#0f1115' }
-        : { bar: '#008000', bg: '#ffffff' };
+        ? { bar: '#1f1f1f', bg: '#0f1115', btn: 'white' }
+        : { bar: '#d9d9d9', bg: '#fafafa', btn: 'black' };
     }
-    return { bar: preset.bar, bg: preset.bg };
+    return { bar: preset.bar, bg: preset.bg, btn: preset.btn || 'white' };
   }
 
   function applyColors(bar, bg) {
     const root = document.documentElement.style;
     root.setProperty('--bar', bar);
-    root.setProperty('--bar-text', Theme.contrastColor(bar));
-    root.setProperty('--btn-bg', bar);
-    root.setProperty('--btn-text', Theme.contrastColor(bar));
-    root.setProperty('--btn-hover', Theme.shade(bar, -0.2));
     root.setProperty('--bg', bg);
-    root.setProperty('--text', Theme.contrastColor(bg));
     root.setProperty('--card', Theme.shade(bg, -0.05));
+    root.setProperty('--btn-bg', bar);
+
+    const textBar  = selected.textBar  || Theme.contrastColor(bar);
+    const textPage = selected.textPage || Theme.contrastColor(bg);
+    root.setProperty('--bar-text', textBar);
+    root.setProperty('--text',     textPage);
+
+    const fill = (function () {
+      if (selected.mode === 'presets') {
+        const p = findPreset(selected.preset);
+        if (p.id === 'system') {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+        }
+        return p.btn || 'white';
+      }
+      return 'white';
+    })();
+    root.setProperty('--nav-fill',   fill === 'black' ? '#000000' : '#ffffff');
+    root.setProperty('--nav-text',   fill === 'black' ? '#ffffff' : '#000000');
+    root.setProperty('--nav-border', fill === 'black' ? '#ffffff' : '#000000');
+  }
+
+  // Уведомление
+  let toastEl = null;
+  let toastTimer = null;
+
+  function showToast(text) {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.id = 'toast';
+      toastEl.innerHTML = '<span class="toast-icon">!</span><span class="toast-text"></span>';
+      document.body.appendChild(toastEl);
+    }
+    toastEl.querySelector('.toast-text').textContent = text;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove('show');
+    }, 3000);
   }
 
   function showSelected() {
@@ -243,7 +278,6 @@
     } else {
       applyColors(selected.bar, selected.bg);
     }
-    Theme.setFavicon(selected.icon);
   }
 
   const tabs = document.querySelectorAll('.tab');
@@ -252,7 +286,6 @@
 
   function switchTab(name) {
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-
     if (name === 'presets') {
       slidePresets.classList.remove('hidden-right', 'hidden-left');
       slidePresets.classList.add('active');
@@ -273,14 +306,12 @@
 
   switchTab(selected.mode);
 
-  // ===== Пресеты =====
+  // Пресеты
   const grid = document.getElementById('theme-grid');
   PRESETS.forEach(preset => {
     const card = document.createElement('div');
     card.className = 'theme-card';
-    if (selected.mode === 'presets' && selected.preset === preset.id) {
-      card.classList.add('active');
-    }
+    if (selected.mode === 'presets' && selected.preset === preset.id) card.classList.add('active');
 
     const preview = document.createElement('div');
     preview.className = 'theme-preview';
@@ -311,6 +342,8 @@
     card.addEventListener('click', () => {
       selected.mode = 'presets';
       selected.preset = preset.id;
+      selected.textBar = '';
+      selected.textPage = '';
       document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       showSelected();
@@ -319,26 +352,39 @@
     grid.appendChild(card);
   });
 
-  // ===== Палитры =====
-  function buildPalette(containerId, key) {
+  // Палитры
+  function buildPalette(containerId, key, target) {
     const container = document.getElementById(containerId);
     COLORS.forEach(color => {
       const sw = document.createElement('div');
       sw.className = 'swatch';
       sw.style.background = color;
-      if (selected[key] === color) {
-        sw.classList.add('active');
-      }
+
+      if (selected[key] === color) sw.classList.add('active');
 
       sw.addEventListener('mouseenter', () => {
-        if (key === 'bar')  applyColors(color, selected.bg);
-        if (key === 'bg')   applyColors(selected.bar, color);
-        if (key === 'icon') Theme.setFavicon(color);
+        if (target === 'bar')      applyColors(color, selected.bg);
+        if (target === 'bg')       applyColors(selected.bar, color);
+        if (target === 'textBar')  document.documentElement.style.setProperty('--bar-text', color);
+        if (target === 'textPage') document.documentElement.style.setProperty('--text', color);
       });
+
       sw.addEventListener('mouseleave', showSelected);
+
       sw.addEventListener('click', () => {
-        if (key !== 'icon') selected.mode = 'custom';
+        if (target === 'textBar' && Theme.colorsMatch(color, selected.bar)) {
+          showToast('У вас установлена ' + Theme.colorName(selected.bar) + ' шапка. Этот цвет текста не виден.');
+          return;
+        }
+        if (target === 'textPage' && Theme.colorsMatch(color, selected.bg)) {
+          showToast('У вас установлен ' + Theme.colorName(selected.bg) + ' фон. Этот цвет текста не виден.');
+          return;
+        }
+
         selected[key] = color;
+        if (target !== 'textBar' && target !== 'textPage') selected.mode = 'custom';
+        else selected.mode = 'custom';
+
         document.querySelectorAll('#' + containerId + ' .swatch').forEach(s => s.classList.remove('active'));
         sw.classList.add('active');
         showSelected();
@@ -348,11 +394,12 @@
     });
   }
 
-  buildPalette('palette-bar',  'bar');
-  buildPalette('palette-bg',   'bg');
-  buildPalette('palette-icon', 'icon');
+  buildPalette('palette-bar',       'bar',      'bar');
+  buildPalette('palette-bg',        'bg',       'bg');
+  buildPalette('palette-text-bar',  'textBar',  'textBar');
+  buildPalette('palette-text-page', 'textPage', 'textPage');
 
-  // ===== Применить =====
+  // Применить
   document.getElementById('apply-btn').addEventListener('click', () => {
     localStorage.setItem('themeMode', selected.mode);
 
@@ -367,12 +414,16 @@
         localStorage.setItem('colorBar', p.bar);
         localStorage.setItem('colorBg',  p.bg);
       }
+      localStorage.removeItem('colorTextBar');
+      localStorage.removeItem('colorTextPage');
     } else {
       localStorage.setItem('colorBar', selected.bar);
       localStorage.setItem('colorBg',  selected.bg);
+      if (selected.textBar)  localStorage.setItem('colorTextBar',  selected.textBar);
+      else                   localStorage.removeItem('colorTextBar');
+      if (selected.textPage) localStorage.setItem('colorTextPage', selected.textPage);
+      else                   localStorage.removeItem('colorTextPage');
     }
-
-    localStorage.setItem('colorIcon', selected.icon);
 
     window.location.href = 'index.html';
   });
@@ -381,7 +432,5 @@
 })();
 </script>
 
-<script src="back-to-top.js"></script>
-<script src="pwa.js"></script>
 </body>
 </html>
