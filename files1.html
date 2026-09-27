@@ -1,41 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UXWEditor Download</title>
+<title>UXWEditor Download — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<link rel="stylesheet" href="common.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon.png">
 <style>
   :root {
-    --bg: #ffffff;
-    --text: #000000;
-    --bar: #008000;
-    --bar-text: #ffffff;
-    --btn-bg: #008000;
-    --btn-text: #ffffff;
-    --btn-hover: #006400;
-    --card: #f2f2f2;
+    --bg: #ffffff; --text: #000000;
+    --bar: #008000; --bar-text: #ffffff;
+    --btn-bg: #008000; --btn-text: #ffffff;
+    --btn-hover: #006400; --card: #f2f2f2;
   }
   body {
     margin: 0; padding: 0;
     font-family: sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--bg); color: var(--text);
     transition: background .25s, color .25s;
   }
   .top-bar {
     background-color: var(--bar);
     border: 4px solid var(--bar);
     color: var(--bar-text);
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 15px;
+    padding: 20px 15px;
     box-sizing: border-box;
     width: 100%;
     position: relative;
     transition: background-color .25s, border-color .25s;
   }
-  .top-bar h1 { margin: 0; }
+  .top-bar h1 { margin: 0; font-size: 1.4rem; }
   .content { padding: 20px; position: relative; }
 
   .zip-btn, .exe-btn, .torrent-btn, .github-btn {
@@ -63,69 +59,118 @@
     margin-left: 20px;
   }
   #home-link {
-    position: absolute;
-    left: 540px;
-    top: -55px;
-    font-size: 25px;
-    color: var(--bar-text);
+    display: inline-block;
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: var(--btn-bg);
     text-decoration: none;
     font-weight: bold;
-    background: transparent;
   }
   #home-link:hover { text-decoration: underline; }
-
-  #settings-btn {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: white;
-    color: black;
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: bold;
-    border: 2px solid white;
-    box-sizing: border-box;
-    transition: background-color .2s;
-  }
-  #settings-btn:hover { background-color: #e6e6e6; }
 
   .version-block {
     overflow: hidden;
     margin-bottom: 40px;
     padding-bottom: 20px;
   }
+  .page-divider {
+    border: 0;
+    height: 4px;
+    background: var(--bar);
+    margin: 40px 0;
+    transition: background-color .25s;
+  }
+
+  @media (max-width: 700px) {
+    .broom-img { float: none; display: block; margin: 20px auto; }
+  }
 </style>
 </head>
 <body>
- <div class="top-bar">
-   <h1>UXNTWWW.io - Сайт с файлами</h1>
-   <a href="GlobalSettings.html" id="settings-btn">Настройки</a>
- </div>
- <div class="content">
- <a href="index.html" id="home-link">~Главная</a>
 
- <div class="version-block">
- <h2>Скачать UXWEditor Free v1.0</h2>
- <p>~ Здесь вы можете скачать утилиту совместимую с будущими файлами в PCCleaner --- .uxw.</p>
-  <h1>Что за программа?</h1>
-  <p>~ Эта утилита позволяет открывать файлы .uxw и другие позволяя редактировать их.</p>
-  <p>~ Эта программа выполняет функции:</p>
-  <p>~ Открыть,сохранить/сохранить как,новый лист.</p>
-  <p>~ Вырезать,вставить,копировать,поиск и замена слова.</p>
-  <p>~ Отображение строк сбоку вкл или выкл.</p>
-  <p>~ Поддержка русского и английского языка.</p>
-  <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
-  <img src="icon.png" class="broom-img" alt="UXWEditor Icon">
-  <br>
-  <a href="UXNTWWW.zip" download class="zip-btn">Скачать.zip</a>
-  <a href="UXWEditor_Setup.exe" download class="exe-btn">Скачать.exe</a>
-  <a href="UXWEditor_Setup.torrent" download class="torrent-btn">Скачать.torrent</a>
-  <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.0.0" class="github-btn">Скачать на гитхаб</a>
- </div>
- </div>
+<div class="top-bar">
+  <h1>UXNTWWW.io - Сайт с файлами</h1>
+  <nav class="top-nav">
+    <a href="index.html">Главная</a>
+    <a href="about.html">О сайте</a>
+    <a href="contacts.html">Контакты</a>
+    <a href="faq.html">FAQ</a>
+    <a href="GlobalSettings.html">Настройки</a>
+  </nav>
+</div>
 
-<script src="theme.js"></script>
+<div class="content fade-in">
+  <a href="index.html" id="home-link">~ Главная</a>
+
+  <div class="search-wrap">
+    <input type="text" id="search" class="search-input" placeholder="Поиск по странице...">
+  </div>
+
+  <!-- ================= Основной блок ================= -->
+  <div class="version-block">
+    <h2>Скачать UXWEditor Free v1.0</h2>
+    <p>~ Здесь вы можете скачать утилиту совместимую с будущими файлами в PCCleaner --- .uxw.</p>
+    <h1>Что за программа?</h1>
+    <p>~ Эта утилита позволяет открывать файлы .uxw и другие позволяя редактировать их.</p>
+    <p>~ Эта программа выполняет функции:</p>
+    <p>~ Открыть,сохранить/сохранить как,новый лист.</p>
+    <p>~ Вырезать,вставить,копировать,поиск и замена слова.</p>
+    <p>~ Отображение строк сбоку вкл или выкл.</p>
+    <p>~ Поддержка русского и английского языка.</p>
+
+    <h1>Скриншоты</h1>
+    <div class="screenshots">
+      <img src="screens/editor-1.png" alt="UXWEditor — главное окно">
+      <img src="screens/editor-2.png" alt="UXWEditor — поиск и замена">
+      <img src="screens/editor-3.png" alt="UXWEditor — настройки">
+    </div>
+
+    <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+    <img src="icon.png" class="broom-img" alt="UXWEditor Icon">
+    <br>
+    <a href="UXNTWWW.zip" download class="zip-btn">Скачать.zip</a>
+    <a href="UXWEditor_Setup.exe" download class="exe-btn">Скачать.exe</a>
+    <a href="UXWEditor_Setup.torrent" download class="torrent-btn">Скачать.torrent</a>
+    <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.0.0" class="github-btn">Скачать на гитхаб</a>
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    const input = document.getElementById('search');
+    if (!input) return;
+
+    const blocks = Array.from(document.querySelectorAll('.version-block'));
+    if (!blocks.length) return;
+
+    const empty = document.createElement('div');
+    empty.className = 'search-empty';
+    empty.textContent = 'Ничего не найдено.';
+    empty.style.display = 'none';
+    blocks[0].parentNode.insertBefore(empty, blocks[0]);
+
+    input.addEventListener('input', function () {
+      const q = input.value.trim().toLowerCase();
+      let found = 0;
+
+      blocks.forEach(function (block) {
+        const text = block.textContent.toLowerCase();
+        const match = !q || text.includes(q);
+        block.style.display = match ? '' : 'none';
+        if (match) found++;
+      });
+
+      document.querySelectorAll('.page-divider').forEach(function (hr) {
+        hr.style.display = q ? 'none' : '';
+      });
+
+      empty.style.display = (q && found === 0) ? 'block' : 'none';
+    });
+  })();
+</script>
+
+<script src="back-to-top.js"></script>
+<script src="pwa.js"></script>
 </body>
 </html>
