@@ -124,8 +124,12 @@ body.glass-mode .search-input {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
+  z-index: 100;
 }
-.top-nav a {
+
+/* Обычные кнопки навигации */
+.nav-btn {
   background: var(--nav-fill, #fff);
   color: var(--nav-text, #000);
   padding: 10px 16px;
@@ -135,8 +139,16 @@ body.glass-mode .search-input {
   font-size: 0.9rem;
   border: 2px solid var(--nav-border, #000);
   transition: opacity .2s, background .25s, color .25s, border-color .25s;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-body.glass-mode .top-nav a {
+.nav-btn:hover { opacity: 0.85; }
+
+body.glass-mode .nav-btn {
   background: var(--glass-bg);
   color: var(--bar-text);
   border: 1px solid var(--glass-border);
@@ -144,8 +156,97 @@ body.glass-mode .top-nav a {
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
 }
-.top-nav a:hover { opacity: 0.85; }
 
+/* Кнопка Помощь */
+.nav-help-wrap {
+  position: relative;
+  display: inline-block;
+}
+.nav-help-btn .nav-arrow {
+  display: inline-block;
+  transition: transform .25s ease;
+  font-size: 0.85rem;
+}
+.nav-help-wrap.open .nav-help-btn .nav-arrow {
+  transform: rotate(180deg);
+}
+.nav-help-wrap.open .nav-help-btn {
+  opacity: 1;
+}
+
+/* Выпадающее подменю "Помощь" — выезжает СЛЕВА (вариант В) */
+.nav-help-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: var(--nav-fill, #fff);
+  border: 2px solid var(--nav-border, #000);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(30px);
+  transition: opacity .3s ease, transform .3s cubic-bezier(.22,.61,.36,1);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  z-index: 200;
+}
+body.glass-mode .nav-help-menu {
+  background: var(--glass-bg-2);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+
+.nav-help-wrap.open .nav-help-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+/* Пункты подменю */
+.nav-help-menu a {
+  color: var(--nav-text, #000);
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background .2s, opacity .2s;
+  opacity: 0;
+  transform: translateX(20px);
+}
+body.glass-mode .nav-help-menu a {
+  color: var(--bar-text);
+}
+
+/* Поочерёдное появление пунктов */
+.nav-help-wrap.open .nav-help-menu a {
+  opacity: 1;
+  transform: translateX(0);
+}
+.nav-help-wrap.open .nav-help-menu a:nth-child(1) {
+  transition: opacity .3s ease .05s, transform .3s ease .05s, background .2s;
+}
+.nav-help-wrap.open .nav-help-menu a:nth-child(2) {
+  transition: opacity .3s ease .12s, transform .3s ease .12s, background .2s;
+}
+.nav-help-wrap.open .nav-help-menu a:nth-child(3) {
+  transition: opacity .3s ease .19s, transform .3s ease .19s, background .2s;
+}
+
+.nav-help-menu a:hover {
+  background: var(--card);
+}
+body.glass-mode .nav-help-menu a:hover {
+  background: var(--glass-bg);
+}
+
+/* Мобильная адаптация */
 @media (max-width: 800px) {
   .top-nav {
     position: static;
@@ -153,9 +254,11 @@ body.glass-mode .top-nav a {
     margin-top: 12px;
     justify-content: flex-start;
   }
-  #back-to-top { top: auto; bottom: 20px; }
+  .nav-help-menu {
+    right: auto;
+    left: 0;
+  }
 }
-
 /* ===== Скриншоты ===== */
 .screenshots {
   display: grid;
