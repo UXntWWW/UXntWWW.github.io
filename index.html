@@ -32,41 +32,9 @@
     transition: background-color .25s, border-color .25s, color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
-  .content { padding: 20px; position: relative; min-height: 500px; }
-
-  #files-btn, #files-btn-v10 {
-    position: absolute;
-    left: 20px;
-    background-color: var(--nav-fill);
-    color: var(--nav-text);
-    border: 2px solid var(--nav-border);
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: bold;
-    display: inline-block;
-    box-sizing: border-box;
-    transition: opacity .2s, background .25s, color .25s, border-color .25s;
-  }
-  #files-btn { top: 140px; }
-  #files-btn-v10 { top: 290px; }
-  #files-btn:hover, #files-btn-v10:hover { opacity: 0.85; }
-
-  .status-text { position: absolute; left: 10px; top: 200px; margin: 0; }
-  #update-text { position: absolute; left: 10px; top: 230px; margin: 0; }
-  .status-text-v10 { position: absolute; left: 10px; top: 350px; margin: 0; }
-  #update-text-v10 { position: absolute; left: 10px; top: 380px; margin: 0; }
-
-  @media (max-width: 700px) {
-    #files-btn, #files-btn-v10,
-    .status-text, #update-text,
-    .status-text-v10, #update-text-v10 {
-      position: static;
-      display: block;
-      margin: 8px 0;
-    }
-    #files-btn, #files-btn-v10 { display: inline-block; margin-top: 12px; }
-  }
+  .content { padding: 20px; max-width: 1100px; margin: 0 auto; }
+  .intro { margin-bottom: 20px; }
+  .intro p { margin: 6px 0; }
 </style>
 </head>
 <body>
@@ -82,19 +50,171 @@
  </div>
 
  <div class="content fade-in">
-   <p>Приветствую,ты попал(а) на сайт файлов и программ.</p>
-   <p>Все файлы АБСОЛЮТНО проверены!</p>
-   <p>Приятного использования!</p>
 
-   <a href="files.html" id="files-btn">Файлы</a>
-   <p class="status-text">PCCleaner(Проверено)</p>
-   <p id="update-text">Обновлено:13.08.2026</p>
+   <div class="intro">
+     <p>Приветствую,ты попал(а) на сайт файлов и программ.</p>
+     <p>Все файлы АБСОЛЮТНО проверены!</p>
+     <p>Приятного использования!</p>
+   </div>
 
-   <a href="files1.html" id="files-btn-v10">Файлы</a>
-   <p class="status-text-v10">UXWEditor Free(Проверено)</p>
-   <p id="update-text-v10">Обновлено:21.07.2026</p>
+   <div class="search-wrap">
+     <input type="text" id="search-programs" class="search-input" placeholder="Поиск программ...">
+   </div>
+
+   <div class="program-cards" id="program-cards">
+
+     <!-- ===== PCCleaner ===== -->
+     <div class="program-card scroll-animate"
+          data-name="PCCleaner"
+          data-desc="Для чистки пк"
+          data-version="1.3"
+          data-totaldata="12.4 MB, 13.08.2026"
+          data-link="files.html"
+          data-icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10"
+          data-github-owner="UXntWWW"
+          data-github-repo="UXntWWW.github.io">
+       <!-- будет заполнено JS -->
+     </div>
+
+     <!-- ===== UXWEditor ===== -->
+     <div class="program-card scroll-animate"
+          data-name="UXWEditor"
+          data-desc="Для редактирования текста"
+          data-version="1.0"
+          data-totaldata="8.5 MB, 21.07.2026"
+          data-link="files1.html"
+          data-icon="icon.png"
+          data-github-owner="UXntWWW"
+          data-github-repo="UXntWWW.github.io">
+       <!-- будет заполнено JS -->
+     </div>
+
+   </div>
+
  </div>
 
+<script>
+(function () {
+  'use strict';
+
+  const versionFiles = ['version.txt', 'version1.txt'];
+  const totalFiles   = ['totaldata.txt', 'totaldata1.txt'];
+
+  function fetchText(url) {
+    return fetch(url, { cache: 'no-cache' })
+      .then(r => r.ok ? r.text() : Promise.reject())
+      .then(t => t.trim())
+      .catch(() => null);
+  }
+
+  function parseTotal(str) {
+    if (!str) return { size: '—', date: '—' };
+    const parts = str.split(',').map(s => s.trim());
+    return {
+      size: parts[0] || '—',
+      date: parts[1] || '—'
+    };
+  }
+
+  function buildCard(card, version, total) {
+    const name = card.dataset.name;
+    const desc = card.dataset.desc;
+    const link = card.dataset.link;
+    const icon = card.dataset.icon;
+    const owner = card.dataset.githubOwner;
+    const repo = card.dataset.githubRepo;
+
+    const td = parseTotal(total || card.dataset.totaldata);
+
+    card.innerHTML =
+      '<img class="program-card-icon" src="' + icon + '" alt="' + name + '">' +
+      '<h3 class="program-card-title">' + name +
+        '<span class="program-card-version">v' + (version || '—') + '</span>' +
+      '</h3>' +
+      '<p class="program-card-desc">' + desc + '</p>' +
+      '<div class="program-card-meta">' +
+        '<div class="program-card-meta-row">' +
+          '<span>Размер:</span>' +
+          '<span>' + td.size + '</span>' +
+        '</div>' +
+        '<div class="program-card-meta-row">' +
+          '<span>Последнее обновление:</span>' +
+          '<span>' + td.date + '</span>' +
+        '</div>' +
+        '<div class="program-card-meta-row">' +
+          '<span>Безопасно:</span>' +
+          '<span class="program-card-safe">' +
+            '<span class="program-card-safe-icon">✓</span>' +
+            'Проверено' +
+          '</span>' +
+        '</div>' +
+        '<div class="program-card-meta-row">' +
+          '<span>Скачиваний:</span>' +
+          '<span class="program-card-downloads" data-owner="' + owner + '" data-repo="' + repo + '">—</span>' +
+        '</div>' +
+      '</div>' +
+      '<a href="' + link + '" class="program-card-btn">Открыть</a>';
+  }
+
+  // Загружаем версии и totaldata параллельно
+  const cards = document.querySelectorAll('.program-card');
+
+  cards.forEach(function (card, i) {
+    const vFile = versionFiles[i];
+    const tFile = totalFiles[i];
+
+    Promise.all([fetchText(vFile), fetchText(tFile)]).then(function (res) {
+      buildCard(card, res[0], res[1]);
+      loadDownloadCounts();
+    });
+  });
+
+  // Счётчик скачиваний через GitHub API
+  let countsLoaded = false;
+  function loadDownloadCounts() {
+    if (countsLoaded) return;
+    countsLoaded = true;
+
+    const counters = document.querySelectorAll('.program-card-downloads');
+    counters.forEach(function (el) {
+      const owner = el.dataset.owner;
+      const repo = el.dataset.repo;
+      if (!owner || !repo) return;
+
+      fetch('https://api.github.com/repos/' + owner + '/' + repo + '/releases', { cache: 'no-cache' })
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(function (releases) {
+          let total = 0;
+          releases.forEach(function (rel) {
+            (rel.assets || []).forEach(function (asset) {
+              total += asset.download_count || 0;
+            });
+          });
+          el.textContent = total > 0 ? total.toLocaleString('ru-RU') : '—';
+        })
+        .catch(function () {
+          el.textContent = '—';
+        });
+    });
+  }
+
+  // Поиск по карточкам
+  const searchInput = document.getElementById('search-programs');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      const q = searchInput.value.trim().toLowerCase();
+      document.querySelectorAll('.program-card').forEach(function (card) {
+        const name = (card.dataset.name || '').toLowerCase();
+        const desc = (card.dataset.desc || '').toLowerCase();
+        const match = !q || name.includes(q) || desc.includes(q);
+        card.style.display = match ? '' : 'none';
+      });
+    });
+  }
+})();
+</script>
+
+<script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
 </body>
 </html>
