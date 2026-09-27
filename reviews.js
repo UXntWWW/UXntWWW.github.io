@@ -1,6 +1,4 @@
-/* reviews.js — отзывы и рейтинг для страниц UXNTWWW.io
-   Использует GitHub Discussions через Giscus + GitHub API для рейтинга.
-*/
+/* reviews.js — отзывы и рейтинг для страниц UXNTWWW.io */
 (function () {
   'use strict';
 
@@ -9,7 +7,7 @@
   const GISCUS_REPO_ID     = 'R_kgDOTZJ_lQ';
   const GISCUS_CATEGORY    = 'Отзывы';
   const GISCUS_CATEGORY_ID = 'DIC_kwDOTZJ_lc4DGhXU';
-  const GITHUB_TOKEN       = '';                        // ← оставь пустым или вставь токен для общего рейтинга
+  const GITHUB_TOKEN       = '';
   const RATING_PREFIX      = 'RATING:';
 
   function getSlug() {
@@ -18,6 +16,33 @@
   }
 
   const SLUG = getSlug();
+
+  // ===== Определяем тему для Giscus по настройкам сайта =====
+  function getGiscusTheme() {
+    const glass = localStorage.getItem('glassEffect') === 'on';
+    const mode = localStorage.getItem('themeMode') || 'presets';
+
+    if (glass) {
+      return 'transparent_dark';
+    }
+
+    if (mode === 'presets') {
+      const preset = localStorage.getItem('presetName') || 'base';
+      if (preset === 'dark') return 'dark';
+      if (preset === 'system') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      return 'light';
+    }
+
+    // Кастом — определяем по яркости фона
+    const bg = localStorage.getItem('colorBg') || '#ffffff';
+    const r = parseInt(bg.substr(1, 2), 16);
+    const g = parseInt(bg.substr(3, 2), 16);
+    const b = parseInt(bg.substr(5, 2), 16);
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum < 0.5 ? 'dark' : 'light';
+  }
 
   function createReviewsSection() {
     const section = document.createElement('section');
@@ -45,7 +70,7 @@
     modal.innerHTML =
       '<div class="rating-modal">' +
         '<h3>Оцените программу</h3>' +
-        '<p>Поставьте от 1 до 5 звёзд. Ваша оценка сохранится и будет учтена в общем рейтинге.</p>' +
+        '<p>Поставьте от 1 до 5 звёзд.</p>' +
         '<div class="rating-stars-input" id="rating-stars-input">' +
           '<span data-value="1">★</span>' +
           '<span data-value="2">★</span>' +
@@ -98,104 +123,9 @@
       if (!chosen) return;
       const key = 'rating_' + SLUG;
       localStorage.setItem(key, String(chosen));
-      if (GITHUB_TOKEN) {
-        postRatingToGitHub(chosen);
-      } else {
-        updateRatingFromLocal();
-      }
+      updateRatingFromLocal();
       modal.classList.remove('show');
     });
-  }
-
-  function postRatingToGitHub(value) {
-    fetch('https://api.github.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + GITHUB_TOKEN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query: `
-          query($owner: String!, $repo: String!, $title: String!) {
-            repository(owner: $owner, name: $repo) {
-              discussion(title: $title) { id }
-            }
-          }`,
-        variables: {
-          owner: GISCUS_REPO.split('/')[0],
-          repo: GISCUS_REPO.split('/')[1],
-          title: SLUG
-        }
-      })
-    })
-    .then(r => r.json())
-    .then(function (data) {
-      const discussionId = data && data.data && data.data.repository &&
-                          data.data.repository.discussion &&
-                          data.data.repository.discussion.id;
-      if (!discussionId) return;
-      return fetch('https://api.github.com/graphql', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + GITHUB_TOKEN,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          query: `
-            mutation($discussionId: ID!, $body: String!) {
-              addDiscussionComment(input: { discussionId: $discussionId, body: $body }) {
-                comment { id }
-              }
-            }`,
-          variables: { discussionId: discussionId, body: RATING_PREFIX + value }
-        })
-      });
-    })
-    .then(function () { setTimeout(updateRatingFromGitHub, 1200); })
-    .catch(function () { updateRatingFromLocal(); });
-  }
-
-  function updateRatingFromGitHub() {
-    if (!GITHUB_TOKEN) { updateRatingFromLocal(); return; }
-
-    fetch('https://api.github.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + GITHUB_TOKEN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        query: `
-          query($owner: String!, $repo: String!, $title: String!) {
-            repository(owner: $owner, name: $repo) {
-              discussion(title: $title) {
-                comments(first: 100) { nodes { body } }
-              }
-            }
-          }`,
-        variables: {
-          owner: GISCUS_REPO.split('/')[0],
-          repo: GISCUS_REPO.split('/')[1],
-          title: SLUG
-        }
-      })
-    })
-    .then(r => r.json())
-    .then(function (data) {
-      const comments = data && data.data && data.data.repository &&
-                       data.data.repository.discussion &&
-                       data.data.repository.discussion.comments &&
-                       data.data.repository.discussion.comments.nodes;
-      if (!comments || !comments.length) { updateRatingFromLocal(); return; }
-      const values = comments
-        .map(c => c.body)
-        .filter(b => b && b.indexOf(RATING_PREFIX) === 0)
-        .map(b => parseInt(b.replace(RATING_PREFIX, '').trim(), 10))
-        .filter(n => n >= 1 && n <= 5);
-      if (!values.length) { updateRatingFromLocal(); return; }
-      renderRating(values);
-    })
-    .catch(function () { updateRatingFromLocal(); });
   }
 
   function updateRatingFromLocal() {
@@ -239,9 +169,16 @@
     return forms[2];
   }
 
+  // ===== Giscus с синхронизацией темы =====
+  let giscusLoaded = false;
+
   function loadGiscus() {
     const wrap = document.getElementById('giscus-wrap');
     if (!wrap) return;
+    wrap.innerHTML = '';
+
+    const theme = getGiscusTheme();
+
     const s = document.createElement('script');
     s.src = 'https://giscus.app/client.js';
     s.setAttribute('data-repo', GISCUS_REPO);
@@ -254,13 +191,32 @@
     s.setAttribute('data-reactions-enabled', '1');
     s.setAttribute('data-emit-metadata', '0');
     s.setAttribute('data-input-position', 'top');
-    s.setAttribute('data-theme', localStorage.getItem('glassEffect') === 'on' ? 'transparent_dark' : 'preferred_color_scheme');
+    s.setAttribute('data-theme', theme);
     s.setAttribute('data-lang', 'ru');
     s.setAttribute('crossorigin', 'anonymous');
     s.async = true;
     wrap.appendChild(s);
+
+    giscusLoaded = true;
   }
 
+  // Обновление темы Giscus без перезагрузки страницы
+  function updateGiscusTheme() {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+    const theme = getGiscusTheme();
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme: theme } } },
+      'https://giscus.app'
+    );
+  }
+
+  // Слушаем изменения темы на сайте (custom event из theme.js)
+  document.addEventListener('themeChanged', function () {
+    if (giscusLoaded) updateGiscusTheme();
+  });
+
+  // Запуск
   document.addEventListener('DOMContentLoaded', function () {
     createReviewsSection();
     createRatingModal();
@@ -272,8 +228,7 @@
       });
     }
 
-    if (GITHUB_TOKEN) updateRatingFromGitHub();
-    else updateRatingFromLocal();
+    updateRatingFromLocal();
     loadGiscus();
   });
 })();
