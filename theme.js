@@ -3,10 +3,11 @@
   'use strict';
 
   const PRESETS = {
-    base:  { bar: '#008000', bg: '#ffffff' },
-    light: { bar: '#d9d9d9', bg: '#fafafa' },
-    gray:  { bar: '#5a5a5a', bg: '#e0e0e0' },
-    dark:  { bar: '#1f1f1f', bg: '#0f1115' }
+    base:   { bar: '#008000', bg: '#ffffff' },
+    light:  { bar: '#d9d9d9', bg: '#fafafa' },
+    gray:   { bar: '#5a5a5a', bg: '#e0e0e0' },
+    dark:   { bar: '#1f1f1f', bg: '#0f1115' },
+    system: { bar: null,      bg: null      }
   };
 
   const DEFAULTS = PRESETS.base;
@@ -32,10 +33,19 @@
     return '#' + to(r) + to(g) + to(b);
   }
 
+  function systemPrefersDark() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
   function getColors() {
     const mode = localStorage.getItem('themeMode') || 'presets';
     if (mode === 'presets') {
       const id = localStorage.getItem('presetName') || 'base';
+      if (id === 'system') {
+        return systemPrefersDark()
+          ? { bar: '#1f1f1f', bg: '#0f1115' }
+          : { bar: '#008000', bg: '#ffffff' };
+      }
       const p = PRESETS[id] || DEFAULTS;
       return { bar: p.bar, bg: p.bg };
     }
@@ -59,6 +69,16 @@
 
   const c = getColors();
   apply(c.bar, c.bg);
+
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+      if (localStorage.getItem('themeMode') === 'presets' &&
+          localStorage.getItem('presetName') === 'system') {
+        const x = getColors();
+        apply(x.bar, x.bg);
+      }
+    });
+  }
 
   document.addEventListener('DOMContentLoaded', function () {
     const x = getColors();
