@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — UXNTWWW.io</title>
+<script src="theme.js"></script>
+<link rel="stylesheet" href="common.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+  :root {
+    --bg: #ffffff; --text: #000000;
+    --bar: #008000; --bar-text: #ffffff;
+    --btn-bg: #008000; --btn-text: #ffffff;
+    --btn-hover: #006400; --card: #f2f2f2;
+  }
+  body {
+    margin: 0; font-family: sans-serif;
+    background: var(--bg); color: var(--text);
+    transition: background .25s, color .25s;
+  }
+  .top-bar {
+    background: var(--bar); color: var(--bar-text);
+    padding: 20px 15px; position: relative;
+    transition: background-color .25s;
+  }
+  .top-bar h1 { margin: 0; font-size: 1.4rem; }
+  .content { padding: 24px; max-width: 820px; margin: 0 auto; }
+  h2 { margin-top: 30px; }
+  a { color: var(--btn-bg); }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>FAQ — UXNTWWW.io</h1>
+  <nav class="top-nav">
+    <a href="index.html">Главная</a>
+    <a href="about.html">О сайте</a>
+    <a href="contacts.html">Контакты</a>
+    <a href="GlobalSettings.html">Настройки</a>
+  </nav>
+</div>
+
+<div class="content fade-in">
+
+  <h2>Частые вопросы</h2>
+
+  <div class="faq-item">
+    <button class="faq-q">Антивирус ругается на файл. Что делать?</button>
+    <div class="faq-a">Это ложное срабатывание — утилиты работают с системными папками (Temp, DNS, кэш), поэтому антивирусы иногда реагируют. Все файлы проверены, исходники есть на GitHub. Можно добавить в исключения.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q">Почему у вас .exe, а не установщик?</button>
+    <div class="faq-a">Программы portable — не требуют установки. Скачал, распаковал (если .zip), запустил. Так проще и не оставляет следов в системе.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q">Как обновляться до новой версии?</button>
+    <div class="faq-a">Утилиты сами проверяют обновления. Также можно вручную скачать новую версию с главной страницы или из GitHub Releases.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q">Работает ли на Windows 7?</button>
+    <div class="faq-a">Основная поддержка — Windows 10 и 11 (64-bit). На Windows 7 часть функций может не работать корректно.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q">Можно ли использовать в коммерческих целях?</button>
+    <div class="faq-a">Да, программы бесплатные. Единственное условие — не выдавать их за свои и не продавать.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q">Где посмотреть исходный код?</button>
+    <div class="faq-a">На GitHub: <a href="https://github.com/UXntWWW/UXntWWW.github.io">UXntWWW/UXntWWW.github.io</a></div>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.faq-item').forEach(function (item) {
+    item.querySelector('.faq-q').addEventListener('click', function () {
+      item.classList.toggle('open');
+    });
+  });
+</script>
+
+<script src="back-to-top.js"></script>
+<script src="pwa.js"></script>
+</body>
+</html>
