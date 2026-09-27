@@ -1,42 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Главная</title>
+<title>Главная — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<link rel="stylesheet" href="common.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon.png">
+<meta name="theme-color" content="#008000">
 <style>
   :root {
-    --bg: #ffffff;
-    --text: #000000;
-    --bar: #008000;
-    --bar-text: #ffffff;
-    --btn-bg: #008000;
-    --btn-text: #ffffff;
-    --btn-hover: #006400;
-    --card: #f2f2f2;
+    --bg: #ffffff; --text: #000000;
+    --bar: #008000; --bar-text: #ffffff;
+    --btn-bg: #008000; --btn-text: #ffffff;
+    --btn-hover: #006400; --card: #f2f2f2;
   }
   body {
     margin: 0; padding: 0;
     font-family: sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--bg); color: var(--text);
     transition: background .25s, color .25s;
   }
   .top-bar {
     background-color: var(--bar);
     border: 4px solid var(--bar);
     color: var(--bar-text);
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 15px;
+    padding: 20px 15px;
     box-sizing: border-box;
     width: 100%;
     position: relative;
     transition: background-color .25s, border-color .25s;
   }
-  .top-bar h1 { margin: 0; }
-  .content { padding: 20px; position: relative; }
+  .top-bar h1 { margin: 0; font-size: 1.4rem; }
+  .content { padding: 20px; position: relative; min-height: 500px; }
 
   #files-btn, #files-btn-v10 {
     position: absolute;
@@ -60,31 +57,31 @@
   .status-text-v10 { position: absolute; left: 10px; top: 350px; margin: 0; }
   #update-text-v10 { position: absolute; left: 10px; top: 380px; margin: 0; }
 
-  #settings-btn {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: white;
-    color: black;
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: bold;
-    border: 2px solid white;
-    display: inline-block;
-    box-sizing: border-box;
-    transition: background-color .2s;
+  @media (max-width: 700px) {
+    #files-btn, #files-btn-v10,
+    .status-text, #update-text,
+    .status-text-v10, #update-text-v10 {
+      position: static;
+      display: block;
+      margin: 8px 0;
+    }
+    #files-btn, #files-btn-v10 { display: inline-block; margin-top: 12px; }
   }
-  #settings-btn:hover { background-color: #e6e6e6; }
 </style>
 </head>
 <body>
+
  <div class="top-bar">
    <h1>UXNTWWW.io - Сайт с файлами</h1>
-   <a href="GlobalSettings.html" id="settings-btn">Настройки</a>
+   <nav class="top-nav">
+     <a href="about.html">О сайте</a>
+     <a href="contacts.html">Контакты</a>
+     <a href="faq.html">FAQ</a>
+     <a href="GlobalSettings.html">Настройки</a>
+   </nav>
  </div>
- <div class="content">
+
+ <div class="content fade-in">
    <p>Приветствую,ты попал(а) на сайт файлов и программ.</p>
    <p>Все файлы АБСОЛЮТНО проверены!</p>
    <p>Приятного использования!</p>
@@ -98,6 +95,7 @@
    <p id="update-text-v10">Обновлено:21.07.2026</p>
  </div>
 
-<script src="theme.js"></script>
+<script src="back-to-top.js"></script>
+<script src="pwa.js"></script>
 </body>
 </html>
