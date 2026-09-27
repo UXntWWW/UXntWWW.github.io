@@ -57,11 +57,14 @@
     root.setProperty('--card',      shade(bg, -0.05));
   }
 
-  // Применяем сразу, до отрисовки
   const c = getColors();
   apply(c.bar, c.bg);
 
-  // Публичный API
+  document.addEventListener('DOMContentLoaded', function () {
+    const x = getColors();
+    apply(x.bar, x.bg);
+  });
+
   window.Theme = {
     contrastColor: contrastColor,
     shade: shade,
