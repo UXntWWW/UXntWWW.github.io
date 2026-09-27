@@ -73,7 +73,6 @@
           data-icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZsDBGFxtWw2pRVZh8HPGyT06yK4z6eKOfOkobWm_LsA&s=10"
           data-github-owner="UXntWWW"
           data-github-repo="UXntWWW.github.io">
-       <!-- будет заполнено JS -->
      </div>
 
      <!-- ===== UXWEditor ===== -->
@@ -86,7 +85,6 @@
           data-icon="icon.png"
           data-github-owner="UXntWWW"
           data-github-repo="UXntWWW.github.io">
-       <!-- будет заполнено JS -->
      </div>
 
    </div>
@@ -110,10 +108,7 @@
   function parseTotal(str) {
     if (!str) return { size: '—', date: '—' };
     const parts = str.split(',').map(s => s.trim());
-    return {
-      size: parts[0] || '—',
-      date: parts[1] || '—'
-    };
+    return { size: parts[0] || '—', date: parts[1] || '—' };
   }
 
   function buildCard(card, version, total) {
@@ -123,7 +118,6 @@
     const icon = card.dataset.icon;
     const owner = card.dataset.githubOwner;
     const repo = card.dataset.githubRepo;
-
     const td = parseTotal(total || card.dataset.totaldata);
 
     card.innerHTML =
@@ -133,50 +127,33 @@
       '</h3>' +
       '<p class="program-card-desc">' + desc + '</p>' +
       '<div class="program-card-meta">' +
-        '<div class="program-card-meta-row">' +
-          '<span>Размер:</span>' +
-          '<span>' + td.size + '</span>' +
+        '<div class="program-card-meta-row"><span>Размер:</span><span>' + td.size + '</span></div>' +
+        '<div class="program-card-meta-row"><span>Последнее обновление:</span><span>' + td.date + '</span></div>' +
+        '<div class="program-card-meta-row"><span>Безопасно:</span>' +
+          '<span class="program-card-safe"><span class="program-card-safe-icon">✓</span>Проверено</span>' +
         '</div>' +
-        '<div class="program-card-meta-row">' +
-          '<span>Последнее обновление:</span>' +
-          '<span>' + td.date + '</span>' +
-        '</div>' +
-        '<div class="program-card-meta-row">' +
-          '<span>Безопасно:</span>' +
-          '<span class="program-card-safe">' +
-            '<span class="program-card-safe-icon">✓</span>' +
-            'Проверено' +
-          '</span>' +
-        '</div>' +
-        '<div class="program-card-meta-row">' +
-          '<span>Скачиваний:</span>' +
+        '<div class="program-card-meta-row"><span>Скачиваний:</span>' +
           '<span class="program-card-downloads" data-owner="' + owner + '" data-repo="' + repo + '">—</span>' +
         '</div>' +
       '</div>' +
       '<a href="' + link + '" class="program-card-btn">Открыть</a>';
   }
 
-  // Загружаем версии и totaldata параллельно
   const cards = document.querySelectorAll('.program-card');
 
   cards.forEach(function (card, i) {
-    const vFile = versionFiles[i];
-    const tFile = totalFiles[i];
-
-    Promise.all([fetchText(vFile), fetchText(tFile)]).then(function (res) {
+    Promise.all([fetchText(versionFiles[i]), fetchText(totalFiles[i])]).then(function (res) {
       buildCard(card, res[0], res[1]);
       loadDownloadCounts();
     });
   });
 
-  // Счётчик скачиваний через GitHub API
   let countsLoaded = false;
   function loadDownloadCounts() {
     if (countsLoaded) return;
     countsLoaded = true;
 
-    const counters = document.querySelectorAll('.program-card-downloads');
-    counters.forEach(function (el) {
+    document.querySelectorAll('.program-card-downloads').forEach(function (el) {
       const owner = el.dataset.owner;
       const repo = el.dataset.repo;
       if (!owner || !repo) return;
@@ -192,13 +169,10 @@
           });
           el.textContent = total > 0 ? total.toLocaleString('ru-RU') : '—';
         })
-        .catch(function () {
-          el.textContent = '—';
-        });
+        .catch(function () { el.textContent = '—'; });
     });
   }
 
-  // Поиск по карточкам
   const searchInput = document.getElementById('search-programs');
   if (searchInput) {
     searchInput.addEventListener('input', function () {
@@ -214,6 +188,7 @@
 })();
 </script>
 
+<script src="reviews.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
 </body>
