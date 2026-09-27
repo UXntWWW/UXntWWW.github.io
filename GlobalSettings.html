@@ -298,7 +298,6 @@
   function switchTab(name) {
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
 
-    // Сброс
     slidePresets.classList.remove('hidden-right', 'hidden-left', 'active');
     slideCustom.classList.remove('hidden-right', 'hidden-left', 'active');
     slideEffects.classList.remove('hidden-right', 'hidden-left', 'active');
@@ -463,5 +462,7 @@
 })();
 </script>
 
+<script src="scroll-animate.js"></script>
+<script src="back-to-top.js"></script>
 </body>
 </html>
