@@ -33,21 +33,11 @@
 
   function colorName(hex) {
     const map = {
-      '#008000': 'зелёный',
-      '#4f8cff': 'синий',
-      '#a06bff': 'фиолетовый',
-      '#ff5c8a': 'розовый',
-      '#ff8c42': 'оранжевый',
-      '#e6c200': 'жёлтый',
-      '#3ecf8e': 'мятный',
-      '#ef4444': 'красный',
-      '#0f1115': 'чёрный',
-      '#ffffff': 'белый',
-      '#1e5fd8': 'тёмно-синий',
-      '#8b5e3c': 'коричневый',
-      '#5a5a5a': 'серый',
-      '#d9d9d9': 'светло-серый',
-      '#000000': 'чёрный',
+      '#008000': 'зелёный', '#4f8cff': 'синий', '#a06bff': 'фиолетовый',
+      '#ff5c8a': 'розовый', '#ff8c42': 'оранжевый', '#e6c200': 'жёлтый',
+      '#3ecf8e': 'мятный', '#ef4444': 'красный', '#0f1115': 'чёрный',
+      '#ffffff': 'белый', '#1e5fd8': 'тёмно-синий', '#8b5e3c': 'коричневый',
+      '#5a5a5a': 'серый', '#d9d9d9': 'светло-серый', '#000000': 'чёрный',
       '#fafafa': 'белый'
     };
     return map[(hex || '').toLowerCase()] || 'этот';
@@ -126,11 +116,8 @@
     let fill = 'white';
     if (mode === 'presets') {
       if (presetId === 'light' || presetId === 'gray') fill = 'black';
-      else if (presetId === 'system') {
-        fill = systemPrefersDark() ? 'white' : 'black';
-      } else {
-        fill = 'white';
-      }
+      else if (presetId === 'system') fill = systemPrefersDark() ? 'white' : 'black';
+      else fill = 'white';
     } else {
       fill = 'white';
     }
@@ -142,9 +129,38 @@
     root.setProperty('--nav-text',   navText);
     root.setProperty('--nav-border', navBorder);
 
+    // Поля ввода: при тёмных темах — светлые поля с тёмным текстом и наоборот
+    // Логика: если фон тёмный → поле светлое, если светлый → поле тёмное
+    const bgLum = (function () {
+      const r = parseInt(bg.substr(1, 2), 16);
+      const g = parseInt(bg.substr(3, 2), 16);
+      const b = parseInt(bg.substr(5, 2), 16);
+      return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    })();
+
+    let inputBg, inputText, inputBorder;
+    if (bgLum < 0.5) {
+      // тёмный фон → светлое поле
+      inputBg = '#ffffff';
+      inputText = '#000000';
+      inputBorder = '#d9d9d9';
+    } else {
+      // светлый фон → тёмное поле
+      inputBg = '#1a1d24';
+      inputText = '#ffffff';
+      inputBorder = '#3a3d44';
+    }
+    root.setProperty('--input-bg',     inputBg);
+    root.setProperty('--input-text',   inputText);
+    root.setProperty('--input-border', inputBorder);
+
+    // Цвета текста
     const tc = getTextColors(bar, bg);
     root.setProperty('--bar-text', tc.barText);
     root.setProperty('--text',     tc.pageText);
+
+    // Ссылки — тот же цвет, что и основной текст
+    root.setProperty('--text-link', tc.pageText);
   }
 
   const c = getColors();
