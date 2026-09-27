@@ -12,6 +12,27 @@
 
   const DEFAULTS = PRESETS.base;
 
+  const ICON_MAP = {
+    '#008000': 'icon-green.png',
+    '#4f8cff': 'icon-blue.png',
+    '#a06bff': 'icon-purple.png',
+    '#ff5c8a': 'icon-pink.png',
+    '#ff8c42': 'icon-orange.png',
+    '#e6c200': 'icon-yellow.png',
+    '#3ecf8e': 'icon-mint.png',
+    '#ef4444': 'icon-red.png',
+    '#0f1115': 'icon-black.png',
+    '#ffffff': 'icon-white.png',
+    '#1e5fd8': 'icon-navy.png',
+    '#8b5e3c': 'icon-brown.png',
+    '#5a5a5a': 'icon-gray.png',
+    '#d9d9d9': 'icon-light.png',
+    '#000000': 'icon-dark.png',
+    '#fafafa': 'icon-white2.png'
+  };
+
+  const DEFAULT_ICON = 'icon-green.png';
+
   function contrastColor(hex) {
     if (!hex || hex.length < 6) return '#000000';
     const r = parseInt(hex.substr(1, 2), 16);
@@ -55,6 +76,18 @@
     };
   }
 
+  function setFavicon(hex) {
+    const file = ICON_MAP[(hex || '').toLowerCase()] || DEFAULT_ICON;
+    let link = document.querySelector('link[rel="icon"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.type = 'image/png';
+    link.href = file;
+  }
+
   function apply(bar, bg) {
     const root = document.documentElement.style;
     root.setProperty('--bar',       bar);
@@ -70,6 +103,9 @@
   const c = getColors();
   apply(c.bar, c.bg);
 
+  const iconColor = localStorage.getItem('colorIcon') || '#008000';
+  setFavicon(iconColor);
+
   if (window.matchMedia) {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
       if (localStorage.getItem('themeMode') === 'presets' &&
@@ -83,12 +119,22 @@
   document.addEventListener('DOMContentLoaded', function () {
     const x = getColors();
     apply(x.bar, x.bg);
+    const ic = localStorage.getItem('colorIcon') || '#008000';
+    setFavicon(ic);
   });
 
   window.Theme = {
     contrastColor: contrastColor,
     shade: shade,
     applyColors: apply,
-    refresh: function () { const x = getColors(); apply(x.bar, x.bg); }
+    setFavicon: setFavicon,
+    iconMap: ICON_MAP,
+    defaultIcon: DEFAULT_ICON,
+    refresh: function () {
+      const x = getColors();
+      apply(x.bar, x.bg);
+      const ic = localStorage.getItem('colorIcon') || '#008000';
+      setFavicon(ic);
+    }
   };
 })();
