@@ -171,15 +171,12 @@
     const glassDark = isDark(bg);
 
     if (glass) {
-      // Стеклянные переменные
       if (glassDark) {
-        // Тёмная тема — тёмное стекло
         root.setProperty('--glass-bg',     'rgba(30, 32, 40, 0.45)');
         root.setProperty('--glass-bg-2',   'rgba(40, 42, 52, 0.55)');
         root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.12)');
         root.setProperty('--glass-shadow', '0 8px 32px rgba(0, 0, 0, 0.4)');
       } else {
-        // Светлая тема — светлое стекло
         root.setProperty('--glass-bg',     'rgba(255, 255, 255, 0.45)');
         root.setProperty('--glass-bg-2',   'rgba(255, 255, 255, 0.6)');
         root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.7)');
@@ -187,7 +184,6 @@
       }
       root.setProperty('--glass-blur',   'blur(20px) saturate(180%)');
 
-      // Градиентный фон под стеклом
       const gradColor = lighten(bar, 0.65);
       const gradColor2 = lighten(bar, 0.9);
       root.setProperty('--page-gradient', `linear-gradient(135deg, ${gradColor} 0%, ${gradColor2} 100%)`);
@@ -200,27 +196,32 @@
       root.setProperty('--page-gradient', 'none');
     }
 
-    // Класс на body
-    document.body.classList.toggle('glass-mode', glass);
+    // Класс на body — только если body уже существует
+    if (document.body) {
+      document.body.classList.toggle('glass-mode', glass);
+    }
   }
 
-  const c = getColors();
-  apply(c.bar, c.bg);
+  // Применяем либо сразу (если body есть), либо после DOMContentLoaded
+  function boot() {
+    const c = getColors();
+    apply(c.bar, c.bg);
+  }
+
+  if (document.body) {
+    boot();
+  } else {
+    document.addEventListener('DOMContentLoaded', boot);
+  }
 
   if (window.matchMedia) {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
       if (localStorage.getItem('themeMode') === 'presets' &&
           localStorage.getItem('presetName') === 'system') {
-        const x = getColors();
-        apply(x.bar, x.bg);
+        boot();
       }
     });
   }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const x = getColors();
-    apply(x.bar, x.bg);
-  });
 
   window.Theme = {
     contrastColor: contrastColor,
@@ -233,6 +234,6 @@
     applyColors: apply,
     getColors: getColors,
     getTextColors: getTextColors,
-    refresh: function () { const x = getColors(); apply(x.bar, x.bg); }
+    refresh: boot
   };
 })();
