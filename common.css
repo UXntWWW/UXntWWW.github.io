@@ -834,7 +834,13 @@ body.glass-mode .nav-help-menu a:hover {
 
 /* ===== Свёртывание шапки ===== */
 .top-bar {
-  transition: transform .35s cubic-bezier(.22,.61,.36,1),
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 500;
+  transition: transform .4s cubic-bezier(.22,.61,.36,1),
               background-color .25s,
               border-color .25s,
               color .25s;
@@ -843,9 +849,14 @@ body.glass-mode .nav-help-menu a:hover {
 }
 
 body.topbar-collapsed .top-bar {
-  transform: translateY(-120%);
+  transform: translateY(-100%);
 }
 
+/* Компенсация — чтобы контент не заезжал под fixed-шапку */
+body {
+  padding-top: var(--topbar-height, 80px);
+  transition: padding-top .25s ease;
+}
 .topbar-toggle {
   position: fixed;
   top: 12px;
