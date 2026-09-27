@@ -8,36 +8,12 @@
   :root {
     --bg: #ffffff;
     --text: #000000;
-    --bar: green;
+    --bar: #008000;
     --bar-text: #ffffff;
-    --btn-bg: green;
+    --btn-bg: #008000;
     --btn-text: #ffffff;
-    --btn-hover: darkgreen;
+    --btn-hover: #006400;
     --card: #f2f2f2;
-  }
-
-  /* Тёмная тема */
-  body.dark {
-    --bg: #0f1115;
-    --text: #e6e8ee;
-    --bar: #1a1d24;
-    --bar-text: #e6e8ee;
-    --btn-bg: #4f8cff;
-    --btn-text: #ffffff;
-    --btn-hover: #3d78e0;
-    --card: #1a1d24;
-  }
-
-  /* Синяя тема */
-  body.blue {
-    --bg: #eaf2ff;
-    --text: #0a1a33;
-    --bar: #1e5fd8;
-    --bar-text: #ffffff;
-    --btn-bg: #1e5fd8;
-    --btn-text: #ffffff;
-    --btn-hover: #1749a8;
-    --card: #d6e6ff;
   }
 
   * { box-sizing: border-box; }
@@ -46,97 +22,210 @@
     font-family: sans-serif;
     background: var(--bg);
     color: var(--text);
-    transition: background .2s, color .2s;
+    transition: background .25s, color .25s;
   }
+
   .top-bar {
     background: var(--bar);
     color: var(--bar-text);
     padding: 20px 15px;
+    transition: background-color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
-  .content { padding: 20px; }
-  .theme-list { display: grid; gap: 12px; max-width: 400px; margin-top: 20px; }
-  .theme-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    background: var(--card);
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: border-color .2s;
+
+  .content { padding: 20px; max-width: 700px; }
+
+  h2 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    border-left: 4px solid var(--btn-bg);
+    padding-left: 10px;
   }
-  .theme-option:hover { border-color: var(--btn-bg); }
-  .theme-option.active { border-color: var(--btn-bg); }
-  .theme-option input { accent-color: var(--btn-bg); }
-  .back-btn {
+
+  .hint {
+    color: var(--text);
+    opacity: 0.7;
+    font-size: 0.9rem;
+    margin: 0 0 14px;
+  }
+
+  /* ===== Палитра ===== */
+  .palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .swatch {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 2px solid #00000022;
+    cursor: pointer;
+    transition: transform .15s, border-color .15s, box-shadow .15s;
+    position: relative;
+  }
+  .swatch:hover {
+    transform: scale(1.12);
+    border-color: var(--text);
+    box-shadow: 0 4px 12px #00000033;
+  }
+  .swatch.active {
+    border-color: var(--text);
+    box-shadow: 0 0 0 3px var(--btn-bg);
+  }
+
+  /* ===== Кнопка "Применить" ===== */
+  .apply-btn {
     display: inline-block;
-    margin-top: 20px;
-    padding: 12px 24px;
+    margin-top: 30px;
+    padding: 12px 28px;
     background: var(--btn-bg);
     color: var(--btn-text);
     text-decoration: none;
     border-radius: 12px;
     font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
     transition: background .2s;
   }
-  .back-btn:hover { background: var(--btn-hover); }
+  .apply-btn:hover { background: var(--btn-hover); }
+
+  /* Блок предпросмотра */
+  .preview {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--card);
+    border: 2px dashed #00000022;
+  }
+  .preview-title { margin: 0 0 8px; font-weight: bold; }
+  .preview-text { margin: 0; opacity: 0.8; font-size: 0.9rem; }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <h1>Настройки</h1>
+  <h1>Настройки — UXNTWWW.io</h1>
 </div>
 
 <div class="content">
-  <p>Выбери тему оформления. Она применится на всех страницах сайта.</p>
+  <p>Выбери цвет шапки сайта (верхняя линия) и цвет фона. Изменения применяются сразу, на всех страницах.</p>
 
-  <div class="theme-list">
-    <label class="theme-option" data-theme="light">
-      <input type="radio" name="theme" value="light">
-      <span>☀️ Светлая</span>
-    </label>
-    <label class="theme-option" data-theme="dark">
-      <input type="radio" name="theme" value="dark">
-      <span>🌙 Тёмная</span>
-    </label>
-    <label class="theme-option" data-theme="blue">
-      <input type="radio" name="theme" value="blue">
-      <span>🔵 Синяя</span>
-    </label>
+  <h2>Цвет шапки</h2>
+  <p class="hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы сохранить.</p>
+  <div class="palette" id="palette-bar"></div>
+
+  <h2>Цвет фона</h2>
+  <p class="hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы сохранить.</p>
+  <div class="palette" id="palette-bg"></div>
+
+  <div class="preview">
+    <p class="preview-title">Предпросмотр</p>
+    <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Кнопки и шапка тоже подстроятся.</p>
   </div>
 
-  <a href="index.html" class="back-btn">← Назад на главную</a>
+  <button id="apply-btn" class="apply-btn">Применить</button>
 </div>
 
 <script>
-  // Применяем сохранённую тему сразу
-  const saved = localStorage.getItem('theme') || 'light';
-  document.body.classList.add(saved);
+  // Палитра цветов
+  const COLORS = [
+    '#008000', // зелёный
+    '#4f8cff', // синий
+    '#a06bff', // фиолетовый
+    '#ff5c8a', // розовый
+    '#ff8c42', // оранжевый
+    '#e6c200', // жёлтый
+    '#3ecf8e', // мятный
+    '#ef4444', // красный
+    '#0f1115', // почти чёрный
+    '#ffffff', // белый
+    '#1e5fd8', // тёмно-синий
+    '#8b5e3c'  // коричневый
+  ];
 
-  // Отмечаем активную радиокнопку
-  document.querySelectorAll('input[name="theme"]').forEach(r => {
-    if (r.value === saved) r.checked = true;
-  });
-  document.querySelectorAll('.theme-option').forEach(opt => {
-    if (opt.dataset.theme === saved) opt.classList.add('active');
-  });
+  // Автоматически подобрать цвет текста к фону (белый/чёрный)
+  function contrastColor(hex) {
+    if (!hex || hex.length < 6) return '#000000';
+    const r = parseInt(hex.substr(1, 2), 16);
+    const g = parseInt(hex.substr(3, 2), 16);
+    const b = parseInt(hex.substr(5, 2), 16);
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum > 0.6 ? '#000000' : '#ffffff';
+  }
 
-  // Обработка выбора темы
-  document.querySelectorAll('input[name="theme"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      const theme = radio.value;
-      localStorage.setItem('theme', theme);
+  // Текущие настройки (читаем из localStorage)
+  const state = {
+    bar:  localStorage.getItem('colorBar')  || '#008000',
+    bg:   localStorage.getItem('colorBg')   || '#ffffff'
+  };
 
-      document.body.classList.remove('light', 'dark', 'blue');
-      document.body.classList.add(theme);
+  // Применяем цвета на страницу
+  function applyColors() {
+    document.documentElement.style.setProperty('--bar', state.bar);
+    document.documentElement.style.setProperty('--bar-text', contrastColor(state.bar));
+    document.documentElement.style.setProperty('--btn-bg', state.bar);
+    document.documentElement.style.setProperty('--btn-text', contrastColor(state.bar));
+    document.documentElement.style.setProperty('--btn-hover', shade(state.bar, -0.2));
 
-      document.querySelectorAll('.theme-option').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.theme === theme);
+    document.documentElement.style.setProperty('--bg', state.bg);
+    document.documentElement.style.setProperty('--text', contrastColor(state.bg));
+    document.documentElement.style.setProperty('--card', shade(state.bg, -0.05));
+  }
+
+  // Затемнить/осветлить цвет (amount: -1..1)
+  function shade(hex, amount) {
+    if (!hex || hex.length < 6) return hex;
+    let r = parseInt(hex.substr(1, 2), 16);
+    let g = parseInt(hex.substr(3, 2), 16);
+    let b = parseInt(hex.substr(5, 2), 16);
+    r = Math.max(0, Math.min(255, Math.round(r + r * amount)));
+    g = Math.max(0, Math.min(255, Math.round(g + g * amount)));
+    b = Math.max(0, Math.min(255, Math.round(b + b * amount)));
+    const to = n => n.toString(16).padStart(2, '0');
+    return `#${to(r)}${to(g)}${to(b)}`;
+  }
+
+  // Строим палитру
+  function buildPalette(containerId, key) {
+    const container = document.getElementById(containerId);
+    COLORS.forEach(color => {
+      const sw = document.createElement('div');
+      sw.className = 'swatch';
+      sw.style.background = color;
+      if (color === state[key]) sw.classList.add('active');
+
+      // Наведение — применяем временно
+      sw.addEventListener('mouseenter', () => {
+        state[key] = color;
+        applyColors();
       });
+
+      // Клик — сохраняем
+      sw.addEventListener('click', () => {
+        state[key] = color;
+        localStorage.setItem(key === 'bar' ? 'colorBar' : 'colorBg', color);
+        applyColors();
+        document.querySelectorAll(`#${containerId} .swatch`).forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+      });
+
+      container.appendChild(sw);
     });
+  }
+
+  buildPalette('palette-bar', 'bar');
+  buildPalette('palette-bg',  'bg');
+  applyColors();
+
+  // Кнопка "Применить"
+  document.getElementById('apply-btn').addEventListener('click', () => {
+    localStorage.setItem('colorBar', state.bar);
+    localStorage.setItem('colorBg',  state.bg);
+    window.location.href = 'index.html';
   });
 </script>
 
