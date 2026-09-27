@@ -4,50 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UXWEditor Download</title>
+<script src="theme.js"></script>
 <style>
   :root {
     --bg: #ffffff;
     --text: #000000;
-    --bar: green;
+    --bar: #008000;
     --bar-text: #ffffff;
-    --btn-bg: green;
+    --btn-bg: #008000;
     --btn-text: #ffffff;
-    --btn-hover: darkgreen;
+    --btn-hover: #006400;
+    --card: #f2f2f2;
   }
-  body.dark {
-    --bg: #0f1115;
-    --text: #e6e8ee;
-    --bar: #1a1d24;
-    --bar-text: #e6e8ee;
-    --btn-bg: #4f8cff;
-    --btn-text: #ffffff;
-    --btn-hover: #3d78e0;
-  }
-  body.blue {
-    --bg: #eaf2ff;
-    --text: #0a1a33;
-    --bar: #1e5fd8;
-    --bar-text: #ffffff;
-    --btn-bg: #1e5fd8;
-    --btn-text: #ffffff;
-    --btn-hover: #1749a8;
-  }
-
   body {
     margin: 0; padding: 0;
     font-family: sans-serif;
     background: var(--bg);
     color: var(--text);
-    transition: background .2s, color .2s;
+    transition: background .25s, color .25s;
   }
   .top-bar {
     background-color: var(--bar);
     border: 4px solid var(--bar);
     color: var(--bar-text);
-    padding: 20px 15px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 15px;
     box-sizing: border-box;
     width: 100%;
     position: relative;
+    transition: background-color .25s, border-color .25s;
   }
   .top-bar h1 { margin: 0; }
   .content { padding: 20px; position: relative; }
@@ -63,7 +49,7 @@
     box-sizing: border-box;
     margin-right: 10px;
     margin-top: 15px;
-    transition: background .2s;
+    transition: background-color .2s;
   }
   .github-btn { white-space: nowrap; margin-right: 0; }
   .zip-btn:hover, .exe-btn:hover, .torrent-btn:hover, .github-btn:hover {
@@ -88,7 +74,6 @@
   }
   #home-link:hover { text-decoration: underline; }
 
-  /* Кнопка "Настройки" в шапке */
   #settings-btn {
     position: absolute;
     right: 20px;
@@ -102,7 +87,7 @@
     font-weight: bold;
     border: 2px solid white;
     box-sizing: border-box;
-    transition: background .2s;
+    transition: background-color .2s;
   }
   #settings-btn:hover { background-color: #e6e6e6; }
 
@@ -116,7 +101,7 @@
 <body>
  <div class="top-bar">
    <h1>UXNTWWW.io - Сайт с файлами</h1>
-   <a href="https://uxntwww.github.io/GlobalSettings" id="settings-btn">Настройки</a>
+   <a href="GlobalSettings.html" id="settings-btn">Настройки</a>
  </div>
  <div class="content">
  <a href="index.html" id="home-link">~Главная</a>
@@ -141,9 +126,6 @@
  </div>
  </div>
 
-<script>
-  const saved = localStorage.getItem('theme') || 'light';
-  document.body.classList.add(saved);
-</script>
+<script src="theme.js"></script>
 </body>
 </html>
