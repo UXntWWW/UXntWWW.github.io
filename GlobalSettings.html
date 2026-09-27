@@ -70,4 +70,398 @@
     border-left: 4px solid var(--btn-bg); padding-left: 10px;
   }
   .palette-hint {
-    color:
+    color: var(--text); opacity: 0.65; font-size: 0.85rem;
+    margin: 0 0 12px;
+  }
+  .palette { display: flex; flex-wrap: wrap; gap: 10px; }
+  .swatch {
+    width: 42px; height: 42px; border-radius: 10px;
+    border: 2px solid #00000022; cursor: pointer;
+    transition: transform .15s, border-color .15s, box-shadow .15s;
+  }
+  .swatch:hover {
+    transform: scale(1.12); border-color: var(--text);
+    box-shadow: 0 4px 12px #00000033;
+  }
+  .swatch.active {
+    border-color: var(--text);
+    box-shadow: 0 0 0 3px var(--btn-bg);
+  }
+
+  .preview {
+    margin-top: 26px; padding: 18px; border-radius: 12px;
+    background: var(--card); border: 2px dashed #00000022;
+  }
+  body.glass-mode .preview {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .preview-title { margin: 0 0 6px; font-weight: bold; }
+  .preview-text { margin: 0; opacity: 0.85; font-size: 0.9rem; }
+
+  .actions { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>Настройки — UXNTWWW.io</h1>
+  <nav class="top-nav">
+    <a href="index.html">Главная</a>
+    <a href="about.html">О сайте</a>
+    <a href="contacts.html">Контакты</a>
+    <a href="faq.html">FAQ</a>
+  </nav>
+</div>
+
+<div class="content">
+
+  <div class="tabs">
+    <button class="tab active" data-tab="presets">Темы</button>
+    <button class="tab" data-tab="custom">Кастом</button>
+    <button class="tab" data-tab="effects">Эффекты</button>
+  </div>
+
+  <div class="slider">
+
+    <div class="slide active" id="slide-presets">
+      <div class="theme-grid" id="theme-grid"></div>
+      <div class="preview">
+        <p class="preview-title">Предпросмотр</p>
+        <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
+      </div>
+    </div>
+
+    <div class="slide hidden-right" id="slide-custom">
+      <p class="palette-title">Цвет шапки</p>
+      <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <div class="palette" id="palette-bar"></div>
+
+      <p class="palette-title">Цвет фона</p>
+      <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <div class="palette" id="palette-bg"></div>
+
+      <p class="palette-title">Цвет текста в шапке</p>
+      <p class="palette-hint">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом шапки.</p>
+      <div class="palette" id="palette-text-bar"></div>
+
+      <p class="palette-title">Цвет текста на странице</p>
+      <p class="palette-hint">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом фона.</p>
+      <div class="palette" id="palette-text-page"></div>
+
+      <div class="preview">
+        <p class="preview-title">Предпросмотр</p>
+        <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
+      </div>
+    </div>
+
+    <div class="slide hidden-right" id="slide-effects">
+      <p class="palette-title">Стеклянный эффект</p>
+      <p class="palette-hint">Элементы сайта станут полупрозрачными, с размытием фона — как в iOS.</p>
+
+      <label class="glass-toggle">
+        <input type="checkbox" id="glass-checkbox">
+        <div class="glass-toggle-text">
+          <span class="glass-toggle-title">Включить стекло (Glassmorphism)</span>
+          <span class="glass-toggle-desc">Кнопки, карточки, поля и уведомления станут стеклянными. Фон страницы — градиентный.</span>
+        </div>
+      </label>
+
+      <div class="preview">
+        <p class="preview-title">Как это выглядит</p>
+        <p class="preview-text">Кнопки в шапке, карточки программ, поля ввода, поиск, уведомления и окна получат эффект матового стекла с размытием.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="apply-btn">Применить</button>
+    <a class="btn" href="index.html">Отмена</a>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const PRESETS = [
+    { id: 'base',   name: 'Базовая',   bar: '#008000', bg: '#ffffff', btn: 'white' },
+    { id: 'light',  name: 'Светлая',   bar: '#d9d9d9', bg: '#fafafa', btn: 'black' },
+    { id: 'gray',   name: 'Серая',     bar: '#5a5a5a', bg: '#e0e0e0', btn: 'black' },
+    { id: 'dark',   name: 'Тёмная',    bar: '#1f1f1f', bg: '#0f1115', btn: 'white' },
+    { id: 'system', name: 'Системная (Автоопределение)', bar: null, bg: null, btn: null }
+  ];
+
+  const COLORS = [
+    '#008000', '#4f8cff', '#a06bff', '#ff5c8a',
+    '#ff8c42', '#e6c200', '#3ecf8e', '#ef4444',
+    '#0f1115', '#ffffff', '#1e5fd8', '#8b5e3c',
+    '#5a5a5a', '#d9d9d9', '#000000', '#fafafa'
+  ];
+
+  const savedMode   = localStorage.getItem('themeMode') || 'presets';
+  const savedPreset = localStorage.getItem('presetName') || 'base';
+  const savedBar    = localStorage.getItem('colorBar') || '#008000';
+  const savedBg     = localStorage.getItem('colorBg')  || '#ffffff';
+  const savedTextBar  = localStorage.getItem('colorTextBar')  || '';
+  const savedTextPage = localStorage.getItem('colorTextPage') || '';
+
+  const selected = {
+    mode: savedMode,
+    preset: savedPreset,
+    bar: savedBar,
+    bg: savedBg,
+    textBar: savedTextBar,
+    textPage: savedTextPage
+  };
+
+  function findPreset(id) {
+    return PRESETS.find(p => p.id === id) || PRESETS[0];
+  }
+
+  function colorsFor(preset) {
+    if (preset.id === 'system') {
+      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return dark
+        ? { bar: '#1f1f1f', bg: '#0f1115', btn: 'white' }
+        : { bar: '#d9d9d9', bg: '#fafafa', btn: 'black' };
+    }
+    return { bar: preset.bar, bg: preset.bg, btn: preset.btn || 'white' };
+  }
+
+  function applyColors(bar, bg) {
+    const root = document.documentElement.style;
+    root.setProperty('--bar', bar);
+    root.setProperty('--bg', bg);
+    root.setProperty('--card', Theme.shade(bg, -0.05));
+    root.setProperty('--btn-bg', bar);
+
+    const textBar  = selected.textBar  || Theme.contrastColor(bar);
+    const textPage = selected.textPage || Theme.contrastColor(bg);
+    root.setProperty('--bar-text', textBar);
+    root.setProperty('--text',     textPage);
+    root.setProperty('--text-link', textPage);
+
+    const fill = (function () {
+      if (selected.mode === 'presets') {
+        const p = findPreset(selected.preset);
+        if (p.id === 'system') {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+        }
+        return p.btn || 'white';
+      }
+      return 'white';
+    })();
+    root.setProperty('--nav-fill',   fill === 'black' ? '#000000' : '#ffffff');
+    root.setProperty('--nav-text',   fill === 'black' ? '#ffffff' : '#000000');
+    root.setProperty('--nav-border', fill === 'black' ? '#ffffff' : '#000000');
+  }
+
+  // Уведомление
+  let toastEl = null;
+  let toastTimer = null;
+
+  function showToast(text) {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.id = 'toast';
+      toastEl.innerHTML = '<span class="toast-icon">!</span><span class="toast-text"></span>';
+      document.body.appendChild(toastEl);
+    }
+    toastEl.querySelector('.toast-text').textContent = text;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove('show');
+    }, 3000);
+  }
+
+  function showSelected() {
+    if (selected.mode === 'presets') {
+      const p = findPreset(selected.preset);
+      const c = colorsFor(p);
+      applyColors(c.bar, c.bg);
+    } else {
+      applyColors(selected.bar, selected.bg);
+    }
+  }
+
+  const tabs = document.querySelectorAll('.tab');
+  const slidePresets = document.getElementById('slide-presets');
+  const slideCustom  = document.getElementById('slide-custom');
+  const slideEffects = document.getElementById('slide-effects');
+
+  function switchTab(name) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+
+    // Сброс
+    slidePresets.classList.remove('hidden-right', 'hidden-left', 'active');
+    slideCustom.classList.remove('hidden-right', 'hidden-left', 'active');
+    slideEffects.classList.remove('hidden-right', 'hidden-left', 'active');
+
+    if (name === 'presets') {
+      slidePresets.classList.add('active');
+      slideCustom.classList.add('hidden-right');
+      slideEffects.classList.add('hidden-right');
+    } else if (name === 'custom') {
+      slideCustom.classList.add('active');
+      slidePresets.classList.add('hidden-left');
+      slideEffects.classList.add('hidden-right');
+    } else {
+      slideEffects.classList.add('active');
+      slidePresets.classList.add('hidden-left');
+      slideCustom.classList.add('hidden-left');
+    }
+    showSelected();
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+
+  switchTab(selected.mode === 'custom' ? 'custom' : 'presets');
+
+  // Пресеты
+  const grid = document.getElementById('theme-grid');
+  PRESETS.forEach(preset => {
+    const card = document.createElement('div');
+    card.className = 'theme-card';
+    if (selected.mode === 'presets' && selected.preset === preset.id) card.classList.add('active');
+
+    const preview = document.createElement('div');
+    preview.className = 'theme-preview';
+    const barEl = document.createElement('div');
+    barEl.className = 'bar';
+    const bodyEl = document.createElement('div');
+    bodyEl.className = 'body';
+
+    const c = colorsFor(preset);
+    barEl.style.background = c.bar;
+    bodyEl.style.background = c.bg;
+
+    preview.appendChild(barEl);
+    preview.appendChild(bodyEl);
+
+    const name = document.createElement('div');
+    name.className = 'theme-name';
+    name.textContent = preset.name;
+
+    card.appendChild(preview);
+    card.appendChild(name);
+
+    card.addEventListener('mouseenter', () => {
+      const cc = colorsFor(preset);
+      applyColors(cc.bar, cc.bg);
+    });
+    card.addEventListener('mouseleave', showSelected);
+    card.addEventListener('click', () => {
+      selected.mode = 'presets';
+      selected.preset = preset.id;
+      selected.textBar = '';
+      selected.textPage = '';
+      document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      showSelected();
+    });
+
+    grid.appendChild(card);
+  });
+
+  // Палитры
+  function buildPalette(containerId, key, target) {
+    const container = document.getElementById(containerId);
+    COLORS.forEach(color => {
+      const sw = document.createElement('div');
+      sw.className = 'swatch';
+      sw.style.background = color;
+
+      if (selected[key] === color) sw.classList.add('active');
+
+      sw.addEventListener('mouseenter', () => {
+        if (target === 'bar')      applyColors(color, selected.bg);
+        if (target === 'bg')       applyColors(selected.bar, color);
+        if (target === 'textBar')  document.documentElement.style.setProperty('--bar-text', color);
+        if (target === 'textPage') {
+          document.documentElement.style.setProperty('--text', color);
+          document.documentElement.style.setProperty('--text-link', color);
+        }
+      });
+
+      sw.addEventListener('mouseleave', showSelected);
+
+      sw.addEventListener('click', () => {
+        if (target === 'textBar' && Theme.colorsMatch(color, selected.bar)) {
+          showToast('У вас установлена ' + Theme.colorName(selected.bar) + ' шапка. Этот цвет текста не виден.');
+          return;
+        }
+        if (target === 'textPage' && Theme.colorsMatch(color, selected.bg)) {
+          showToast('У вас установлен ' + Theme.colorName(selected.bg) + ' фон. Этот цвет текста не виден.');
+          return;
+        }
+
+        selected[key] = color;
+        selected.mode = 'custom';
+
+        document.querySelectorAll('#' + containerId + ' .swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        showSelected();
+      });
+
+      container.appendChild(sw);
+    });
+  }
+
+  buildPalette('palette-bar',       'bar',      'bar');
+  buildPalette('palette-bg',        'bg',       'bg');
+  buildPalette('palette-text-bar',  'textBar',  'textBar');
+  buildPalette('palette-text-page', 'textPage', 'textPage');
+
+  // Стекло
+  const glassCheckbox = document.getElementById('glass-checkbox');
+  glassCheckbox.checked = localStorage.getItem('glassEffect') === 'on';
+
+  glassCheckbox.addEventListener('change', () => {
+    const on = glassCheckbox.checked;
+    localStorage.setItem('glassEffect', on ? 'on' : 'off');
+    Theme.refresh();
+  });
+
+  // Применить
+  document.getElementById('apply-btn').addEventListener('click', () => {
+    localStorage.setItem('themeMode', selected.mode);
+
+    if (selected.mode === 'presets') {
+      const p = findPreset(selected.preset);
+      localStorage.setItem('presetName', p.id);
+      if (p.id === 'system') {
+        const c = colorsFor(p);
+        localStorage.setItem('colorBar', c.bar);
+        localStorage.setItem('colorBg',  c.bg);
+      } else {
+        localStorage.setItem('colorBar', p.bar);
+        localStorage.setItem('colorBg',  p.bg);
+      }
+      localStorage.removeItem('colorTextBar');
+      localStorage.removeItem('colorTextPage');
+    } else {
+      localStorage.setItem('colorBar', selected.bar);
+      localStorage.setItem('colorBg',  selected.bg);
+      if (selected.textBar)  localStorage.setItem('colorTextBar',  selected.textBar);
+      else                   localStorage.removeItem('colorTextBar');
+      if (selected.textPage) localStorage.setItem('colorTextPage', selected.textPage);
+      else                   localStorage.removeItem('colorTextPage');
+    }
+
+    window.location.href = 'index.html';
+  });
+
+  showSelected();
+})();
+</script>
+
+</body>
+</html>
