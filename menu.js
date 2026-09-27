@@ -1,4 +1,4 @@
-/* menu.js — навигация + свёртывание шапки для UXNTWWW.io */
+/* menu.js — навигация для всех страниц UXNTWWW.io */
 (function () {
   'use strict';
 
@@ -85,26 +85,8 @@
     });
   }
 
-  // ===== Компенсация высоты fixed-шапки =====
-  function fixTopBarHeight() {
-    const topBar = document.querySelector('.top-bar');
-    if (!topBar) return;
-
-    function update() {
-      const h = topBar.offsetHeight;
-      document.body.style.paddingTop = h + 'px';
-      document.documentElement.style.setProperty('--topbar-height', h + 'px');
-    }
-
-    update();
-    window.addEventListener('resize', update);
-    setTimeout(update, 100);
-    setTimeout(update, 400);
-  }
-
   function init() {
     buildNav();
-    fixTopBarHeight();
   }
 
   if (document.readyState === 'loading') {
