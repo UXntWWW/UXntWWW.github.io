@@ -74,6 +74,26 @@
    font-weight: normal;
    margin: 0;
  }
+
+ /* ===== Кнопка "Настройки" (белая) ===== */
+ #settings-btn {
+   position: absolute;
+   left: 20px;    /* ← меняй это значение, чтобы двигать по горизонтали */
+   top: 440px;    /* ← меняй это значение, чтобы двигать по вертикали */
+   background-color: white;
+   color: black;
+   padding: 12px 24px;
+   text-decoration: none;
+   border-radius: 12px;
+   font-weight: bold;
+   display: inline-block;
+   box-sizing: border-box;
+   border: 2px solid green; /* зелёная рамка, чтобы кнопка была видна на белом фоне */
+   transition: background-color 0.2s;
+ }
+ #settings-btn:hover {
+   background-color: #e6e6e6;
+ }
 </style>
 </head>
 <body>
@@ -92,6 +112,9 @@
  <a href="files1.html" id="files-btn-v10">Файлы</a>
  <p class="status-text-v10">UXWEditor Free(Проверено✅)</p>
  <p id="update-text-v10">Обновлено:21.07.2026</p>
+
+ <!-- ===== Кнопка "Настройки" ===== -->
+ <a href="https://uxntwww.github.io/GlobalSettings" id="settings-btn">Настройки</a>
  </div>
 </body>
 </html>
