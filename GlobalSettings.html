@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Настройки — UXNTWWW.io</title>
+<script src="theme.js"></script>
 <style>
   :root {
     --bg: #ffffff;
@@ -29,42 +30,151 @@
     background: var(--bar);
     color: var(--bar-text);
     padding: 20px 15px;
+    position: relative;
     transition: background-color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
 
-  .content { padding: 20px; max-width: 700px; }
+  .back-home {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid white;
+    font-size: 0.9rem;
+  }
+  .back-home:hover { background: #e6e6e6; }
 
-  h2 {
-    margin-top: 30px;
+  .content {
+    padding: 20px;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* ===== Табы ===== */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 2px solid var(--card);
+    margin-bottom: 24px;
+  }
+  .tab {
+    padding: 10px 24px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text);
+    opacity: 0.6;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+    transition: opacity .2s, border-color .2s;
+  }
+  .tab:hover { opacity: 1; }
+  .tab.active {
+    opacity: 1;
+    border-bottom-color: var(--btn-bg);
+  }
+
+  /* ===== Слайдер-контейнер ===== */
+  .slider {
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+  }
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: transform .35s ease, opacity .35s ease;
+  }
+  .slide.hidden-right {
+    transform: translateX(110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .slide.hidden-left {
+    transform: translateX(-110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .slide.active {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ===== Темы ===== */
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+  }
+  .theme-card {
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    background: var(--card);
+    transition: transform .15s, border-color .15s;
+    user-select: none;
+  }
+  .theme-card:hover { transform: translateY(-3px); }
+  .theme-card.active { border-color: var(--btn-bg); }
+  .theme-preview {
+    height: 60px;
+    border-radius: 8px;
     margin-bottom: 10px;
-    font-size: 1.1rem;
+    overflow: hidden;
+    border: 1px solid #00000022;
+  }
+  .theme-preview .bar {
+    height: 40%;
+    width: 100%;
+  }
+  .theme-preview .body {
+    height: 60%;
+    width: 100%;
+  }
+  .theme-name {
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  /* ===== Кастом — палитры ===== */
+  .palette-title {
+    margin: 20px 0 10px;
+    font-size: 1rem;
+    font-weight: bold;
     border-left: 4px solid var(--btn-bg);
     padding-left: 10px;
   }
-
-  .hint {
+  .palette-hint {
     color: var(--text);
-    opacity: 0.7;
-    font-size: 0.9rem;
-    margin: 0 0 14px;
+    opacity: 0.65;
+    font-size: 0.85rem;
+    margin: 0 0 12px;
   }
-
-  /* ===== Палитра ===== */
   .palette {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 10px;
   }
   .swatch {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 10px;
     border: 2px solid #00000022;
     cursor: pointer;
     transition: transform .15s, border-color .15s, box-shadow .15s;
-    position: relative;
   }
   .swatch:hover {
     transform: scale(1.12);
@@ -76,141 +186,279 @@
     box-shadow: 0 0 0 3px var(--btn-bg);
   }
 
-  /* ===== Кнопка "Применить" ===== */
-  .apply-btn {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 12px 28px;
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background .2s;
-  }
-  .apply-btn:hover { background: var(--btn-hover); }
-
-  /* Блок предпросмотра */
+  /* ===== Предпросмотр ===== */
   .preview {
-    margin-top: 30px;
-    padding: 20px;
+    margin-top: 26px;
+    padding: 18px;
     border-radius: 12px;
     background: var(--card);
     border: 2px dashed #00000022;
   }
-  .preview-title { margin: 0 0 8px; font-weight: bold; }
-  .preview-text { margin: 0; opacity: 0.8; font-size: 0.9rem; }
+  .preview-title { margin: 0 0 6px; font-weight: bold; }
+  .preview-text { margin: 0; opacity: 0.85; font-size: 0.9rem; }
+
+  /* ===== Кнопки внизу ===== */
+  .actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 12px 26px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background .2s;
+  }
+  .btn-primary {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+  }
+  .btn-primary:hover { background: var(--btn-hover); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--btn-bg);
+  }
+  .btn-secondary:hover { background: var(--card); }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
   <h1>Настройки — UXNTWWW.io</h1>
+  <a href="index.html" class="back-home">Вернуться на главную</a>
 </div>
 
 <div class="content">
-  <p>Выбери цвет шапки сайта (верхняя линия) и цвет фона. Изменения применяются сразу, на всех страницах.</p>
 
-  <h2>Цвет шапки</h2>
-  <p class="hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы сохранить.</p>
-  <div class="palette" id="palette-bar"></div>
-
-  <h2>Цвет фона</h2>
-  <p class="hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы сохранить.</p>
-  <div class="palette" id="palette-bg"></div>
-
-  <div class="preview">
-    <p class="preview-title">Предпросмотр</p>
-    <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Кнопки и шапка тоже подстроятся.</p>
+  <!-- Табы -->
+  <div class="tabs">
+    <button class="tab active" data-tab="presets">Темы</button>
+    <button class="tab" data-tab="custom">Кастом</button>
   </div>
 
-  <button id="apply-btn" class="apply-btn">Применить</button>
+  <!-- Слайдер -->
+  <div class="slider">
+
+    <!-- ===== Раздел "Темы" ===== -->
+    <div class="slide active" id="slide-presets">
+      <div class="theme-grid" id="theme-grid"></div>
+
+      <div class="preview">
+        <p class="preview-title">Предпросмотр</p>
+        <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
+      </div>
+    </div>
+
+    <!-- ===== Раздел "Кастом" ===== -->
+    <div class="slide hidden-right" id="slide-custom">
+      <p class="palette-title">Цвет шапки</p>
+      <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <div class="palette" id="palette-bar"></div>
+
+      <p class="palette-title">Цвет фона</p>
+      <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <div class="palette" id="palette-bg"></div>
+
+      <div class="preview">
+        <p class="preview-title">Предпросмотр</p>
+        <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Кнопки -->
+  <div class="actions">
+    <button class="btn btn-primary" id="apply-btn">Применить</button>
+    <a class="btn btn-secondary" href="index.html">Отмена</a>
+  </div>
+
 </div>
 
 <script>
-  // Палитра цветов
-  const COLORS = [
-    '#008000', // зелёный
-    '#4f8cff', // синий
-    '#a06bff', // фиолетовый
-    '#ff5c8a', // розовый
-    '#ff8c42', // оранжевый
-    '#e6c200', // жёлтый
-    '#3ecf8e', // мятный
-    '#ef4444', // красный
-    '#0f1115', // почти чёрный
-    '#ffffff', // белый
-    '#1e5fd8', // тёмно-синий
-    '#8b5e3c'  // коричневый
+(function () {
+  'use strict';
+
+  // ===== Пресеты тем =====
+  const PRESETS = [
+    { id: 'base',  name: 'Базовая', bar: '#008000', bg: '#ffffff' },
+    { id: 'light', name: 'Светлая', bar: '#d9d9d9', bg: '#fafafa' },
+    { id: 'gray',  name: 'Серая',   bar: '#5a5a5a', bg: '#e0e0e0' },
+    { id: 'dark',  name: 'Тёмная',  bar: '#1f1f1f', bg: '#0f1115' }
   ];
 
-  // Автоматически подобрать цвет текста к фону (белый/чёрный)
-  function contrastColor(hex) {
-    if (!hex || hex.length < 6) return '#000000';
-    const r = parseInt(hex.substr(1, 2), 16);
-    const g = parseInt(hex.substr(3, 2), 16);
-    const b = parseInt(hex.substr(5, 2), 16);
-    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return lum > 0.6 ? '#000000' : '#ffffff';
-  }
+  // ===== Палитра для кастома =====
+  const COLORS = [
+    '#008000', '#4f8cff', '#a06bff', '#ff5c8a',
+    '#ff8c42', '#e6c200', '#3ecf8e', '#ef4444',
+    '#0f1115', '#ffffff', '#1e5fd8', '#8b5e3c',
+    '#5a5a5a', '#d9d9d9', '#000000', '#fafafa'
+  ];
 
-  // Текущие настройки (читаем из localStorage)
-  const state = {
-    bar:  localStorage.getItem('colorBar')  || '#008000',
-    bg:   localStorage.getItem('colorBg')   || '#ffffff'
+  // ===== Текущее состояние (то, что реально сохранено) =====
+  const savedMode = localStorage.getItem('themeMode') || 'presets';
+  const savedPreset = localStorage.getItem('presetName') || 'base';
+  const savedBar = localStorage.getItem('colorBar') || '#008000';
+  const savedBg  = localStorage.getItem('colorBg')  || '#ffffff';
+
+  // Выбранные значения (то, что применяется по "Применить")
+  const selected = {
+    mode: savedMode,
+    preset: savedPreset,
+    bar: savedBar,
+    bg: savedBg
   };
 
-  // Применяем цвета на страницу
-  function applyColors() {
-    document.documentElement.style.setProperty('--bar', state.bar);
-    document.documentElement.style.setProperty('--bar-text', contrastColor(state.bar));
-    document.documentElement.style.setProperty('--btn-bg', state.bar);
-    document.documentElement.style.setProperty('--btn-text', contrastColor(state.bar));
-    document.documentElement.style.setProperty('--btn-hover', shade(state.bar, -0.2));
-
-    document.documentElement.style.setProperty('--bg', state.bg);
-    document.documentElement.style.setProperty('--text', contrastColor(state.bg));
-    document.documentElement.style.setProperty('--card', shade(state.bg, -0.05));
+  // Найдём пресет по id
+  function findPreset(id) {
+    return PRESETS.find(p => p.id === id) || PRESETS[0];
   }
 
-  // Затемнить/осветлить цвет (amount: -1..1)
-  function shade(hex, amount) {
-    if (!hex || hex.length < 6) return hex;
-    let r = parseInt(hex.substr(1, 2), 16);
-    let g = parseInt(hex.substr(3, 2), 16);
-    let b = parseInt(hex.substr(5, 2), 16);
-    r = Math.max(0, Math.min(255, Math.round(r + r * amount)));
-    g = Math.max(0, Math.min(255, Math.round(g + g * amount)));
-    b = Math.max(0, Math.min(255, Math.round(b + b * amount)));
-    const to = n => n.toString(16).padStart(2, '0');
-    return `#${to(r)}${to(g)}${to(b)}`;
+  // ===== Применение цветов на страницу =====
+  function applyColors(bar, bg) {
+    const root = document.documentElement.style;
+    root.setProperty('--bar', bar);
+    root.setProperty('--bar-text', Theme.contrastColor(bar));
+    root.setProperty('--btn-bg', bar);
+    root.setProperty('--btn-text', Theme.contrastColor(bar));
+    root.setProperty('--btn-hover', Theme.shade(bar, -0.2));
+    root.setProperty('--bg', bg);
+    root.setProperty('--text', Theme.contrastColor(bg));
+    root.setProperty('--card', Theme.shade(bg, -0.05));
   }
 
-  // Строим палитру
+  // Показать "сохранённое" (то, что выбрано)
+  function showSelected() {
+    if (selected.mode === 'presets') {
+      const p = findPreset(selected.preset);
+      applyColors(p.bar, p.bg);
+    } else {
+      applyColors(selected.bar, selected.bg);
+    }
+  }
+
+  // ===== Табы =====
+  const tabs = document.querySelectorAll('.tab');
+  const slidePresets = document.getElementById('slide-presets');
+  const slideCustom  = document.getElementById('slide-custom');
+
+  function switchTab(name) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+
+    if (name === 'presets') {
+      slidePresets.classList.remove('hidden-right');
+      slidePresets.classList.add('active');
+      slideCustom.classList.remove('active');
+      slideCustom.classList.add('hidden-right');
+    } else {
+      slideCustom.classList.remove('hidden-right');
+      slideCustom.classList.add('active');
+      slidePresets.classList.remove('active');
+      slidePresets.classList.add('hidden-left');
+    }
+    showSelected();
+  }
+
+  // Сброс классов для повторного срабатывания анимации
+  function resetSlideClasses() {
+    slidePresets.classList.remove('hidden-left', 'hidden-right', 'active');
+    slideCustom.classList.remove('hidden-left', 'hidden-right', 'active');
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      resetSlideClasses();
+      switchTab(tab.dataset.tab);
+    });
+  });
+
+  // Начальное состояние
+  switchTab(selected.mode);
+  // Сброс, чтобы при первом клике анимация сработала
+  setTimeout(resetSlideClasses, 50);
+  // И снова применим активный слайд
+  setTimeout(() => switchTab(selected.mode), 100);
+
+  // ===== Пресеты =====
+  const grid = document.getElementById('theme-grid');
+
+  PRESETS.forEach(preset => {
+    const card = document.createElement('div');
+    card.className = 'theme-card';
+    if (selected.mode === 'presets' && selected.preset === preset.id) {
+      card.classList.add('active');
+    }
+
+    const preview = document.createElement('div');
+    preview.className = 'theme-preview';
+    const barEl = document.createElement('div');
+    barEl.className = 'bar';
+    barEl.style.background = preset.bar;
+    const bodyEl = document.createElement('div');
+    bodyEl.className = 'body';
+    bodyEl.style.background = preset.bg;
+    preview.appendChild(barEl);
+    preview.appendChild(bodyEl);
+
+    const name = document.createElement('div');
+    name.className = 'theme-name';
+    name.textContent = preset.name;
+
+    card.appendChild(preview);
+    card.appendChild(name);
+
+    // Наведение = предпросмотр
+    card.addEventListener('mouseenter', () => {
+      applyColors(preset.bar, preset.bg);
+    });
+    // Уход = вернуть выбранное
+    card.addEventListener('mouseleave', showSelected);
+    // Клик = выбрать
+    card.addEventListener('click', () => {
+      selected.mode = 'presets';
+      selected.preset = preset.id;
+      document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      showSelected();
+    });
+
+    grid.appendChild(card);
+  });
+
+  // ===== Палитры кастома =====
   function buildPalette(containerId, key) {
     const container = document.getElementById(containerId);
     COLORS.forEach(color => {
       const sw = document.createElement('div');
       sw.className = 'swatch';
       sw.style.background = color;
-      if (color === state[key]) sw.classList.add('active');
+      if (selected[key] === color && selected.mode === 'custom') {
+        sw.classList.add('active');
+      }
 
-      // Наведение — применяем временно
+      // Наведение = предпросмотр
       sw.addEventListener('mouseenter', () => {
-        state[key] = color;
-        applyColors();
+        // Меняем временно, сохраняя вторую половину из selected
+        if (key === 'bar') applyColors(color, selected.bg);
+        else applyColors(selected.bar, color);
       });
 
-      // Клик — сохраняем
+      // Уход = вернуть выбранное
+      sw.addEventListener('mouseleave', showSelected);
+
+      // Клик = выбрать
       sw.addEventListener('click', () => {
-        state[key] = color;
-        localStorage.setItem(key === 'bar' ? 'colorBar' : 'colorBg', color);
-        applyColors();
+        selected.mode = 'custom';
+        selected[key] = color;
         document.querySelectorAll(`#${containerId} .swatch`).forEach(s => s.classList.remove('active'));
         sw.classList.add('active');
+        showSelected();
       });
 
       container.appendChild(sw);
@@ -219,14 +467,27 @@
 
   buildPalette('palette-bar', 'bar');
   buildPalette('palette-bg',  'bg');
-  applyColors();
 
-  // Кнопка "Применить"
+  // ===== Кнопка "Применить" =====
   document.getElementById('apply-btn').addEventListener('click', () => {
-    localStorage.setItem('colorBar', state.bar);
-    localStorage.setItem('colorBg',  state.bg);
+    localStorage.setItem('themeMode', selected.mode);
+
+    if (selected.mode === 'presets') {
+      const p = findPreset(selected.preset);
+      localStorage.setItem('presetName', p.id);
+      localStorage.setItem('colorBar', p.bar);
+      localStorage.setItem('colorBg',  p.bg);
+    } else {
+      localStorage.setItem('colorBar', selected.bar);
+      localStorage.setItem('colorBg',  selected.bg);
+    }
+
     window.location.href = 'index.html';
   });
+
+  // На всякий случай — начальный показ выбранного
+  showSelected();
+})();
 </script>
 
 </body>
