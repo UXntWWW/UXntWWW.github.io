@@ -16,7 +16,6 @@
 
     nav.innerHTML = '';
 
-    // Главная — только не на главной
     if (PAGE !== 'index') {
       const home = document.createElement('a');
       home.href = 'index.html';
@@ -25,7 +24,6 @@
       nav.appendChild(home);
     }
 
-    // Помощь
     const helpWrap = document.createElement('div');
     helpWrap.className = 'nav-help-wrap';
 
@@ -45,14 +43,12 @@
 
     nav.appendChild(helpWrap);
 
-    // Настройки
     const settings = document.createElement('a');
     settings.href = 'GlobalSettings.html';
     settings.className = 'nav-btn';
     settings.textContent = 'Настройки';
     nav.appendChild(settings);
 
-    // Логика открытия/закрытия "Помощь"
     let open = false;
 
     function openMenu() {
@@ -68,10 +64,7 @@
       localStorage.setItem('helpMenuOpen', 'off');
     }
 
-    // Восстанавливаем состояние меню
-    if (localStorage.getItem('helpMenuOpen') === 'on') {
-      openMenu();
-    }
+    if (localStorage.getItem('helpMenuOpen') === 'on') openMenu();
 
     helpBtn.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -92,61 +85,31 @@
     });
   }
 
-  // ===== Кнопка "Свернуть/Развернуть шапку" =====
-  function buildToggleButton() {
+  // ===== Компенсация высоты fixed-шапки =====
+  function fixTopBarHeight() {
     const topBar = document.querySelector('.top-bar');
     if (!topBar) return;
 
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'topbar-toggle';
-    btn.setAttribute('aria-label', 'Свернуть шапку');
-    btn.innerHTML = '<span class="toggle-arrow">▲</span>';
-    document.body.appendChild(btn);
-
-    let lastY = window.scrollY;
-    let collapsed = false;
-
-    function setCollapsed(state) {
-      collapsed = state;
-      document.body.classList.toggle('topbar-collapsed', state);
-      const arrow = btn.querySelector('.toggle-arrow');
-      if (arrow) arrow.textContent = state ? '▼' : '▲';
-      btn.setAttribute('aria-label', state ? 'Развернуть шапку' : 'Свернуть шапку');
+    function update() {
+      const h = topBar.offsetHeight;
+      document.body.style.paddingTop = h + 'px';
+      document.documentElement.style.setProperty('--topbar-height', h + 'px');
     }
 
-    // Восстанавливаем состояние из localStorage
-    const savedCollapsed = localStorage.getItem('topbarCollapsed') === 'on';
-    if (savedCollapsed) setCollapsed(true);
+    update();
+    window.addEventListener('resize', update);
+    setTimeout(update, 100);
+    setTimeout(update, 400);
+  }
 
-    // Клик по кнопке
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      setCollapsed(!collapsed);
-      localStorage.setItem('topbarCollapsed', collapsed ? 'on' : 'off');
-    });
-
-    // Автосвёртывание при прокрутке вниз / авторазворот при прокрутке вверх
-    window.addEventListener('scroll', function () {
-      if (localStorage.getItem('topbarCollapsed') === 'on') return;
-
-      const y = window.scrollY;
-      if (y > lastY && y > 80 && !collapsed) {
-        setCollapsed(true);
-      } else if (y < lastY - 5 && collapsed) {
-        setCollapsed(false);
-      }
-      lastY = y;
-    }, { passive: true });
+  function init() {
+    buildNav();
+    fixTopBarHeight();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      buildNav();
-      buildToggleButton();
-    });
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    buildNav();
-    buildToggleButton();
+    init();
   }
 })();
