@@ -1,38 +1,24 @@
 /* reviews.js — отзывы и рейтинг для страниц UXNTWWW.io
    Использует GitHub Discussions через Giscus + GitHub API для рейтинга.
-
-   НАСТРОЙКА:
-   1. Включи Discussions в репозитории (Settings → Features → Discussions).
-   2. Установи приложение giscus: https://github.com/apps/giscus
-   3. Открой https://giscus.app/ru, введи репозиторий UXntWWW/UXntWWW.github.io
-      и скопируй data-repo-id и data-category-id.
-   4. Замени значения GISCUS_REPO_ID и GISCUS_CATEGORY_ID ниже.
-   5. Для рейтинга нужен GitHub Personal Access Token (только read).
-      Создай его тут: https://github.com/settings/tokens
-      Права: public_repo (read).
-      Вставь в GITHUB_TOKEN.
 */
 (function () {
   'use strict';
 
   // ===== НАСТРОЙКИ =====
   const GISCUS_REPO        = 'UXntWWW/UXntWWW.github.io';
-  const GISCUS_REPO_ID     = 'R_kgDON123456';           // ← замени
-  const GISCUS_CATEGORY    = 'Отзывы';                  // ← название категории в Discussions
-  const GISCUS_CATEGORY_ID = 'DIC_kwDON123456';         // ← замени
-  const GITHUB_TOKEN       = '';                        // ← личный токен (или оставь пустым — будет работать без рейтинга)
-  const RATING_PREFIX      = 'RATING:';                 // маркер для парсинга оценок
+  const GISCUS_REPO_ID     = 'R_kgDOTZJ_lQ';
+  const GISCUS_CATEGORY    = 'Отзывы';
+  const GISCUS_CATEGORY_ID = 'DIC_kwDOTZJ_lc4DGhXU';
+  const GITHUB_TOKEN       = '';                        // ← оставь пустым или вставь токен для общего рейтинга
+  const RATING_PREFIX      = 'RATING:';
 
-  // ===== SLUG страницы — уникальный для каждой =====
   function getSlug() {
-    // Берём имя файла без .html
     const path = window.location.pathname.split('/').pop() || 'index.html';
     return path.replace('.html', '');
   }
 
   const SLUG = getSlug();
 
-  // ===== Создаём секцию отзывов =====
   function createReviewsSection() {
     const section = document.createElement('section');
     section.className = 'reviews-section';
@@ -52,7 +38,6 @@
     content.appendChild(section);
   }
 
-  // ===== Модалка для оценки =====
   function createRatingModal() {
     const modal = document.createElement('div');
     modal.className = 'rating-modal-backdrop';
@@ -111,23 +96,18 @@
 
     saveBtn.addEventListener('click', function () {
       if (!chosen) return;
-      // Сохраняем локально
       const key = 'rating_' + SLUG;
       localStorage.setItem(key, String(chosen));
-      // И записываем в GitHub Discussions как комментарий (если есть токен)
       if (GITHUB_TOKEN) {
         postRatingToGitHub(chosen);
       } else {
-        // Если токена нет — просто локально + обновляем отображение
         updateRatingFromLocal();
       }
       modal.classList.remove('show');
     });
   }
 
-  // ===== Отправка оценки в GitHub Discussions через API =====
   function postRatingToGitHub(value) {
-    // Ищем Discussion по названию (slug)
     fetch('https://api.github.com/graphql', {
       method: 'POST',
       headers: {
@@ -138,9 +118,7 @@
         query: `
           query($owner: String!, $repo: String!, $title: String!) {
             repository(owner: $owner, name: $repo) {
-              discussion(title: $title) {
-                id
-              }
+              discussion(title: $title) { id }
             }
           }`,
         variables: {
@@ -156,7 +134,6 @@
                           data.data.repository.discussion &&
                           data.data.repository.discussion.id;
       if (!discussionId) return;
-      // Добавляем комментарий с оценкой
       return fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: {
@@ -170,22 +147,14 @@
                 comment { id }
               }
             }`,
-          variables: {
-            discussionId: discussionId,
-            body: RATING_PREFIX + value
-          }
+          variables: { discussionId: discussionId, body: RATING_PREFIX + value }
         })
       });
     })
-    .then(function () {
-      setTimeout(updateRatingFromGitHub, 1200);
-    })
-    .catch(function () {
-      updateRatingFromLocal();
-    });
+    .then(function () { setTimeout(updateRatingFromGitHub, 1200); })
+    .catch(function () { updateRatingFromLocal(); });
   }
 
-  // ===== Рейтинг из GitHub Discussions =====
   function updateRatingFromGitHub() {
     if (!GITHUB_TOKEN) { updateRatingFromLocal(); return; }
 
@@ -200,9 +169,7 @@
           query($owner: String!, $repo: String!, $title: String!) {
             repository(owner: $owner, name: $repo) {
               discussion(title: $title) {
-                comments(first: 100) {
-                  nodes { body }
-                }
+                comments(first: 100) { nodes { body } }
               }
             }
           }`,
@@ -231,18 +198,13 @@
     .catch(function () { updateRatingFromLocal(); });
   }
 
-  // ===== Рейтинг из localStorage (fallback) =====
   function updateRatingFromLocal() {
     const key = 'rating_' + SLUG;
     const v = parseInt(localStorage.getItem(key) || '0', 10);
-    if (v >= 1 && v <= 5) {
-      renderRating([v]);
-    } else {
-      renderRating([]);
-    }
+    if (v >= 1 && v <= 5) renderRating([v]);
+    else renderRating([]);
   }
 
-  // ===== Отображение рейтинга =====
   function renderRating(values) {
     const starsEl = document.getElementById('rating-stars-display');
     const valueEl = document.getElementById('rating-value');
@@ -261,7 +223,6 @@
     let stars = '';
     for (let i = 1; i <= 5; i++) {
       if (i <= Math.floor(rounded)) stars += '★';
-      else if (i - 0.5 === rounded) stars += '⯨';
       else stars += '☆';
     }
     starsEl.textContent = stars;
@@ -278,7 +239,6 @@
     return forms[2];
   }
 
-  // ===== Giscus =====
   function loadGiscus() {
     const wrap = document.getElementById('giscus-wrap');
     if (!wrap) return;
@@ -301,7 +261,6 @@
     wrap.appendChild(s);
   }
 
-  // ===== Запуск =====
   document.addEventListener('DOMContentLoaded', function () {
     createReviewsSection();
     createRatingModal();
@@ -313,12 +272,8 @@
       });
     }
 
-    // Загружаем рейтинг и Giscus
-    if (GITHUB_TOKEN) {
-      updateRatingFromGitHub();
-    } else {
-      updateRatingFromLocal();
-    }
+    if (GITHUB_TOKEN) updateRatingFromGitHub();
+    else updateRatingFromLocal();
     loadGiscus();
   });
 })();
