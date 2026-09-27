@@ -424,10 +424,6 @@ body.glass-mode .program-card-btn {
   -webkit-backdrop-filter: var(--glass-blur);
 }
 .program-card-btn:hover { opacity: 0.85; }
-.program-card-skeleton {
-  opacity: 0.4;
-  font-style: italic;
-}
 
 /* ===== Уведомление ===== */
 #toast {
@@ -507,7 +503,7 @@ body.glass-mode #screenshot-overlay {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
 }
 
-/* ===== Табы "Темы / Кастом / Эффекты" ===== */
+/* ===== Табы ===== */
 .tabs {
   display: flex; gap: 8px;
   border-bottom: 2px solid var(--card);
@@ -554,3 +550,135 @@ body.glass-mode .glass-toggle {
 .glass-toggle-text { display: flex; flex-direction: column; gap: 4px; }
 .glass-toggle-title { font-weight: bold; font-size: 1rem; }
 .glass-toggle-desc { font-size: 0.85rem; opacity: 0.7; }
+
+/* ===== Отзывы и комментарии (Giscus) ===== */
+.reviews-section {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid var(--card);
+}
+body.glass-mode .reviews-section { border-top-color: var(--glass-border); }
+.reviews-title {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+.reviews-subtitle {
+  opacity: 0.75;
+  font-size: 0.9rem;
+  margin: 0 0 20px;
+}
+.rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--card);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+body.glass-mode .rating-summary {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.rating-stars-display {
+  font-size: 1.6rem;
+  color: #f5b301;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.rating-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.rating-count {
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+/* ===== Модалка рейтинга ===== */
+.rating-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity .3s;
+  padding: 20px;
+}
+body.glass-mode .rating-modal-backdrop {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.rating-modal-backdrop.show { opacity: 1; display: flex; }
+.rating-modal {
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 26px;
+  max-width: 420px;
+  width: 100%;
+  border: 2px solid var(--card);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  transform: translateY(20px);
+  transition: transform .3s;
+}
+.rating-modal-backdrop.show .rating-modal { transform: translateY(0); }
+body.glass-mode .rating-modal {
+  background: var(--glass-bg-2);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.rating-modal h3 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+.rating-modal p {
+  margin: 0 0 18px;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+.rating-stars-input {
+  display: flex;
+  gap: 8px;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+.rating-stars-input span {
+  color: #888;
+  transition: color .15s, transform .15s;
+  line-height: 1;
+}
+.rating-stars-input span:hover,
+.rating-stars-input span.active {
+  color: #f5b301;
+  transform: scale(1.15);
+}
+.rating-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.rating-modal-actions button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  border: 2px solid var(--nav-border);
+  background: var(--nav-fill);
+  color: var(--nav-text);
+  transition: opacity .2s;
+}
+body.glass-mode .rating-modal-actions button {
+  background: var(--glass-bg);
+  color: var(--text);
+  border: 1px solid var(--glass-border
