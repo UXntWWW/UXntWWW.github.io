@@ -108,12 +108,7 @@
 
 <div class="top-bar">
   <h1>Настройки — UXNTWWW.io</h1>
-  <nav class="top-nav">
-    <a href="index.html">Главная</a>
-    <a href="about.html">О сайте</a>
-    <a href="contacts.html">Контакты</a>
-    <a href="faq.html">FAQ</a>
-  </nav>
+  <nav class="top-nav"></nav>
 </div>
 
 <div class="content">
@@ -233,14 +228,12 @@
     return { bar: preset.bar, bg: preset.bg, btn: preset.btn || 'white' };
   }
 
-  // ===== Ключевая функция — теперь вызывает полный preview из theme.js =====
+  // Полный пересчёт — вызывает preview из theme.js
   function applyColors(bar, bg) {
-    // Полный пересчёт — обновляет фон, стекло, градиент, всё
     if (window.Theme && window.Theme.preview) {
       window.Theme.preview(bar, bg);
     }
 
-    // Дополнительно — цвета текста (если выбраны вручную)
     const root = document.documentElement.style;
     const textBar  = selected.textBar  || Theme.contrastColor(bar);
     const textPage = selected.textPage || Theme.contrastColor(bg);
@@ -248,7 +241,6 @@
     root.setProperty('--text',     textPage);
     root.setProperty('--text-link', textPage);
 
-    // Кнопки по теме
     const fill = (function () {
       if (selected.mode === 'presets') {
         const p = findPreset(selected.preset);
@@ -465,6 +457,7 @@
 })();
 </script>
 
+<script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
 </body>
