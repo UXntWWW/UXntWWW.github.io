@@ -6,14 +6,14 @@
 <title>PCCleaner Download — UXNTWWW.io</title>
 <script src="theme.js"></script>
 <link rel="stylesheet" href="common.css">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-green.png">
+<link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
   :root {
     --bg: #ffffff; --text: #000000;
     --bar: #008000; --bar-text: #ffffff;
-    --btn-bg: #008000; --btn-text: #ffffff;
-    --btn-hover: #006400; --card: #f2f2f2;
+    --card: #f2f2f2;
+    --nav-fill: #ffffff; --nav-text: #000000; --nav-border: #000000;
+    --btn-bg: #008000; --btn-hover: #006400;
   }
   body {
     margin: 0; padding: 0;
@@ -29,26 +29,10 @@
     box-sizing: border-box;
     width: 100%;
     position: relative;
-    transition: background-color .25s, border-color .25s;
+    transition: background-color .25s, border-color .25s, color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
   .content { padding: 20px; position: relative; }
-
-  .zip-btn, .github-btn {
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: bold;
-    display: inline-block;
-    box-sizing: border-box;
-    margin-top: 15px;
-    transition: background-color .2s;
-  }
-  .zip-btn { margin-right: 10px; }
-  .github-btn { white-space: nowrap; }
-  .zip-btn:hover, .github-btn:hover { background-color: var(--btn-hover); }
 
   .broom-img {
     float: right;
@@ -56,15 +40,6 @@
     height: 256px;
     margin-left: 20px;
   }
-  #home-link {
-    display: inline-block;
-    margin: 0 0 10px 0;
-    font-size: 20px;
-    color: var(--btn-bg);
-    text-decoration: none;
-    font-weight: bold;
-  }
-  #home-link:hover { text-decoration: underline; }
 
   .version-block {
     overflow: hidden;
@@ -98,7 +73,6 @@
 </div>
 
 <div class="content fade-in">
-  <a href="index.html" id="home-link">~ Главная</a>
 
   <div class="search-wrap">
     <input type="text" id="search" class="search-input" placeholder="Поиск по странице...">
@@ -245,6 +219,5 @@
 </script>
 
 <script src="back-to-top.js"></script>
-<script src="pwa.js"></script>
 </body>
 </html>
