@@ -1,5 +1,17 @@
 /* common.css — общие стили для всех страниц UXNTWWW.io */
 
+/* ===== Убираем красное мерцание текста ===== */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.scroll-animate {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
 /* ===== Стеклянный фон страницы ===== */
 body.glass-mode {
   background: var(--page-gradient, var(--bg)) fixed;
@@ -830,4 +842,47 @@ body.glass-mode .nav-help-menu a:hover {
     right: auto;
     left: 0;
   }
+}
+
+/* ===== Сворачивание старых версий ===== */
+.toggle-old-versions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: 2px solid var(--nav-border, #000);
+  background: var(--nav-fill, #fff);
+  color: var(--nav-text, #000);
+  font-weight: bold;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity .2s, background .25s, color .25s;
+  margin: 20px 0;
+}
+body.glass-mode .toggle-old-versions {
+  background: var(--glass-bg);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+.toggle-old-versions:hover { opacity: 0.85; }
+.toggle-old-versions .toggle-arrow {
+  display: inline-block;
+  transition: transform .3s ease;
+  font-size: 0.85rem;
+}
+
+.old-versions {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .5s cubic-bezier(.22,.61,.36,1), opacity .3s ease;
+  opacity: 0;
+}
+.old-versions.open {
+  max-height: 5000px;
+  opacity: 1;
 }
