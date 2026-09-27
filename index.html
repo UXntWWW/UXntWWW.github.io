@@ -6,15 +6,14 @@
 <title>Главная — UXNTWWW.io</title>
 <script src="theme.js"></script>
 <link rel="stylesheet" href="common.css">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-green.png">
-<meta name="theme-color" content="#008000">
+<link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
   :root {
     --bg: #ffffff; --text: #000000;
     --bar: #008000; --bar-text: #ffffff;
-    --btn-bg: #008000; --btn-text: #ffffff;
-    --btn-hover: #006400; --card: #f2f2f2;
+    --card: #f2f2f2;
+    --nav-fill: #ffffff; --nav-text: #000000; --nav-border: #000000;
+    --btn-bg: #008000; --btn-hover: #006400;
   }
   body {
     margin: 0; padding: 0;
@@ -30,7 +29,7 @@
     box-sizing: border-box;
     width: 100%;
     position: relative;
-    transition: background-color .25s, border-color .25s;
+    transition: background-color .25s, border-color .25s, color .25s;
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
   .content { padding: 20px; position: relative; min-height: 500px; }
@@ -38,19 +37,20 @@
   #files-btn, #files-btn-v10 {
     position: absolute;
     left: 20px;
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
+    background-color: var(--nav-fill);
+    color: var(--nav-text);
+    border: 2px solid var(--nav-border);
     padding: 12px 24px;
     text-decoration: none;
     border-radius: 12px;
     font-weight: bold;
     display: inline-block;
     box-sizing: border-box;
-    transition: background-color .2s;
+    transition: opacity .2s;
   }
   #files-btn { top: 140px; }
   #files-btn-v10 { top: 290px; }
-  #files-btn:hover, #files-btn-v10:hover { background-color: var(--btn-hover); }
+  #files-btn:hover, #files-btn-v10:hover { opacity: 0.85; }
 
   .status-text { position: absolute; left: 10px; top: 200px; margin: 0; }
   #update-text { position: absolute; left: 10px; top: 230px; margin: 0; }
@@ -96,6 +96,5 @@
  </div>
 
 <script src="back-to-top.js"></script>
-<script src="pwa.js"></script>
 </body>
 </html>
