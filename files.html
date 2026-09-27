@@ -213,4 +213,68 @@
 <script>
   (function () {
     const block = document.querySelector('.version-block[data-version-file]');
-   
+    if (!block) return;
+    const vFile = block.dataset.versionFile;
+    const tFile = block.dataset.totaldataFile;
+
+    function fetchText(url) {
+      return fetch(url, { cache: 'no-cache' })
+        .then(r => r.ok ? r.text() : Promise.reject())
+        .then(t => t.trim())
+        .catch(() => null);
+    }
+
+    Promise.all([fetchText(vFile), fetchText(tFile)]).then(function (res) {
+      if (res[0]) {
+        block.querySelectorAll('.version-value').forEach(el => el.textContent = res[0]);
+      }
+      if (res[1]) {
+        const parts = res[1].split(',').map(s => s.trim());
+        const size = parts[0] || '—';
+        const date = parts[1] || '—';
+        const sizeEl = block.querySelector('.size-value');
+        const dateEl = block.querySelector('.date-value');
+        if (sizeEl) sizeEl.textContent = size;
+        if (dateEl) dateEl.textContent = date;
+      }
+    });
+  })();
+
+  (function () {
+    const input = document.getElementById('search');
+    if (!input) return;
+
+    const blocks = Array.from(document.querySelectorAll('.version-block'));
+    if (!blocks.length) return;
+
+    const empty = document.createElement('div');
+    empty.className = 'search-empty';
+    empty.textContent = 'Ничего не найдено.';
+    empty.style.display = 'none';
+    blocks[0].parentNode.insertBefore(empty, blocks[0]);
+
+    input.addEventListener('input', function () {
+      const q = input.value.trim().toLowerCase();
+      let found = 0;
+
+      blocks.forEach(function (block) {
+        const text = block.textContent.toLowerCase();
+        const match = !q || text.includes(q);
+        block.style.display = match ? '' : 'none';
+        if (match) found++;
+      });
+
+      document.querySelectorAll('.page-divider').forEach(function (hr) {
+        hr.style.display = q ? 'none' : '';
+      });
+
+      empty.style.display = (q && found === 0) ? 'block' : 'none';
+    });
+  })();
+</script>
+
+<script src="reviews.js"></script>
+<script src="scroll-animate.js"></script>
+<script src="back-to-top.js"></script>
+</body>
+</html>
