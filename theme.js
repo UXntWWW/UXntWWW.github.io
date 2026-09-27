@@ -13,12 +13,9 @@
   const DEFAULTS = PRESETS.base;
 
   const COLOR_GROUPS = {
-    '#ffffff': 'white',
-    '#fafafa': 'white',
-    '#000000': 'black',
-    '#0f1115': 'black',
-    '#5a5a5a': 'gray',
-    '#d9d9d9': 'lightgray'
+    '#ffffff': 'white', '#fafafa': 'white',
+    '#000000': 'black', '#0f1115': 'black',
+    '#5a5a5a': 'gray',  '#d9d9d9': 'lightgray'
   };
 
   function colorKey(hex) {
@@ -27,9 +24,7 @@
     return COLOR_GROUPS[h] || h;
   }
 
-  function colorsMatch(a, b) {
-    return colorKey(a) === colorKey(b);
-  }
+  function colorsMatch(a, b) { return colorKey(a) === colorKey(b); }
 
   function colorName(hex) {
     const map = {
@@ -52,6 +47,14 @@
     return lum > 0.6 ? '#000000' : '#ffffff';
   }
 
+  function isDark(hex) {
+    if (!hex || hex.length < 6) return false;
+    const r = parseInt(hex.substr(1, 2), 16);
+    const g = parseInt(hex.substr(3, 2), 16);
+    const b = parseInt(hex.substr(5, 2), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+  }
+
   function shade(hex, amount) {
     if (!hex || hex.length < 6) return hex;
     let r = parseInt(hex.substr(1, 2), 16);
@@ -60,6 +63,18 @@
     r = Math.max(0, Math.min(255, Math.round(r + r * amount)));
     g = Math.max(0, Math.min(255, Math.round(g + g * amount)));
     b = Math.max(0, Math.min(255, Math.round(b + b * amount)));
+    const to = n => n.toString(16).padStart(2, '0');
+    return '#' + to(r) + to(g) + to(b);
+  }
+
+  function lighten(hex, amount) {
+    if (!hex || hex.length < 6) return hex;
+    let r = parseInt(hex.substr(1, 2), 16);
+    let g = parseInt(hex.substr(3, 2), 16);
+    let b = parseInt(hex.substr(5, 2), 16);
+    r = Math.round(r + (255 - r) * amount);
+    g = Math.round(g + (255 - g) * amount);
+    b = Math.round(b + (255 - b) * amount);
     const to = n => n.toString(16).padStart(2, '0');
     return '#' + to(r) + to(g) + to(b);
   }
@@ -101,6 +116,10 @@
     };
   }
 
+  function getGlass() {
+    return localStorage.getItem('glassEffect') === 'on';
+  }
+
   function apply(bar, bg) {
     const root = document.documentElement.style;
 
@@ -129,38 +148,60 @@
     root.setProperty('--nav-text',   navText);
     root.setProperty('--nav-border', navBorder);
 
-    // Поля ввода: при тёмных темах — светлые поля с тёмным текстом и наоборот
-    // Логика: если фон тёмный → поле светлое, если светлый → поле тёмное
-    const bgLum = (function () {
-      const r = parseInt(bg.substr(1, 2), 16);
-      const g = parseInt(bg.substr(3, 2), 16);
-      const b = parseInt(bg.substr(5, 2), 16);
-      return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    })();
-
-    let inputBg, inputText, inputBorder;
-    if (bgLum < 0.5) {
-      // тёмный фон → светлое поле
-      inputBg = '#ffffff';
-      inputText = '#000000';
-      inputBorder = '#d9d9d9';
+    // Поля ввода
+    const bgDark = isDark(bg);
+    if (bgDark) {
+      root.setProperty('--input-bg',     '#ffffff');
+      root.setProperty('--input-text',   '#000000');
+      root.setProperty('--input-border', '#d9d9d9');
     } else {
-      // светлый фон → тёмное поле
-      inputBg = '#1a1d24';
-      inputText = '#ffffff';
-      inputBorder = '#3a3d44';
+      root.setProperty('--input-bg',     '#1a1d24');
+      root.setProperty('--input-text',   '#ffffff');
+      root.setProperty('--input-border', '#3a3d44');
     }
-    root.setProperty('--input-bg',     inputBg);
-    root.setProperty('--input-text',   inputText);
-    root.setProperty('--input-border', inputBorder);
 
-    // Цвета текста
+    // Текст
     const tc = getTextColors(bar, bg);
     root.setProperty('--bar-text', tc.barText);
     root.setProperty('--text',     tc.pageText);
-
-    // Ссылки — тот же цвет, что и основной текст
     root.setProperty('--text-link', tc.pageText);
+
+    // ===== Стекло =====
+    const glass = getGlass();
+    const glassDark = isDark(bg);
+
+    if (glass) {
+      // Стеклянные переменные
+      if (glassDark) {
+        // Тёмная тема — тёмное стекло
+        root.setProperty('--glass-bg',     'rgba(30, 32, 40, 0.45)');
+        root.setProperty('--glass-bg-2',   'rgba(40, 42, 52, 0.55)');
+        root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.12)');
+        root.setProperty('--glass-shadow', '0 8px 32px rgba(0, 0, 0, 0.4)');
+      } else {
+        // Светлая тема — светлое стекло
+        root.setProperty('--glass-bg',     'rgba(255, 255, 255, 0.45)');
+        root.setProperty('--glass-bg-2',   'rgba(255, 255, 255, 0.6)');
+        root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.7)');
+        root.setProperty('--glass-shadow', '0 8px 32px rgba(0, 0, 0, 0.1)');
+      }
+      root.setProperty('--glass-blur',   'blur(20px) saturate(180%)');
+
+      // Градиентный фон под стеклом
+      const gradColor = lighten(bar, 0.65);
+      const gradColor2 = lighten(bar, 0.9);
+      root.setProperty('--page-gradient', `linear-gradient(135deg, ${gradColor} 0%, ${gradColor2} 100%)`);
+    } else {
+      root.setProperty('--glass-bg',     'transparent');
+      root.setProperty('--glass-bg-2',   'transparent');
+      root.setProperty('--glass-border', 'transparent');
+      root.setProperty('--glass-shadow', 'none');
+      root.setProperty('--glass-blur',   'none');
+      root.setProperty('--page-gradient', 'none');
+    }
+
+    // Класс на body
+    document.body.classList.toggle('glass-mode', glass);
   }
 
   const c = getColors();
@@ -184,9 +225,11 @@
   window.Theme = {
     contrastColor: contrastColor,
     shade: shade,
+    isDark: isDark,
     colorKey: colorKey,
     colorsMatch: colorsMatch,
     colorName: colorName,
+    getGlass: getGlass,
     applyColors: apply,
     getColors: getColors,
     getTextColors: getTextColors,
