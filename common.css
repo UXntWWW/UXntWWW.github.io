@@ -133,6 +133,15 @@ body.glass-mode .search-input {
   font-style: italic;
 }
 
+/* Подсветка найденного */
+.search-highlight {
+  background: #ffeb3b;
+  color: #000;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
 /* ===== Кнопка "Обновить" ===== */
 .refresh-btn {
   display: inline-flex;
@@ -162,6 +171,75 @@ body.glass-mode .refresh-btn {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ===== Хлебные крошки ===== */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  opacity: 0.85;
+}
+.breadcrumbs a {
+  color: var(--text-link, inherit);
+  text-decoration: none;
+  font-weight: bold;
+}
+.breadcrumbs a:hover { text-decoration: underline; }
+.bc-sep { opacity: 0.5; }
+.bc-current { opacity: 0.7; }
+
+/* ===== Поделиться ===== */
+.share-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 30px 0 20px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 2px solid var(--card);
+}
+body.glass-mode .share-bar {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+.share-label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin-right: 6px;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 2px solid var(--nav-border);
+  background: var(--nav-fill);
+  color: var(--nav-text);
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .2s;
+}
+body.glass-mode .share-btn {
+  background: var(--glass-bg);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.share-btn:hover { opacity: 0.85; }
 
 /* ===== Скриншоты ===== */
 .screenshots {
@@ -469,13 +547,6 @@ body.glass-mode .program-card-btn {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
-.skeleton-line {
-  height: 14px;
-  margin: 8px 0;
-}
-.skeleton-line.short { width: 40%; }
-.skeleton-line.medium { width: 70%; }
-.skeleton-line.long { width: 100%; }
 
 /* ===== Уведомление ===== */
 #toast {
@@ -605,22 +676,15 @@ body.glass-mode .glass-toggle {
 .glass-toggle-title { font-weight: bold; font-size: 1rem; }
 .glass-toggle-desc { font-size: 0.85rem; opacity: 0.7; }
 
-/* ===== Отзывы и рейтинг (Giscus) ===== */
+/* ===== Отзывы и рейтинг ===== */
 .reviews-section {
   margin-top: 40px;
   padding-top: 20px;
   border-top: 2px solid var(--card);
 }
 body.glass-mode .reviews-section { border-top-color: var(--glass-border); }
-.reviews-title {
-  font-size: 1.3rem;
-  margin-bottom: 8px;
-}
-.reviews-subtitle {
-  opacity: 0.75;
-  font-size: 0.9rem;
-  margin: 0 0 20px;
-}
+.reviews-title { font-size: 1.3rem; margin-bottom: 8px; }
+.reviews-subtitle { opacity: 0.75; font-size: 0.9rem; margin: 0 0 20px; }
 .rating-summary {
   display: flex;
   align-items: center;
@@ -637,20 +701,9 @@ body.glass-mode .rating-summary {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
 }
-.rating-stars-display {
-  font-size: 1.6rem;
-  color: #f5b301;
-  letter-spacing: 2px;
-  line-height: 1;
-}
-.rating-value {
-  font-size: 1.4rem;
-  font-weight: bold;
-}
-.rating-count {
-  opacity: 0.7;
-  font-size: 0.9rem;
-}
+.rating-stars-display { font-size: 1.6rem; color: #f5b301; letter-spacing: 2px; line-height: 1; }
+.rating-value { font-size: 1.4rem; font-weight: bold; }
+.rating-count { opacity: 0.7; font-size: 0.9rem; }
 
 /* ===== Модалка рейтинга ===== */
 .rating-modal-backdrop {
@@ -689,38 +742,13 @@ body.glass-mode .rating-modal {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
 }
-.rating-modal h3 {
-  margin: 0 0 8px;
-  font-size: 1.2rem;
-}
-.rating-modal p {
-  margin: 0 0 18px;
-  opacity: 0.8;
-  font-size: 0.9rem;
-}
-.rating-stars-input {
-  display: flex;
-  gap: 8px;
-  font-size: 2.2rem;
-  margin-bottom: 20px;
-  cursor: pointer;
-  user-select: none;
-}
-.rating-stars-input span {
-  color: #888;
-  transition: color .15s, transform .15s;
-  line-height: 1;
-}
+.rating-modal h3 { margin: 0 0 8px; font-size: 1.2rem; }
+.rating-modal p { margin: 0 0 18px; opacity: 0.8; font-size: 0.9rem; }
+.rating-stars-input { display: flex; gap: 8px; font-size: 2.2rem; margin-bottom: 20px; cursor: pointer; user-select: none; }
+.rating-stars-input span { color: #888; transition: color .15s, transform .15s; line-height: 1; }
 .rating-stars-input span:hover,
-.rating-stars-input span.active {
-  color: #f5b301;
-  transform: scale(1.15);
-}
-.rating-modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
+.rating-stars-input span.active { color: #f5b301; transform: scale(1.15); }
+.rating-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 .rating-modal-actions button {
   padding: 10px 20px;
   border-radius: 10px;
@@ -766,30 +794,6 @@ body.glass-mode .write-review-btn {
   -webkit-backdrop-filter: var(--glass-blur);
 }
 .write-review-btn:hover { opacity: 0.85; }
-
-.reviews-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 30px;
-}
-.review-item {
-  padding: 16px 18px;
-  border-radius: 12px;
-  background: var(--card);
-  border: 2px solid var(--card);
-}
-body.glass-mode .review-item {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-}
-.reviews-empty {
-  opacity: 0.7;
-  font-style: italic;
-  padding: 16px 0;
-}
 
 /* ===== Верхнее меню ===== */
 .top-nav {
@@ -1013,14 +1017,8 @@ body.glass-mode .stat-card {
 }
 body.glass-mode .stat-row { border-bottom-color: var(--glass-border); }
 .stat-row:last-child { border-bottom: none; }
-.stat-label {
-  opacity: 0.75;
-  font-size: 0.9rem;
-}
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
+.stat-label { opacity: 0.75; font-size: 0.9rem; }
+.stat-value { font-size: 1.5rem; font-weight: bold; }
 .stat-value.loading { opacity: 0.4; }
 
 /* ===== Языковой переключатель ===== */
