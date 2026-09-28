@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAQ — UXNTWWW.io</title>
+<title data-i18n-title="site.title.faq">FAQ — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<script src="lang.js"></script>
 <link rel="stylesheet" href="common.css">
 <link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
@@ -33,47 +34,45 @@
 <body>
 
 <div class="top-bar">
-  <h1>FAQ — UXNTWWW.io</h1>
-  <nav class="top-nav">
-    <a href="index.html">Главная</a>
-    <a href="about.html">О сайте</a>
-    <a href="contacts.html">Контакты</a>
-    <a href="GlobalSettings.html">Настройки</a>
-  </nav>
+  <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
+  <nav class="top-nav"></nav>
 </div>
 
 <div class="content fade-in">
 
-  <h2>Частые вопросы</h2>
+  <h2 data-i18n="faq.h1">Частые вопросы</h2>
 
   <div class="faq-item">
-    <button class="faq-q">Антивирус ругается на файл. Что делать?</button>
-    <div class="faq-a">Это ложное срабатывание — утилиты работают с системными папками (Temp, DNS, кэш), поэтому антивирусы иногда реагируют. Все файлы проверены, исходники есть на GitHub. Можно добавить в исключения.</div>
+    <button class="faq-q" data-i18n="faq.q1">Антивирус ругается на файл. Что делать?</button>
+    <div class="faq-a" data-i18n="faq.a1">Это ложное срабатывание — утилиты работают с системными папками (Temp, DNS, кэш), поэтому антивирусы иногда реагируют. Все файлы проверены, исходники есть на GitHub. Можно добавить в исключения.</div>
   </div>
 
   <div class="faq-item">
-    <button class="faq-q">Почему у вас .exe, а не установщик?</button>
-    <div class="faq-a">Программы portable — не требуют установки. Скачал, распаковал (если .zip), запустил. Так проще и не оставляет следов в системе.</div>
+    <button class="faq-q" data-i18n="faq.q2">Почему у вас .exe, а не установщик?</button>
+    <div class="faq-a" data-i18n="faq.a2">Программы portable — не требуют установки. Скачал, распаковал (если .zip), запустил. Так проще и не оставляет следов в системе.</div>
   </div>
 
   <div class="faq-item">
-    <button class="faq-q">Как обновляться до новой версии?</button>
-    <div class="faq-a">Утилиты сами проверяют обновления. Также можно вручную скачать новую версию с главной страницы или из GitHub Releases.</div>
+    <button class="faq-q" data-i18n="faq.q3">Как обновляться до новой версии?</button>
+    <div class="faq-a" data-i18n="faq.a3">Утилиты сами проверяют обновления. Также можно вручную скачать новую версию с главной страницы или из GitHub Releases.</div>
   </div>
 
   <div class="faq-item">
-    <button class="faq-q">Работает ли на Windows 7?</button>
-    <div class="faq-a">Основная поддержка — Windows 10 и 11 (64-bit). На Windows 7 часть функций может не работать корректно.</div>
+    <button class="faq-q" data-i18n="faq.q4">Работает ли на Windows 7?</button>
+    <div class="faq-a" data-i18n="faq.a4">Основная поддержка — Windows 10 и 11 (64-bit). На Windows 7 часть функций может не работать корректно.</div>
   </div>
 
   <div class="faq-item">
-    <button class="faq-q">Можно ли использовать в коммерческих целях?</button>
-    <div class="faq-a">Да, программы бесплатные. Единственное условие — не выдавать их за свои и не продавать.</div>
+    <button class="faq-q" data-i18n="faq.q5">Можно ли использовать в коммерческих целях?</button>
+    <div class="faq-a" data-i18n="faq.a5">Да, программы бесплатные. Единственное условие — не выдавать их за свои и не продавать.</div>
   </div>
 
   <div class="faq-item">
-    <button class="faq-q">Где посмотреть исходный код?</button>
-    <div class="faq-a">На GitHub: <a href="https://github.com/UXntWWW/UXntWWW.github.io">UXntWWW/UXntWWW.github.io</a></div>
+    <button class="faq-q" data-i18n="faq.q6">Где посмотреть исходный код?</button>
+    <div class="faq-a">
+      <span data-i18n="faq.a6">На GitHub:</span>
+      <a href="https://github.com/UXntWWW/UXntWWW.github.io">UXntWWW/UXntWWW.github.io</a>
+    </div>
   </div>
 
 </div>
@@ -86,6 +85,8 @@
   });
 </script>
 
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
