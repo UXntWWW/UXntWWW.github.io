@@ -893,26 +893,26 @@ body.compact-mode .program-card-desc { font-size: 0.9rem; }
 
 /* Паттерн на фоне — цвет зависит от темы */
 body.pattern-bg {
-  --pattern-color: rgba(0, 0, 0, 0.12);
-  background-image: radial-gradient(circle, var(--pattern-color) 1px, transparent 1px);
+  --pattern-color: rgba(0, 0, 0, 0.18);
+  background-image: radial-gradient(circle, var(--pattern-color) 1.5px, transparent 1.5px);
   background-size: 24px 24px;
   background-attachment: fixed;
 }
 
-/* Если тема тёмная (--bg тёмный) — точки светлые */
+/* Тёмная тема — яркие белые точки */
 body.pattern-bg[data-dark-bg="true"] {
-  --pattern-color: rgba(255, 255, 255, 0.12);
+  --pattern-color: rgba(255, 255, 255, 0.35);
 }
 
-/* Если тема светлая — точки серые (по умолчанию) */
+/* Светлая тема — тёмные серые точки */
 body.pattern-bg[data-light-bg="true"] {
-  --pattern-color: rgba(0, 0, 0, 0.14);
+  --pattern-color: rgba(0, 0, 0, 0.18);
 }
 
 /* Стекло + паттерн */
 body.pattern-bg.glass-mode {
   background-image:
-    radial-gradient(circle, var(--pattern-color) 1px, transparent 1px),
+    radial-gradient(circle, var(--pattern-color) 1.5px, transparent 1.5px),
     var(--page-gradient);
   background-size: 24px 24px, 100% 100%;
   background-attachment: fixed, fixed;
