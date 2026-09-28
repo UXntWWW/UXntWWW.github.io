@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-i18n-title="site.title.main">Главная — UXNTWWW.io</title>
+<script src="analytics.js" async></script>
 <script src="theme.js"></script>
 <script src="lang.js"></script>
 <link rel="stylesheet" href="common.css">
@@ -37,9 +38,7 @@
   .intro { margin-bottom: 20px; }
   .intro p { margin: 6px 0; }
 
-  .recent-section {
-    margin-top: 40px;
-  }
+  .recent-section { margin-top: 40px; }
   .recent-title {
     font-size: 1.1rem;
     font-weight: bold;
@@ -130,7 +129,6 @@
 
    </div>
 
-   <!-- Недавно смотрели -->
    <div class="recent-section" id="recent-section" style="display:none;">
      <h3 class="recent-title">
        <span>🕒</span>
@@ -161,6 +159,14 @@
     return { size: parts[0] || '—', date: parts[1] || '—' };
   }
 
+  function t(key, fallback) {
+    if (window.Lang && window.Lang.t) {
+      var v = window.Lang.t(key);
+      if (v && v !== key) return v;
+    }
+    return fallback || key;
+  }
+
   function buildCard(card, version, total) {
     const name = card.dataset.name;
     const lang = window.Lang ? window.Lang.get() : 'ru';
@@ -171,7 +177,6 @@
     const repo = card.dataset.githubRepo;
     const td = parseTotal(total || card.dataset.totaldata);
 
-    // Проверяем избранное
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const isFav = favorites.indexOf(name) !== -1;
 
@@ -183,18 +188,17 @@
       '</h3>' +
       '<p class="program-card-desc">' + desc + '</p>' +
       '<div class="program-card-meta">' +
-        '<div class="program-card-meta-row"><span data-i18n="card.size">Размер:</span><span>' + td.size + '</span></div>' +
-        '<div class="program-card-meta-row"><span data-i18n="card.updated">Обновлено:</span><span>' + td.date + '</span></div>' +
-        '<div class="program-card-meta-row"><span data-i18n="card.safe">Безопасно:</span>' +
-          '<span class="program-card-safe"><span class="program-card-safe-icon">✓</span><span data-i18n="card.safe.ok">Проверено</span></span>' +
+        '<div class="program-card-meta-row"><span>' + t('card.size', 'Размер') + ':</span><span>' + td.size + '</span></div>' +
+        '<div class="program-card-meta-row"><span>' + t('card.updated', 'Обновлено') + ':</span><span>' + td.date + '</span></div>' +
+        '<div class="program-card-meta-row"><span>' + t('card.safe', 'Безопасно') + ':</span>' +
+          '<span class="program-card-safe"><span class="program-card-safe-icon">✓</span>' + t('card.safe.ok', 'Проверено') + '</span>' +
         '</div>' +
-        '<div class="program-card-meta-row"><span data-i18n="card.downloads">Скачиваний:</span>' +
+        '<div class="program-card-meta-row"><span>' + t('card.downloads', 'Скачиваний') + ':</span>' +
           '<span class="program-card-downloads" data-owner="' + owner + '" data-repo="' + repo + '">—</span>' +
         '</div>' +
       '</div>' +
-      '<a href="' + link + '" class="program-card-btn" data-i18n="card.open">Открыть</a>';
+      '<a href="' + link + '" class="program-card-btn">' + t('card.open', 'Открыть') + '</a>';
 
-    // Избранное
     const favBtn = card.querySelector('.favorite-btn');
     favBtn.addEventListener('click', function (e) {
       e.preventDefault();
@@ -208,7 +212,6 @@
       favBtn.textContent = favBtn.classList.contains('active') ? '★' : '☆';
     });
 
-    // Сохраняем в "недавно смотрели" при клике на "Открыть"
     card.querySelector('.program-card-btn').addEventListener('click', function () {
       let recent = JSON.parse(localStorage.getItem('recent') || '[]');
       recent = recent.filter(x => x.name !== name);
@@ -225,7 +228,6 @@
       Promise.all([fetchText(versionFiles[i]), fetchText(totalFiles[i])]).then(function (res) {
         buildCard(card, res[0], res[1]);
         loadDownloadCounts();
-        if (window.Lang && window.Lang.apply) window.Lang.apply();
       });
     });
   }
@@ -255,7 +257,6 @@
     });
   }
 
-  // Поиск с подсветкой
   const searchInput = document.getElementById('search-programs');
   if (searchInput) {
     searchInput.addEventListener('input', function () {
@@ -269,7 +270,6 @@
     });
   }
 
-  // Кнопка "Обновить"
   const refreshBtn = document.getElementById('refresh-btn');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', function () {
@@ -280,7 +280,6 @@
     });
   }
 
-  // Недавно смотрели
   function loadRecent() {
     const recent = JSON.parse(localStorage.getItem('recent') || '[]');
     if (!recent.length) return;
@@ -301,25 +300,16 @@
     });
   }
 
+  document.addEventListener('langChanged', function () {
+    countsLoaded = false;
+    loadAll();
+    if (window.Lang && window.Lang.apply) window.Lang.apply();
+  });
+
   function init() {
     loadAll();
     loadRecent();
   }
-
-  document.addEventListener('langChanged', function () {
-    // Перестроить карточки с новым языком
-    cards.forEach(function (card) {
-      const name = card.dataset.name;
-      if (card.querySelector('.program-card-title')) {
-        // Уже построена — просто обновим desc
-        const lang = window.Lang ? window.Lang.get() : 'ru';
-        const desc = (lang === 'en' && card.dataset.descEn) ? card.dataset.descEn : card.dataset.desc;
-        const descEl = card.querySelector('.program-card-desc');
-        if (descEl) descEl.textContent = desc;
-      }
-    });
-    if (window.Lang && window.Lang.apply) window.Lang.apply();
-  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
@@ -329,6 +319,8 @@
 })();
 </script>
 
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
