@@ -2,11 +2,22 @@
 (function () {
   'use strict';
 
-  const btn = document.createElement('button');
+  function t(key, fallback) {
+    if (window.Lang && window.Lang.t) {
+      var v = window.Lang.t(key);
+      if (v && v !== key) return v;
+    }
+    return fallback || key;
+  }
+
+  var btn = document.createElement('button');
   btn.id = 'back-to-top';
-  btn.innerHTML = 'Вверх <span class="arrow">↑</span>';
-  btn.setAttribute('aria-label', 'Наверх');
+  btn.setAttribute('aria-label', 'Up');
   document.body.appendChild(btn);
+
+  function render() {
+    btn.innerHTML = t('nav.up', 'Вверх') + ' <span class="arrow">↑</span>';
+  }
 
   function check() {
     if (window.scrollY > 200) btn.classList.add('visible');
@@ -19,4 +30,9 @@
   btn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  document.addEventListener('langChanged', render);
+  document.addEventListener('langReady', render);
+
+  render();
 })();
