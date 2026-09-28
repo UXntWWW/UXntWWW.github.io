@@ -66,13 +66,6 @@
     margin-bottom: 40px;
     padding-bottom: 20px;
   }
-  .page-divider {
-    border: 0;
-    height: 4px;
-    background: var(--bar);
-    margin: 40px 0;
-    transition: background-color .25s;
-  }
 
   @media (max-width: 700px) {
     .broom-img { float: none; display: block; margin: 20px auto; }
@@ -82,7 +75,7 @@
 <body>
 
 <div class="top-bar">
-  <h1>UXNTWWW.io - Сайт с файлами</h1>
+  <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
   <nav class="top-nav"></nav>
 </div>
 
@@ -93,31 +86,31 @@
   </div>
 
   <div class="version-block" data-version-file="version1.txt" data-totaldata-file="totaldata1.txt">
-    <h2>Скачать UXWEditor Free v<span class="version-value">1.0</span></h2>
+    <h2 data-i18n="editor.title">Скачать UXWEditor Free v1.0</h2>
     <div class="version-meta">
-      <span data-i18n="card.version">Версия</span>: <b class="version-value">1.0</b>
+      <span><span data-i18n="card.version">Версия</span>: <b class="version-value">1.0</b></span>
       <span>·</span>
-      <span data-i18n="card.size">Размер</span>: <b class="size-value">—</b>
+      <span><span data-i18n="card.size">Размер</span>: <b class="size-value">—</b></span>
       <span>·</span>
-      <span data-i18n="card.updated">Обновлено</span>: <b class="date-value">—</b>
+      <span><span data-i18n="card.updated">Обновлено</span>: <b class="date-value">—</b></span>
     </div>
-    <p>~ Здесь вы можете скачать утилиту совместимую с будущими файлами в PCCleaner --- .uxw.</p>
-    <h1>Что за программа?</h1>
-    <p>~ Эта утилита позволяет открывать файлы .uxw и другие позволяя редактировать их.</p>
-    <p>~ Эта программа выполняет функции:</p>
-    <p>~ Открыть,сохранить/сохранить как,новый лист.</p>
-    <p>~ Вырезать,вставить,копировать,поиск и замена слова.</p>
-    <p>~ Отображение строк сбоку вкл или выкл.</p>
-    <p>~ Поддержка русского и английского языка.</p>
+    <p data-i18n="editor.desc">~ Здесь вы можете скачать утилиту совместимую с будущими файлами в PCCleaner --- .uxw.</p>
+    <h1 data-i18n="editor.what">Что за программа?</h1>
+    <p data-i18n="editor.about1">~ Эта утилита позволяет открывать файлы .uxw и другие позволяя редактировать их.</p>
+    <p data-i18n="editor.about2">~ Эта программа выполняет функции:</p>
+    <p data-i18n="editor.f1">~ Открыть, сохранить/сохранить как, новый лист.</p>
+    <p data-i18n="editor.f2">~ Вырезать, вставить, копировать, поиск и замена слова.</p>
+    <p data-i18n="editor.f3">~ Отображение строк сбоку вкл или выкл.</p>
+    <p data-i18n="editor.f4">~ Поддержка русского и английского языка.</p>
 
-    <h1>Скриншоты</h1>
+    <h1 data-i18n="editor.screenshots">Скриншоты</h1>
     <div class="screenshots">
       <img src="screens/editor-1.png" alt="UXWEditor — главное окно">
       <img src="screens/editor-2.png" alt="UXWEditor — поиск и замена">
       <img src="screens/editor-3.png" alt="UXWEditor — настройки">
     </div>
 
-    <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+    <h1 data-i18n="editor.verified">ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
     <img src="icon.png" class="broom-img" alt="UXWEditor Icon">
     <br>
     <a href="UXNTWWW.zip" download class="zip-btn" data-i18n="files.download.zip">Скачать.zip</a>
@@ -163,6 +156,7 @@
 <script src="search-highlight.js"></script>
 <script src="breadcrumbs.js"></script>
 <script src="share.js"></script>
+<script src="reviews.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
