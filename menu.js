@@ -9,7 +9,14 @@
 
   const PAGE = currentPage();
 
-  // ===== Строим навигацию =====
+  function t(key, fallback) {
+    if (window.Lang && window.Lang.t) {
+      var v = window.Lang.t(key);
+      if (v && v !== key) return v;
+    }
+    return fallback || key;
+  }
+
   function buildNav() {
     const nav = document.querySelector('.top-nav');
     if (!nav) return;
@@ -21,7 +28,7 @@
       home.href = 'index.html';
       home.className = 'nav-btn';
       home.setAttribute('data-i18n', 'nav.home');
-      home.textContent = 'Главная';
+      home.textContent = t('nav.home', 'Главная');
       nav.appendChild(home);
     }
 
@@ -32,36 +39,34 @@
     const helpBtn = document.createElement('button');
     helpBtn.type = 'button';
     helpBtn.className = 'nav-btn nav-help-btn';
-    helpBtn.innerHTML = '<span data-i18n="nav.help">Помощь</span> <span class="nav-arrow">▾</span>';
+    helpBtn.innerHTML = '<span data-i18n="nav.help">' + t('nav.help', 'Помощь') + '</span> <span class="nav-arrow">▾</span>';
     helpWrap.appendChild(helpBtn);
 
     const helpMenu = document.createElement('div');
     helpMenu.className = 'nav-help-menu';
     helpMenu.innerHTML =
-      '<a href="faq.html" data-i18n="nav.help.faq">FAQ</a>' +
-      '<a href="contacts.html" data-i18n="nav.help.contacts">Контакты</a>' +
-      '<a href="about.html" data-i18n="nav.help.about">О сайте</a>' +
-      '<a href="install.html" data-i18n="nav.help.install">Установка</a>';
+      '<a href="faq.html" data-i18n="nav.help.faq">' + t('nav.help.faq', 'FAQ') + '</a>' +
+      '<a href="contacts.html" data-i18n="nav.help.contacts">' + t('nav.help.contacts', 'Контакты') + '</a>' +
+      '<a href="about.html" data-i18n="nav.help.about">' + t('nav.help.about', 'О сайте') + '</a>' +
+      '<a href="install.html" data-i18n="nav.help.install">' + t('nav.help.install', 'Установка') + '</a>';
     helpWrap.appendChild(helpMenu);
-
     nav.appendChild(helpWrap);
 
-    // ===== Статистика (как выпадашка) =====
+    // ===== Статистика =====
     const statsWrap = document.createElement('div');
     statsWrap.className = 'nav-help-wrap';
 
     const statsBtn = document.createElement('button');
     statsBtn.type = 'button';
     statsBtn.className = 'nav-btn nav-help-btn';
-    statsBtn.innerHTML = '<span data-i18n="nav.stats">Статистика</span> <span class="nav-arrow">▾</span>';
+    statsBtn.innerHTML = '<span data-i18n="nav.stats">' + t('nav.stats', 'Статистика') + '</span> <span class="nav-arrow">▾</span>';
     statsWrap.appendChild(statsBtn);
 
     const statsMenu = document.createElement('div');
     statsMenu.className = 'nav-help-menu';
     statsMenu.innerHTML =
-      '<a href="stats.html" data-i18n="stats.title">Статистика</a>';
+      '<a href="stats.html" data-i18n="nav.stats">' + t('nav.stats', 'Статистика') + '</a>';
     statsWrap.appendChild(statsMenu);
-
     nav.appendChild(statsWrap);
 
     // ===== Настройки =====
@@ -69,15 +74,14 @@
     settings.href = 'GlobalSettings.html';
     settings.className = 'nav-btn';
     settings.setAttribute('data-i18n', 'nav.settings');
-    settings.textContent = 'Настройки';
+    settings.textContent = t('nav.settings', 'Настройки');
     nav.appendChild(settings);
 
-    // ===== Логика открытия/закрытия =====
+    // ===== Тогглы =====
     function setupToggle(wrap, btn) {
       let open = false;
 
       function openMenu() {
-        // Закрываем другие открытые
         document.querySelectorAll('.nav-help-wrap.open').forEach(function (w) {
           if (w !== wrap) w.classList.remove('open');
         });
@@ -114,21 +118,23 @@
     setupToggle(statsWrap, statsBtn);
   }
 
-  function init() {
-    buildNav();
-    // Переводим навигацию после построения
-    if (window.Lang && window.Lang.apply) {
-      window.Lang.apply();
-    }
+  function refreshTexts() {
+    // Обновляем все тексты внутри .top-nav
+    document.querySelectorAll('.top-nav [data-i18n]').forEach(function (el) {
+      var key = el.dataset.i18n;
+      if (window.Lang && window.Lang.t) {
+        var v = window.Lang.t(key);
+        if (v && v !== key) el.textContent = v;
+      }
+    });
   }
 
-  // Слушаем смену языка — пересобрать навигацию
-  document.addEventListener('langChanged', function () {
-    if (window.Lang && window.Lang.apply) window.Lang.apply();
-  });
-  document.addEventListener('langReady', function () {
-    if (window.Lang && window.Lang.apply) window.Lang.apply();
-  });
+  function init() {
+    buildNav();
+  }
+
+  document.addEventListener('langChanged', refreshTexts);
+  document.addEventListener('langReady', refreshTexts);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
