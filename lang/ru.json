@@ -7,6 +7,11 @@
   "nav.help.contacts": "Контакты",
   "nav.help.about": "О сайте",
   "nav.help.install": "Установка",
+  "nav.up": "Вверх",
+  "nav.copyLink": "Копировать ссылку",
+  "nav.copied": "Скопировано",
+  "share.label": "Поделиться",
+  "breadcrumbs.home": "Главная",
 
   "site.title.main": "Главная — UXNTWWW.io",
   "site.title.files": "PCCleaner Download — UXNTWWW.io",
@@ -253,10 +258,4 @@
   "faq.a5": "Да, программы бесплатные. Единственное условие — не выдавать их за свои и не продавать.",
   "faq.q6": "Где посмотреть исходный код?",
   "faq.a6": "На GitHub:"
-
-  "nav.up": "Вверх",
-  "nav.copyLink": "Копировать ссылку",
-  "nav.copied": "Скопировано",
-  "share.label": "Поделиться",
-  "breadcrumbs.home": "Главная"
 }
