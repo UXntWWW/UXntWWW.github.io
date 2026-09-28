@@ -253,4 +253,10 @@
   "faq.a5": "Yes, the programs are free. The only condition — don't claim them as your own and don't sell them.",
   "faq.q6": "Where to see the source code?",
   "faq.a6": "On GitHub:"
+  
+  "nav.up": "Up",
+  "nav.copyLink": "Copy link",
+  "nav.copied": "Copied",
+  "share.label": "Share",
+  "breadcrumbs.home": "Home"
 }
