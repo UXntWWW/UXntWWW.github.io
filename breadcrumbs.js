@@ -2,34 +2,29 @@
 (function () {
   'use strict';
 
+  function t(key, fallback) {
+    if (window.Lang && window.Lang.t) {
+      var v = window.Lang.t(key);
+      if (v && v !== key) return v;
+    }
+    return fallback || key;
+  }
+
   function getTrail() {
     var p = (window.location.pathname.split('/').pop() || 'index.html').replace('.html', '');
-    var t = function (k, fallback) {
-      if (window.Lang && window.Lang.t) {
-        var v = window.Lang.t(k);
-        if (v && v !== k) return v;
-      }
-      return fallback || k;
-    };
+
+    var home = t('breadcrumbs.home', t('nav.home', 'Главная'));
 
     var map = {
-      'index':    [{ name: t('nav.home', 'Главная'), href: 'index.html' }],
-      'files':    [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                   { name: 'PCCleaner', href: 'files.html' }],
-      'files1':   [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                   { name: 'UXWEditor', href: 'files1.html' }],
-      'about':    [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                   { name: t('nav.help.about', 'О сайте'), href: 'about.html' }],
-      'contacts': [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                   { name: t('nav.help.contacts', 'Контакты'), href: 'contacts.html' }],
-      'faq':      [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                   { name: 'FAQ', href: 'faq.html' }],
-      'GlobalSettings': [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                         { name: t('nav.settings', 'Настройки'), href: 'GlobalSettings.html' }],
-      'stats':    [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                   { name: t('nav.stats', 'Статистика'), href: 'stats.html' }],
-      'install':  [{ name: t('nav.home', 'Главная'), href: 'index.html' },
-                   { name: t('nav.help.install', 'Установка'), href: 'install.html' }]
+      'index':    [{ name: home, href: 'index.html' }],
+      'files':    [{ name: home, href: 'index.html' }, { name: 'PCCleaner', href: 'files.html' }],
+      'files1':   [{ name: home, href: 'index.html' }, { name: 'UXWEditor', href: 'files1.html' }],
+      'about':    [{ name: home, href: 'index.html' }, { name: t('nav.help.about', 'О сайте'), href: 'about.html' }],
+      'contacts': [{ name: home, href: 'index.html' }, { name: t('nav.help.contacts', 'Контакты'), href: 'contacts.html' }],
+      'faq':      [{ name: home, href: 'index.html' }, { name: 'FAQ', href: 'faq.html' }],
+      'GlobalSettings': [{ name: home, href: 'index.html' }, { name: t('nav.settings', 'Настройки'), href: 'GlobalSettings.html' }],
+      'stats':    [{ name: home, href: 'index.html' }, { name: t('nav.stats', 'Статистика'), href: 'stats.html' }],
+      'install':  [{ name: home, href: 'index.html' }, { name: t('nav.help.install', 'Установка'), href: 'install.html' }]
     };
 
     return map[p] || [];
