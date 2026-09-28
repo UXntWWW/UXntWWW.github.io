@@ -2,21 +2,28 @@
 (function () {
   'use strict';
 
-  const selectors = [
+  var selectors = [
     '.version-block', '.program-card', '.faq-item',
     '.content > h2', '.content > p', '.content > ul',
-    '.screenshots', '.preview'
+    '.screenshots', '.preview', '.install-step',
+    '.stat-card', '.recent-section'
   ];
 
-  const elements = document.querySelectorAll(selectors.join(','));
+  var elements = document.querySelectorAll(selectors.join(','));
   if (!elements.length) return;
 
-  if (!('IntersectionObserver' in window)) {
-    elements.forEach(el => el.classList.add('in-view'));
+  // Если анимации выключены — сразу показать всё
+  if (localStorage.getItem('uiAnimations') === 'off') {
+    elements.forEach(function (el) { el.classList.add('in-view'); });
     return;
   }
 
-  const observer = new IntersectionObserver(function (entries) {
+  if (!('IntersectionObserver' in window)) {
+    elements.forEach(function (el) { el.classList.add('in-view'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
         entry.target.classList.add('in-view');
@@ -25,7 +32,7 @@
     });
   }, {
     threshold: 0,
-    rootMargin: '0px 0px 0px 0px'
+    rootMargin: '0px 0px -40px 0px'
   });
 
   elements.forEach(function (el) {
@@ -33,13 +40,13 @@
     observer.observe(el);
   });
 
-  // Через 600мс — принудительно показать всё, что ещё спрятано
+  // Через 800мс — принудительно показать всё, что в зоне видимости
   setTimeout(function () {
     document.querySelectorAll('.scroll-animate:not(.in-view)').forEach(function (el) {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight) {
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 100) {
         el.classList.add('in-view');
       }
     });
-  }, 600);
+  }, 800);
 })();
