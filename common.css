@@ -1,18 +1,14 @@
 /* common.css — общие стили для всех страниц UXNTWWW.io */
 
-/* ===== Убираем красное мерцание текста ===== */
+/* ===== Шрифты ===== */
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-}
-.scroll-animate {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
+  -webkit-text-size-adjust: 100%;
 }
 
-/* ===== Стеклянный фон страницы ===== */
+/* ===== Стеклянный фон ===== */
 body.glass-mode {
   background: var(--page-gradient, var(--bg)) fixed;
   background-attachment: fixed;
@@ -90,6 +86,13 @@ body.glass-mode #back-to-top:hover { background: var(--glass-bg-2); }
   transform: translateY(0);
 }
 
+/* ВАЖНО: если анимации выключены — показываем всё */
+body.no-animations .scroll-animate,
+body.no-animations .fade-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 .program-card:nth-child(1).scroll-animate { transition-delay: 0s; }
 .program-card:nth-child(2).scroll-animate { transition-delay: 0.1s; }
 .program-card:nth-child(3).scroll-animate { transition-delay: 0.2s; }
@@ -163,7 +166,7 @@ body.glass-mode .refresh-btn {
 .refresh-btn.spinning { animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ===== Хлебные крошки ===== */
+/* ===== Крошки ===== */
 .breadcrumbs {
   display: flex;
   align-items: center;
@@ -290,7 +293,7 @@ body.glass-mode .faq-q { background: transparent; }
 }
 .faq-item.open .faq-a { max-height: 500px; padding: 16px 20px; }
 
-/* ===== Форма контактов ===== */
+/* ===== Форма ===== */
 .contact-form {
   max-width: 520px;
   display: grid;
@@ -301,6 +304,7 @@ body.glass-mode .faq-q { background: transparent; }
   font-weight: bold;
   font-size: 0.95rem;
   color: var(--text);
+  display: block;
 }
 .contact-form input,
 .contact-form textarea {
@@ -480,18 +484,6 @@ body.glass-mode .program-card-btn {
 .favorite-btn:hover { transform: scale(1.1); background: rgba(0,0,0,0.15); }
 .favorite-btn.active { color: #f5b301; }
 
-/* ===== Скелетоны ===== */
-.skeleton {
-  background: linear-gradient(90deg, rgba(128,128,128,0.15) 25%, rgba(128,128,128,0.25) 50%, rgba(128,128,128,0.15) 75%);
-  background-size: 200% 100%;
-  animation: skeletonPulse 1.5s infinite;
-  border-radius: 8px;
-}
-@keyframes skeletonPulse {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
 /* ===== Уведомление ===== */
 #toast {
   position: fixed; left: 50%; bottom: -100px;
@@ -521,7 +513,6 @@ body.glass-mode #toast {
   font-weight: bold; font-size: 1rem; line-height: 1;
 }
 #toast .toast-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@media (max-width: 500px) { #toast .toast-text { white-space: normal; } }
 
 /* ===== Оверлей скриншотов ===== */
 #screenshot-overlay {
@@ -742,14 +733,6 @@ body.glass-mode .nav-help-menu a { color: var(--bar-text); }
 .nav-help-menu a:hover { background: var(--card); }
 body.glass-mode .nav-help-menu a:hover { background: var(--glass-bg); }
 
-@media (max-width: 800px) {
-  .top-nav {
-    position: static; transform: none;
-    margin-top: 12px; justify-content: flex-start;
-  }
-  .nav-help-menu { right: auto; left: 0; }
-}
-
 /* ===== Старые версии ===== */
 .toggle-old-versions {
   display: inline-flex; align-items: center; gap: 8px;
@@ -778,7 +761,7 @@ body.glass-mode .toggle-old-versions {
   transition: max-height .5s cubic-bezier(.22,.61,.36,1), opacity .3s ease;
   opacity: 0;
 }
-.old-versions.open { max-height: 5000px; opacity: 1; }
+.old-versions.open { max-height: 15000px; opacity: 1; }
 
 /* ===== Статистика ===== */
 .stats-grid {
@@ -816,12 +799,8 @@ body.glass-mode .stat-row { border-bottom-color: var(--glass-border); }
 .stat-value { font-size: 1.5rem; font-weight: bold; }
 .stat-value.loading { opacity: 0.4; }
 
-/* ===== Коддинг ===== */
 .code-card { padding: 26px; }
-.code-total-wrap {
-  margin-bottom: 22px; display: flex;
-  flex-direction: column; gap: 6px;
-}
+.code-total-wrap { margin-bottom: 22px; display: flex; flex-direction: column; gap: 6px; }
 .code-total-label { font-size: 0.9rem; opacity: 0.75; font-weight: bold; }
 .code-total-wrap .stat-value { font-size: 2rem; }
 .code-bars { display: flex; flex-direction: column; gap: 16px; }
@@ -842,6 +821,12 @@ body.glass-mode .code-bar-track { background: rgba(255, 255, 255, 0.12); }
 .code-bar-fill {
   height: 100%; border-radius: 6px;
   transition: width .9s cubic-bezier(.22,.61,.36,1);
+}
+
+.section-title {
+  font-size: 1.2rem; font-weight: bold;
+  margin: 36px 0 16px;
+  display: flex; align-items: center; gap: 10px;
 }
 
 /* ===== Язык ===== */
@@ -866,16 +851,18 @@ body.glass-mode .lang-btn {
   box-shadow: 0 0 0 3px var(--btn-bg);
 }
 
-/* ===== Настройки внешнего вида ===== */
+/* ===== Внешний вид ===== */
 html { font-size: var(--font-size-base, 16px); }
 
 .program-card, .stat-card, .theme-card, .faq-item, .glass-toggle,
-.share-bar, .install-step, .preview, .rating-summary {
+.share-bar, .install-step, .preview, .rating-summary,
+.toggle-row {
   border-radius: var(--radius, 16px);
 }
 .nav-btn, .search-input,
 .zip-btn, .exe-btn, .torrent-btn, .github-btn,
-.btn, .apply-btn, .lang-btn, .program-card-btn, .faq-q {
+.btn, .apply-btn, .lang-btn, .program-card-btn, .faq-q,
+.opt-btn, .share-btn, .refresh-btn {
   border-radius: var(--radius-small, 10px);
 }
 
@@ -889,7 +876,8 @@ body.no-animations *::after {
   transition: none !important;
   animation: none !important;
 }
-body.no-animations .scroll-animate {
+body.no-animations .scroll-animate,
+body.no-animations .fade-in {
   opacity: 1 !important; transform: none !important;
 }
 
@@ -921,53 +909,13 @@ body.ultra-smooth * {
   transition-timing-function: cubic-bezier(.22,.61,.36,1) !important;
   transition-duration: .55s !important;
 }
-body.ultra-smooth .program-card,
-body.ultra-smooth .stat-card,
-body.ultra-smooth .theme-card,
-body.ultra-smooth .nav-btn,
-body.ultra-smooth .zip-btn,
-body.ultra-smooth .exe-btn,
-body.ultra-smooth .github-btn,
-body.ultra-smooth .btn,
-body.ultra-smooth .apply-btn {
-  transition:
-    transform .55s cubic-bezier(.22,.61,.36,1),
-    box-shadow .55s cubic-bezier(.22,.61,.36,1),
-    background-color .55s cubic-bezier(.22,.61,.36,1),
-    color .55s cubic-bezier(.22,.61,.36,1),
-    border-color .55s cubic-bezier(.22,.61,.36,1),
-    backdrop-filter .55s cubic-bezier(.22,.61,.36,1) !important;
-}
 body.ultra-smooth .program-card:hover,
 body.ultra-smooth .stat-card:hover {
   transform: translateY(-6px) scale(1.012);
   box-shadow: 0 18px 44px rgba(0,0,0,0.18);
-  filter: blur(0.01px);
-}
-body.ultra-smooth .nav-btn:hover,
-body.ultra-smooth .zip-btn:hover,
-body.ultra-smooth .btn:hover {
-  transform: translateY(-2px) scale(1.03);
-}
-body.ultra-smooth .scroll-animate {
-  transition: opacity 1s ease, transform 1s cubic-bezier(.22,.61,.36,1) !important;
-}
-body.ultra-smooth img,
-body.ultra-smooth .program-card-icon {
-  transition: transform .55s cubic-bezier(.22,.61,.36,1), filter .55s ease;
 }
 body.ultra-smooth .program-card:hover .program-card-icon {
   transform: scale(1.08) rotate(-1.5deg);
-}
-body.ultra-smooth .screenshots img:hover {
-  transform: scale(1.045);
-  filter: brightness(1.05) saturate(1.08);
-}
-body.ultra-smooth #back-to-top {
-  transition: opacity .55s cubic-bezier(.22,.61,.36,1), transform .55s cubic-bezier(.22,.61,.36,1), background .55s;
-}
-body.ultra-smooth .old-versions {
-  transition: max-height .8s cubic-bezier(.22,.61,.36,1), opacity .55s ease;
 }
 
 /* ===== Кастомный скроллбар ===== */
@@ -981,155 +929,339 @@ body.ultra-smooth .old-versions {
 body.glass-mode ::-webkit-scrollbar-thumb { background: rgba(150, 150, 160, 0.5); }
 
 /* ============================================================
-   АДАПТИВ ПОД ТЕЛЕФОНЫ
+   АДАПТИВ ПОД ТЕЛЕФОНЫ — КРУПНЫЙ
    ============================================================ */
 
-/* ===== Safe Area для iPhone (не залезает под чёлку) ===== */
-body {
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-}
-.top-bar {
-  padding-top: calc(20px + env(safe-area-inset-top));
-  padding-left: calc(15px + env(safe-area-inset-left));
-  padding-right: calc(15px + env(safe-area-inset-right));
-}
-
-/* ===== Планшеты и меньше (≤ 900px) ===== */
+/* Планшеты */
 @media (max-width: 900px) {
-  .content { padding: 16px; }
-
-  .top-bar { padding: 16px 14px; }
-  .top-bar h1 { font-size: 1.2rem; }
-
-  .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .tab { padding: 10px 18px; font-size: 0.95rem; }
-
+  .content { padding: 18px 16px; }
   .program-cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-
   .stats-grid { grid-template-columns: 1fr; }
-
-  .code-card { padding: 20px; }
-
-  .search-wrap { max-width: 100%; }
-
-  .broom-img { width: 180px; height: 180px; }
 }
 
-/* ===== Телефоны (≤ 700px) ===== */
+/* Телефоны */
 @media (max-width: 700px) {
-  html { font-size: 15px; }
+  html { font-size: 17px; }
 
-  .content { padding: 14px; }
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
 
   /* ===== Шапка ===== */
   .top-bar {
-    padding: 14px 12px;
-    padding-top: calc(14px + env(safe-area-inset-top));
+    padding: 18px 16px;
+    padding-top: calc(18px + env(safe-area-inset-top));
   }
-  .top-bar h1 { font-size: 1.1rem; }
+  .top-bar h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+  }
 
-  /* Навигация — на всю ширину, кнопки крупнее */
+  /* Навигация — крупная, на всю ширину */
   .top-nav {
     position: static;
     transform: none;
-    margin-top: 12px;
+    margin-top: 14px;
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
     width: 100%;
     justify-content: flex-start;
   }
   .nav-btn {
-    padding: 10px 14px;
-    font-size: 0.9rem;
-    flex: 1 1 auto;
-    min-width: calc(50% - 6px);
-    justify-content: center;
-  }
-  .nav-help-wrap {
-    flex: 1 1 auto;
-    min-width: calc(50% - 6px);
-  }
-  .nav-help-wrap .nav-help-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  /* Выпадашка — на всю ширину */
-  .nav-help-menu {
-    left: 0;
-    right: 0;
-    min-width: 0;
-    width: 100%;
-    transform: translateY(-10px);
-  }
-  .nav-help-wrap.open .nav-help-menu {
-    transform: translateY(0);
-  }
-  .nav-help-menu a {
     padding: 14px 18px;
     font-size: 1rem;
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
+    justify-content: center;
+    text-align: center;
+  }
+  .nav-help-wrap { flex: 1 1 calc(50% - 4px); }
+  .nav-help-wrap .nav-help-btn { width: 100%; justify-content: center; }
+  .nav-help-menu {
+    left: 0; right: 0;
+    width: 100%;
+    min-width: 0;
+  }
+  .nav-help-menu a {
+    padding: 16px 20px;
+    font-size: 1rem;
+  }
+
+  /* ===== Контент ===== */
+  .content {
+    padding: 20px 16px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+  .intro p {
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  /* ===== Поиск ===== */
+  .search-wrap {
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0 24px;
+    max-width: 100%;
+  }
+  .search-input {
+    padding: 16px 18px;
+    font-size: 1.05rem;
+    border-radius: 14px;
+  }
+  .refresh-btn {
+    width: 100%;
+    height: 56px;
+    font-size: 1.5rem;
+    border-radius: 14px;
   }
 
   /* ===== Карточки программ ===== */
   .program-cards {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 18px;
+    margin-top: 20px;
   }
   .program-card {
-    padding: 16px;
-    gap: 10px;
+    padding: 22px 20px;
+    gap: 16px;
+    border-radius: 18px;
   }
-  .program-card-icon { width: 56px; height: 56px; }
-  .program-card-title { font-size: 1.1rem; }
-  .program-card-desc { font-size: 0.9rem; }
-  .program-card-meta { font-size: 0.8rem; }
-  .program-card-btn {
-    padding: 12px 18px;
+  .program-card-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+  }
+  .program-card-title { font-size: 1.4rem; gap: 10px; }
+  .program-card-version {
     font-size: 0.95rem;
+    padding: 4px 12px;
+    border-radius: 8px;
   }
-
-  /* Кнопка "В избранное" — крупнее */
+  .program-card-desc { font-size: 1.05rem; line-height: 1.4; }
+  .program-card-meta { gap: 10px; font-size: 1rem; }
+  .program-card-btn {
+    padding: 16px 24px;
+    font-size: 1.05rem;
+    border-radius: 14px;
+    margin-top: 12px;
+  }
   .favorite-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
+    width: 44px; height: 44px;
+    font-size: 1.4rem;
+    top: 14px; right: 14px;
   }
 
   /* ===== Кнопки скачивания ===== */
   .zip-btn, .exe-btn, .torrent-btn, .github-btn {
     display: block;
     width: 100%;
-    margin: 10px 0 0 0;
-    padding: 14px 20px;
-    font-size: 1rem;
+    margin: 12px 0 0 0;
+    padding: 16px 24px;
+    font-size: 1.05rem;
+    border-radius: 14px;
     text-align: center;
   }
-
   .btn, .apply-btn, .toggle-old-versions {
+    padding: 16px 24px;
+    font-size: 1.05rem;
+    border-radius: 14px;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* ===== Отзывы ===== */
+  .reviews-section { margin-top: 30px; padding-top: 16px; }
+  .reviews-title { font-size: 1.3rem; }
+  .reviews-subtitle { font-size: 1rem; }
+  .rating-summary {
+    padding: 16px 18px;
+    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .rating-stars-display { font-size: 1.7rem; }
+  .rating-value { font-size: 1.5rem; }
+  .rating-count { font-size: 0.95rem; }
+  .write-review-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 22px;
+    font-size: 1.05rem;
+    border-radius: 14px;
+  }
+
+  /* ===== Крошки ===== */
+  .breadcrumbs {
+    font-size: 0.95rem;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  /* ===== Поделиться ===== */
+  .share-bar {
+    padding: 16px 18px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .share-label { font-size: 1rem; margin-bottom: 6px; }
+  .share-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 18px;
+    font-size: 1rem;
+    border-radius: 12px;
+  }
+
+  /* ===== FAQ ===== */
+  .faq-q { padding: 20px 20px; font-size: 1.05rem; }
+  .faq-a { padding: 0 20px; font-size: 1rem; line-height: 1.5; }
+  .faq-item.open .faq-a { padding: 16px 20px; }
+
+  /* ===== Форма ===== */
+  .contact-form { gap: 18px; }
+  .contact-form label { font-size: 1rem; }
+  .contact-form input,
+  .contact-form textarea {
+    padding: 16px 18px;
+    font-size: 1.05rem;
+    border-radius: 12px;
+  }
+  .contact-form textarea { min-height: 140px; }
+  .contact-form button {
+    width: 100%;
+    padding: 16px 22px;
+    font-size: 1.05rem;
+    border-radius: 14px;
+  }
+
+  /* ===== Статистика ===== */
+  .stats-grid { grid-template-columns: 1fr; gap: 16px; }
+  .stat-card { padding: 22px 20px; border-radius: 18px; }
+  .stat-card-title { font-size: 1.2rem; gap: 12px; }
+  .stat-card-icon { font-size: 1.6rem; }
+  .stat-row { padding: 14px 0; font-size: 1rem; }
+  .stat-label { font-size: 1rem; }
+  .stat-value { font-size: 1.6rem; }
+
+  .code-card { padding: 22px 20px; }
+  .code-total-label { font-size: 1rem; }
+  .code-total-wrap .stat-value { font-size: 2rem; }
+  .code-bars { gap: 18px; }
+  .code-row-head { font-size: 0.95rem; gap: 12px; }
+  .code-lines { font-size: 0.95rem; }
+  .code-percent { font-size: 0.9rem; min-width: 52px; }
+  .code-bar-track { height: 10px; }
+
+  /* ===== Настройки ===== */
+  .tabs { gap: 6px; margin-bottom: 20px; }
+  .tab { padding: 12px 18px; font-size: 0.95rem; }
+
+  .theme-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .theme-card { padding: 14px; border-radius: 14px; }
+  .theme-preview { height: 60px; }
+  .theme-name { font-size: 1rem; }
+
+  .palette-title { font-size: 1.05rem; margin: 24px 0 12px; }
+  .palette-hint { font-size: 0.95rem; margin: 0 0 14px; }
+  .palette { gap: 10px; }
+  .swatch { width: 46px; height: 46px; border-radius: 12px; }
+
+  .opt-row { gap: 10px; }
+  .opt-btn {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+    padding: 14px 12px;
+    font-size: 0.95rem;
+    text-align: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+
+  .toggle-row {
+    padding: 18px 20px;
+    border-radius: 14px;
+  }
+  .toggle-row-title { font-size: 1.05rem; }
+  .toggle-row-desc { font-size: 0.9rem; }
+  .toggle-switch { width: 56px; height: 32px; }
+  .toggle-switch::after { width: 26px; height: 26px; top: 3px; left: 3px; }
+  .toggle-row.on .toggle-switch::after { transform: translateX(24px); }
+
+  .lang-btn {
+    flex: 1 1 0;
+    padding: 16px 14px;
+    font-size: 1rem;
+    text-align: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+
+  /* ===== Установка ===== */
+  .install-step {
+    padding: 20px;
+    gap: 16px;
+    border-radius: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .install-step-num { width: 44px; height: 44px; font-size: 1.3rem; }
+  .install-step-title { font-size: 1.15rem; }
+  .install-step-desc { font-size: 1rem; line-height: 1.5; }
+
+  /* ===== Кнопка "Вверх" ===== */
+  #back-to-top {
+    top: auto;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    right: 16px;
     padding: 14px 22px;
     font-size: 1rem;
   }
 
-  /* ===== Поиск ===== */
-  .search-wrap {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
+  /* ===== Уведомление ===== */
+  #toast {
+    width: calc(100% - 24px);
+    padding: 16px 20px;
+    font-size: 1rem;
+    bottom: calc(20px + env(safe-area-inset-bottom));
   }
-  .search-input {
-    padding: 14px 16px;
+  #toast .toast-text { white-space: normal; }
+  #toast .toast-icon { width: 28px; height: 28px; font-size: 1.1rem; }
+
+  /* ===== Модалка рейтинга ===== */
+  .rating-modal { padding: 26px 22px; margin: 12px; border-radius: 18px; }
+  .rating-modal h3 { font-size: 1.3rem; }
+  .rating-modal p { font-size: 1rem; }
+  .rating-stars-input { font-size: 2.4rem; gap: 12px; }
+  .rating-modal-actions { flex-direction: column; gap: 10px; }
+  .rating-modal-actions button {
+    width: 100%;
+    padding: 14px 20px;
     font-size: 1rem;
   }
-  .refresh-btn {
-    width: 100%;
-    height: 48px;
-    border-radius: 12px;
-    font-size: 1.3rem;
-  }
 
-  /* ===== Верхнее изображение (веник) ===== */
+  /* ===== Скриншоты ===== */
+  .screenshots { grid-template-columns: 1fr; gap: 14px; }
+
+  /* ===== Версии (files.html) ===== */
+  .version-block { margin-bottom: 30px; padding-bottom: 16px; }
+  .version-block h2 { font-size: 1.3rem; line-height: 1.3; }
+  .version-block h1 { font-size: 1.15rem; margin-top: 20px; }
+  .version-block p { font-size: 1rem; line-height: 1.5; }
+  .version-meta {
+    font-size: 0.95rem;
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   .broom-img {
     float: none;
     display: block;
@@ -1138,223 +1270,19 @@ body {
     height: 140px;
   }
 
-  /* ===== Крошки ===== */
-  .breadcrumbs {
-    font-size: 0.85rem;
-    gap: 6px;
-  }
-
-  /* ===== Поделиться ===== */
-  .share-bar {
-    padding: 14px 16px;
-    gap: 8px;
-  }
-  .share-label {
-    width: 100%;
-    margin: 0 0 4px 0;
-  }
-  .share-btn {
-    flex: 1 1 calc(50% - 4px);
-    justify-content: center;
-    padding: 12px 14px;
-    font-size: 0.9rem;
-  }
-
-  /* ===== Хлебные крошки ===== */
-  .bc-sep, .bc-current {
-    white-space: nowrap;
-  }
-
-  /* ===== Скриншоты ===== */
-  .screenshots {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .screenshots img {
-    border-width: 1px;
-  }
-
-  /* ===== FAQ ===== */
-  .faq-q {
-    padding: 16px 18px;
-    font-size: 1rem;
-  }
-  .faq-a {
-    padding: 0 18px;
-    font-size: 0.95rem;
-  }
-  .faq-item.open .faq-a {
-    padding: 14px 18px;
-  }
-
-  /* ===== Форма контактов ===== */
-  .contact-form input,
-  .contact-form textarea {
-    padding: 14px 16px;
-    font-size: 1rem;
-  }
-  .contact-form button {
-    width: 100%;
-    padding: 14px 20px;
-    font-size: 1rem;
-  }
-
-  /* ===== Статистика ===== */
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-  .stat-card {
-    padding: 18px;
-  }
-  .stat-value { font-size: 1.3rem; }
-  .stat-card-title { font-size: 1rem; }
-
-  /* Коддинг */
-  .code-card { padding: 18px; }
-  .code-total-wrap .stat-value { font-size: 1.7rem; }
-  .code-row-head { font-size: 0.85rem; }
-  .code-percent { min-width: 44px; }
-
-  /* ===== Настройки ===== */
-  .tabs {
-    border-bottom-width: 1px;
-    margin-bottom: 18px;
-  }
-  .tab {
-    padding: 10px 16px;
-    font-size: 0.9rem;
-  }
-
-  .theme-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  .theme-card { padding: 12px; }
-  .theme-preview { height: 50px; }
-
-  .palette-title { font-size: 0.95rem; }
-  .palette-hint { font-size: 0.85rem; }
-  .palette { gap: 8px; }
-  .swatch { width: 38px; height: 38px; }
-
-  .opt-btn {
-    flex: 1 1 calc(33.333% - 6px);
-    min-width: 0;
-    padding: 12px 10px;
-    font-size: 0.9rem;
-    text-align: center;
-    justify-content: center;
-  }
-
-  .toggle-row {
-    padding: 14px 16px;
-  }
-  .toggle-row-title { font-size: 0.95rem; }
-  .toggle-row-desc { font-size: 0.8rem; }
-
-  .lang-btn {
-    flex: 1 1 0;
-    padding: 12px 14px;
-    justify-content: center;
-    text-align: center;
-  }
-  .lang-switcher {
-    display: flex;
-    gap: 8px;
-  }
-
-  /* ===== Установка ===== */
-  .install-step {
-    padding: 16px;
-    gap: 12px;
-  }
-  .install-step-num {
-    width: 34px;
-    height: 34px;
-    font-size: 1rem;
-  }
-  .install-step-title { font-size: 1rem; }
-  .install-step-desc { font-size: 0.9rem; }
-
-  /* ===== Кнопка "Вверх" ===== */
-  #back-to-top {
-    top: auto;
-    bottom: calc(20px + env(safe-area-inset-bottom));
-    right: 16px;
-    padding: 12px 20px;
-    font-size: 0.95rem;
-  }
-
-  /* ===== Оверлей скриншотов ===== */
-  #screenshot-overlay img {
-    border-radius: 8px;
-  }
-
-  /* ===== Уведомление ===== */
-  #toast {
-    width: calc(100% - 24px);
-    padding: 14px 18px;
-    font-size: 0.9rem;
-    bottom: calc(20px + env(safe-area-inset-bottom));
-  }
-
-  /* ===== Отзывы ===== */
-  .rating-summary {
-    padding: 14px 16px;
-    gap: 10px;
-  }
-  .rating-stars-display { font-size: 1.4rem; }
-  .rating-value { font-size: 1.2rem; }
-  .write-review-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 14px 20px;
-    font-size: 1rem;
-  }
-
-  /* Модалка рейтинга */
-  .rating-modal {
-    padding: 22px;
-    margin: 10px;
-  }
-  .rating-stars-input { font-size: 2rem; }
-  .rating-modal-actions {
-    flex-direction: column;
-  }
-  .rating-modal-actions button {
-    width: 100%;
-    padding: 12px 18px;
-  }
+  .old-versions.open { max-height: 15000px; }
 }
 
-/* ===== Очень маленькие телефоны (≤ 380px) ===== */
+/* Очень маленькие телефоны (≤ 380px) */
 @media (max-width: 380px) {
-  html { font-size: 14px; }
-
-  .top-bar h1 { font-size: 1rem; }
-
-  .nav-btn {
-    min-width: 100%;
-    flex: 1 1 100%;
-  }
-  .nav-help-wrap { min-width: 100%; flex: 1 1 100%; }
-
+  html { font-size: 16px; }
+  .top-bar h1 { font-size: 1.3rem; }
+  .nav-btn, .nav-help-wrap { flex: 1 1 100%; }
   .theme-grid { grid-template-columns: 1fr; }
-
-  .opt-btn {
-    flex: 1 1 100%;
-    min-width: 100%;
-  }
-
-  .share-btn {
-    flex: 1 1 100%;
-  }
-
-  .stat-value { font-size: 1.2rem; }
+  .opt-btn { flex: 1 1 100%; }
 }
 
-/* ===== Отключение hover-эффектов на тач-устройствах ===== */
+/* Отключение hover на тач-устройствах */
 @media (hover: none) and (pointer: coarse) {
   .program-card:hover,
   .stat-card:hover,
@@ -1365,9 +1293,7 @@ body {
   }
   .nav-btn:hover,
   .zip-btn:hover,
-  .btn:hover {
-    opacity: 1;
-  }
+  .btn:hover { opacity: 1; }
   body.ultra-smooth .program-card:hover,
   body.ultra-smooth .stat-card:hover {
     transform: none;
