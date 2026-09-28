@@ -5,9 +5,8 @@
   const GITHUB_OWNER = 'UXntWWW';
   const GITHUB_REPO = 'UXntWWW.github.io';
   const CACHE_KEY = 'codeStatsCache_v1';
-  const CACHE_TTL = 60 * 60 * 1000; // 1 час
+  const CACHE_TTL = 60 * 60 * 1000;
 
-  // Расширения → язык
   const LANG_MAP = {
     '.html': { name: 'HTML', color: '#e34c26' },
     '.css':  { name: 'CSS', color: '#563d7c' },
@@ -26,7 +25,6 @@
       .catch(() => null);
   }
 
-  // Получить список всех файлов в репозитории (рекурсивно)
   function getAllFiles() {
     return fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/git/trees/main?recursive=1', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
@@ -34,40 +32,27 @@
       .catch(() => []);
   }
 
-  // Посчитать строки в файле
   function countLines(url) {
     return fetchText(url).then(function (text) {
       if (!text) return 0;
-      // Считаем переносы строк + 1 если последняя строка без \n
-      var lines = text.split('\n').length;
-      // Если файл пустой — 0
       if (text.trim() === '') return 0;
-      return lines;
+      return text.split('\n').length;
     });
   }
 
-  // Загрузить и посчитать всё
   function calculate() {
     return getAllFiles().then(function (files) {
-      // Фильтруем по поддерживаемым расширениям
-      var targets = files.filter(function (f) {
-        var ext = fileExt(f.path);
-        return LANG_MAP[ext];
-      });
-
-      // Группируем по языкам
+      var targets = files.filter(function (f) { return LANG_MAP[fileExt(f.path)]; });
       var byLang = {};
       var promises = targets.map(function (file) {
         var ext = fileExt(file.path);
         var lang = LANG_MAP[ext].name;
         var rawUrl = 'https://raw.githubusercontent.com/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/main/' + file.path;
-
         return countLines(rawUrl).then(function (n) {
           if (!byLang[lang]) byLang[lang] = 0;
           byLang[lang] += n;
         });
       });
-
       return Promise.all(promises).then(function () {
         var total = 0;
         Object.keys(byLang).forEach(function (k) { total += byLang[k]; });
@@ -76,23 +61,17 @@
     });
   }
 
-  // Отрисовка
   function render(data) {
     var totalEl = document.getElementById('code-total');
     var barsEl = document.getElementById('code-bars');
-
     if (totalEl) {
       totalEl.textContent = data.total.toLocaleString('ru-RU');
       totalEl.classList.remove('loading');
     }
-
     if (!barsEl) return;
 
-    // Сортируем по убыванию
     var entries = Object.keys(data.byLang)
-      .map(function (lang) {
-        return { lang: lang, lines: data.byLang[lang] };
-      })
+      .map(function (lang) { return { lang: lang, lines: data.byLang[lang] }; })
       .sort(function (a, b) { return b.lines - a.lines; });
 
     barsEl.innerHTML = '';
@@ -117,10 +96,7 @@
         '<div class="code-bar-track">' +
           '<div class="code-bar-fill" style="background:' + color + '; width:0%"></div>' +
         '</div>';
-
       barsEl.appendChild(row);
-
-      // Анимация заполнения
       setTimeout(function () {
         var fill = row.querySelector('.code-bar-fill');
         if (fill) fill.style.width = percent.toFixed(1) + '%';
@@ -128,9 +104,7 @@
     });
   }
 
-  // Загрузка с кэшем
   function load() {
-    // Проверяем кэш
     try {
       var cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
       if (cached && (Date.now() - cached.time < CACHE_TTL)) {
