@@ -8,44 +8,32 @@
     var blocks = Array.from(document.querySelectorAll(blockSelector));
     if (!blocks.length) return;
 
-    // Сохраняем оригинальный HTML каждого блока
     blocks.forEach(function (b) {
-      if (!b.dataset.originalHtml) {
-        b.dataset.originalHtml = b.innerHTML;
-      }
+      if (!b.dataset.originalHtml) b.dataset.originalHtml = b.innerHTML;
     });
 
-    // Сообщение "ничего не найдено"
     var empty = document.createElement('div');
     empty.className = 'search-empty';
-    empty.textContent = 'Ничего не найдено.';
+    empty.textContent = (window.Lang && window.Lang.get() === 'en') ? 'Nothing found.' : 'Ничего не найдено.';
     empty.style.display = 'none';
     blocks[0].parentNode.insertBefore(empty, blocks[0]);
 
     function restoreAll() {
       blocks.forEach(function (b) {
-        if (b.dataset.originalHtml) {
-          b.innerHTML = b.dataset.originalHtml;
-        }
+        if (b.dataset.originalHtml) b.innerHTML = b.dataset.originalHtml;
         b.style.display = '';
       });
-      document.querySelectorAll('.page-divider').forEach(function (hr) {
-        hr.style.display = '';
-      });
+      document.querySelectorAll('.page-divider').forEach(function (hr) { hr.style.display = ''; });
     }
 
     function highlightNode(node, regex) {
       var text = node.nodeValue;
-      if (!regex.test(text)) {
-        regex.lastIndex = 0;
-        return false;
-      }
+      if (!regex.test(text)) { regex.lastIndex = 0; return false; }
       regex.lastIndex = 0;
 
       var frag = document.createDocumentFragment();
       var lastIndex = 0;
       var m;
-
       while ((m = regex.exec(text)) !== null) {
         if (m.index > lastIndex) {
           frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
@@ -56,49 +44,32 @@
         frag.appendChild(span);
         lastIndex = m.index + m[0].length;
       }
-
       if (lastIndex < text.length) {
         frag.appendChild(document.createTextNode(text.slice(lastIndex)));
       }
-
       node.parentNode.replaceChild(frag, node);
       return true;
     }
 
     input.addEventListener('input', function () {
       var q = input.value.trim();
-
-      if (!q) {
-        restoreAll();
-        empty.style.display = 'none';
-        return;
-      }
+      if (!q) { restoreAll(); empty.style.display = 'none'; return; }
 
       var found = 0;
       var regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
 
       blocks.forEach(function (b) {
-        // Восстанавливаем оригинал перед каждой подсветкой
-        if (b.dataset.originalHtml) {
-          b.innerHTML = b.dataset.originalHtml;
-        }
-
+        if (b.dataset.originalHtml) b.innerHTML = b.dataset.originalHtml;
         var text = b.textContent.toLowerCase();
         var match = text.indexOf(q.toLowerCase()) !== -1;
-
         if (match) {
           found++;
           b.style.display = '';
-
-          // Собираем текстовые узлы (чтобы не ломать HTML)
           var walker = document.createTreeWalker(b, NodeFilter.SHOW_TEXT, null, false);
           var nodes = [];
           var n;
           while ((n = walker.nextNode())) nodes.push(n);
-
-          nodes.forEach(function (node) {
-            highlightNode(node, regex);
-          });
+          nodes.forEach(function (node) { highlightNode(node, regex); });
         } else {
           b.style.display = 'none';
         }
