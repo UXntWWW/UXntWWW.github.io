@@ -263,6 +263,11 @@
       document.body.classList.toggle('glass-mode', glass);
     }
 
+        // Определяем, тёмный ли фон — для цвета точек паттерна
+    if (document.body) {
+      document.body.setAttribute('data-dark-bg', bgDark ? 'true' : 'false');
+      document.body.setAttribute('data-light-bg', !bgDark ? 'true' : 'false');
+    }
     applyAllUI();
   }
 
