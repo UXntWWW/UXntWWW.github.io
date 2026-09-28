@@ -353,14 +353,14 @@
 (function () {
   'use strict';
 
-  const PRESETS = [
-    { id: 'base',   i18n: 'settings.theme.base',   bar: '#008000', bg: '#ffffff', btn: 'white' },
-    { id: 'light',  i18n: 'settings.theme.light',  bar: '#d9d9d9', bg: '#fafafa', btn: 'black' },
-    { id: 'gray',   i18n: 'settings.theme.gray',   bar: '#5a5a5a', bg: '#e0e0e0', btn: 'black' },
-    { id: 'dark',   i18n: 'settings.theme.dark',   bar: '#1f1f1f', bg: '#0f1115', btn: 'white' },
-    { id: 'system', i18n: 'settings.theme.system', bar: null,      bg: null,      btn: null }
-  ];
-
+const PRESETS = [
+  { id: 'base',   i18n: 'settings.theme.base',   fallback: 'Базовая',   bar: '#008000', bg: '#ffffff', btn: 'white' },
+  { id: 'light',  i18n: 'settings.theme.light',  fallback: 'Светлая',   bar: '#d9d9d9', bg: '#fafafa', btn: 'black' },
+  { id: 'gray',   i18n: 'settings.theme.gray',   fallback: 'Серая',     bar: '#5a5a5a', bg: '#e0e0e0', btn: 'black' },
+  { id: 'dark',   i18n: 'settings.theme.dark',   fallback: 'Тёмная',    bar: '#1f1f1f', bg: '#0f1115', btn: 'white' },
+  { id: 'system', i18n: 'settings.theme.system', fallback: 'Системная (Автоопределение)', bar: null, bg: null, btn: null }
+];
+ 
   const COLORS = [
     '#008000', '#4f8cff', '#a06bff', '#ff5c8a',
     '#ff8c42', '#e6c200', '#3ecf8e', '#ef4444',
