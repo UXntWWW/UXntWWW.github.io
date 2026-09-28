@@ -30,7 +30,7 @@
 
   .content { padding: 20px; max-width: 820px; margin: 0 auto; }
 
-  .slider { position: relative; overflow: hidden; min-height: 1000px; }
+  .slider { position: relative; overflow: hidden; min-height: 1300px; }
   .slide {
     position: absolute; top: 0; left: 0; width: 100%;
     transition: transform .35s ease, opacity .35s ease;
@@ -104,37 +104,80 @@
 
   .actions { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
 
-  /* Языковой переключатель */
-  .lang-switcher {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-  }
+  .lang-switcher { display: flex; gap: 8px; margin-top: 16px; }
   .lang-btn {
-    padding: 10px 20px;
-    border-radius: 10px;
+    padding: 10px 20px; border-radius: 10px;
     border: 2px solid var(--nav-border);
-    background: var(--nav-fill);
-    color: var(--nav-text);
-    font-weight: bold;
-    font-size: 0.95rem;
-    cursor: pointer;
-    font-family: inherit;
+    background: var(--nav-fill); color: var(--nav-text);
+    font-weight: bold; font-size: 0.95rem;
+    cursor: pointer; font-family: inherit;
     transition: opacity .2s, background .25s;
   }
   body.glass-mode .lang-btn {
-    background: var(--glass-bg);
-    color: var(--text);
+    background: var(--glass-bg); color: var(--text);
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
   }
   .lang-btn:hover { opacity: 0.85; }
   .lang-btn.active {
-    opacity: 1;
-    border-color: var(--btn-bg);
+    opacity: 1; border-color: var(--btn-bg);
     box-shadow: 0 0 0 3px var(--btn-bg);
   }
+
+  .opt-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .opt-btn {
+    padding: 10px 18px; border-radius: 10px;
+    border: 2px solid var(--nav-border);
+    background: var(--nav-fill); color: var(--nav-text);
+    font-weight: bold; font-size: 0.9rem;
+    cursor: pointer; font-family: inherit;
+    transition: opacity .2s, background .25s, border-color .25s;
+  }
+  body.glass-mode .opt-btn {
+    background: var(--glass-bg); color: var(--text);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .opt-btn:hover { opacity: 0.85; }
+  .opt-btn.active {
+    opacity: 1; border-color: var(--btn-bg);
+    box-shadow: 0 0 0 3px var(--btn-bg);
+  }
+
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; background: var(--card);
+    border-radius: 12px; border: 2px solid var(--card);
+    margin-top: 10px; cursor: pointer;
+    transition: background .25s, border-color .25s;
+  }
+  body.glass-mode .toggle-row {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .toggle-row:hover { border-color: var(--btn-bg); }
+  .toggle-row-left { display: flex; flex-direction: column; gap: 4px; }
+  .toggle-row-title { font-weight: bold; font-size: 1rem; }
+  .toggle-row-desc { font-size: 0.85rem; opacity: 0.7; }
+  .toggle-switch {
+    position: relative; width: 50px; height: 28px;
+    flex-shrink: 0; border-radius: 999px;
+    background: rgba(128,128,128,0.3);
+    transition: background .25s;
+  }
+  .toggle-switch::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #fff;
+    transition: transform .25s, background .25s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .toggle-row.on .toggle-switch { background: var(--btn-bg); }
+  .toggle-row.on .toggle-switch::after { transform: translateX(22px); }
 </style>
 </head>
 <body>
@@ -150,7 +193,9 @@
     <button class="tab active" data-tab="presets" data-i18n="settings.tab.themes">Темы</button>
     <button class="tab" data-tab="custom" data-i18n="settings.tab.custom">Кастом</button>
     <button class="tab" data-tab="effects" data-i18n="settings.tab.effects">Эффекты</button>
-    <button class="tab" data-tab="lang">Язык / Language</button>
+    <button class="tab" data-tab="appearance" data-i18n="settings.tab.appearance">Внешний вид</button>
+    <button class="tab" data-tab="system" data-i18n="settings.tab.system">Системное</button>
+    <button class="tab" data-tab="lang" data-i18n="settings.tab.lang">Язык</button>
   </div>
 
   <div class="slider">
@@ -159,44 +204,125 @@
       <div class="theme-grid" id="theme-grid"></div>
       <div class="preview">
         <p class="preview-title">Предпросмотр</p>
-        <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
+        <p class="preview-text">Так будет выглядеть текст на выбранном фоне.</p>
       </div>
     </div>
 
     <div class="slide hidden-right" id="slide-custom">
       <p class="palette-title" data-i18n="settings.custom.colorBar">Цвет шапки</p>
-      <p class="palette-hint" data-i18n="settings.custom.hint.hover">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.hover">Наведи на квадратик — цвет применится сразу.</p>
       <div class="palette" id="palette-bar"></div>
 
       <p class="palette-title" data-i18n="settings.custom.colorBg">Цвет фона</p>
-      <p class="palette-hint" data-i18n="settings.custom.hint.hover">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.hover">Наведи на квадратик — цвет применится сразу.</p>
       <div class="palette" id="palette-bg"></div>
 
       <p class="palette-title" data-i18n="settings.custom.textBar">Цвет текста в шапке</p>
-      <p class="palette-hint" data-i18n="settings.custom.hint.noMatchBar">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом шапки.</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.noMatchBar">Нельзя выбрать цвет, совпадающий с цветом шапки.</p>
       <div class="palette" id="palette-text-bar"></div>
 
       <p class="palette-title" data-i18n="settings.custom.textPage">Цвет текста на странице</p>
-      <p class="palette-hint" data-i18n="settings.custom.hint.noMatchBg">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом фона.</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.noMatchBg">Нельзя выбрать цвет, совпадающий с цветом фона.</p>
       <div class="palette" id="palette-text-page"></div>
-
-      <div class="preview">
-        <p class="preview-title">Предпросмотр</p>
-        <p class="preview-text">Так будет выглядеть текст на выбранном фоне. Шапка, кнопки и разделители тоже подстроятся.</p>
-      </div>
     </div>
 
     <div class="slide hidden-right" id="slide-effects">
-      <p class="palette-title" data-i18n="settings.effects.glass">Включить стекло (Glassmorphism)</p>
-      <p class="palette-hint" data-i18n="settings.effects.glassDesc">Кнопки, карточки, поля и уведомления станут стеклянными. Фон страницы — градиентный.</p>
+      <p class="palette-title" data-i18n="settings.effects.glass">Включить стекло</p>
 
-      <label class="glass-toggle">
-        <input type="checkbox" id="glass-checkbox">
-        <div class="glass-toggle-text">
-          <span class="glass-toggle-title" data-i18n="settings.effects.glass">Включить стекло (Glassmorphism)</span>
-          <span class="glass-toggle-desc" data-i18n="settings.effects.glassDesc">Кнопки, карточки, поля и уведомления станут стеклянными.</span>
+      <div class="toggle-row" id="toggle-glass">
+        <div class="toggle-row-left">
+          <span class="toggle-row-title" data-i18n="settings.effects.glass">Стекло</span>
+          <span class="toggle-row-desc" data-i18n="settings.effects.glassDesc">Кнопки, карточки, поля станут стеклянными.</span>
         </div>
-      </label>
+        <div class="toggle-switch"></div>
+      </div>
+
+      <p class="palette-title" style="margin-top:30px;" data-i18n="settings.effects.glassOpacity">Прозрачность стекла</p>
+      <p class="palette-hint" data-i18n="settings.effects.glassOpacity.hint">Насколько сильно размытие под стеклом.</p>
+      <div class="opt-row">
+        <button class="opt-btn" data-glass="weak" data-i18n="settings.effects.glass.weak">Слабое</button>
+        <button class="opt-btn" data-glass="medium" data-i18n="settings.effects.glass.medium">Среднее</button>
+        <button class="opt-btn" data-glass="strong" data-i18n="settings.effects.glass.strong">Сильное</button>
+      </div>
+
+      <p class="palette-title" style="margin-top:30px;" data-i18n="settings.effects.animations">Анимации</p>
+
+      <div class="toggle-row" id="toggle-animations">
+        <div class="toggle-row-left">
+          <span class="toggle-row-title" data-i18n="settings.effects.animations">Анимации</span>
+          <span class="toggle-row-desc" data-i18n="settings.effects.animationsDesc">Плавные переходы и появление.</span>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+
+      <div class="toggle-row" id="toggle-ultra">
+        <div class="toggle-row-left">
+          <span class="toggle-row-title" data-i18n="settings.effects.ultraSmooth">Мега-плавность</span>
+          <span class="toggle-row-desc" data-i18n="settings.effects.ultraSmoothDesc">Все элементы плавно двигаются, лёгкое размытие и масштаб.</span>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+    </div>
+
+    <div class="slide hidden-right" id="slide-appearance">
+      <p class="palette-title" data-i18n="settings.appearance.fontSize">Размер шрифта</p>
+      <p class="palette-hint" data-i18n="settings.appearance.fontSize.hint">Меняет размер текста по всему сайту.</p>
+      <div class="opt-row">
+        <button class="opt-btn" data-font="small" data-i18n="settings.appearance.font.small">Маленький</button>
+        <button class="opt-btn" data-font="medium" data-i18n="settings.appearance.font.medium">Средний</button>
+        <button class="opt-btn" data-font="large" data-i18n="settings.appearance.font.large">Большой</button>
+      </div>
+
+      <p class="palette-title" data-i18n="settings.appearance.radius">Скругления</p>
+      <p class="palette-hint" data-i18n="settings.appearance.radius.hint">Форма углов у карточек и кнопок.</p>
+      <div class="opt-row">
+        <button class="opt-btn" data-radius="sharp" data-i18n="settings.appearance.radius.sharp">Острые</button>
+        <button class="opt-btn" data-radius="soft" data-i18n="settings.appearance.radius.soft">Мягкие</button>
+        <button class="opt-btn" data-radius="round" data-i18n="settings.appearance.radius.round">Круглые</button>
+      </div>
+
+      <p class="palette-title" data-i18n="settings.appearance.density">Плотность карточек</p>
+      <p class="palette-hint" data-i18n="settings.appearance.density.hint">Сколько карточек помещается в ряд.</p>
+      <div class="opt-row">
+        <button class="opt-btn" data-density="1" data-i18n="settings.appearance.density.1">1 колонка</button>
+        <button class="opt-btn" data-density="2" data-i18n="settings.appearance.density.2">2 колонки</button>
+        <button class="opt-btn" data-density="3" data-i18n="settings.appearance.density.3">3 колонки</button>
+      </div>
+
+      <div class="toggle-row" id="toggle-compact" style="margin-top:30px;">
+        <div class="toggle-row-left">
+          <span class="toggle-row-title" data-i18n="settings.appearance.compact">Компактный режим</span>
+          <span class="toggle-row-desc" data-i18n="settings.appearance.compactDesc">Меньше отступов, больше контента.</span>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+
+      <div class="toggle-row" id="toggle-pattern">
+        <div class="toggle-row-left">
+          <span class="toggle-row-title" data-i18n="settings.appearance.pattern">Паттерн на фоне</span>
+          <span class="toggle-row-desc" data-i18n="settings.appearance.patternDesc">Лёгкие точки на фоне страницы.</span>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+    </div>
+
+    <div class="slide hidden-right" id="slide-system">
+      <p class="palette-title" data-i18n="settings.system.autoUpdate">Автообновление данных</p>
+      <p class="palette-hint" data-i18n="settings.system.autoUpdate.hint">Обновлять скачивания и просмотры каждый час без перезагрузки.</p>
+
+      <div class="toggle-row" id="toggle-autoupdate">
+        <div class="toggle-row-left">
+          <span class="toggle-row-title" data-i18n="settings.system.autoUpdate.title">Автообновление</span>
+          <span class="toggle-row-desc" data-i18n="settings.system.autoUpdate.desc">Раз в час — фоновое обновление счётчиков.</span>
+        </div>
+        <div class="toggle-switch"></div>
+      </div>
+
+      <p class="palette-title" style="margin-top:30px;" data-i18n="settings.system.reset">Сброс настроек</p>
+      <p class="palette-hint" data-i18n="settings.system.reset.hint">Удаляет все сохранённые настройки и возвращает значения по умолчанию.</p>
+      <div class="opt-row">
+        <button class="opt-btn" id="reset-all" style="border-color:#ef4444; color:#ef4444;" data-i18n="settings.system.reset.btn">Сбросить всё</button>
+      </div>
     </div>
 
     <div class="slide hidden-right" id="slide-lang">
@@ -228,11 +354,11 @@
   'use strict';
 
   const PRESETS = [
-    { id: 'base',   name: 'Базовая',   bar: '#008000', bg: '#ffffff', btn: 'white' },
-    { id: 'light',  name: 'Светлая',   bar: '#d9d9d9', bg: '#fafafa', btn: 'black' },
-    { id: 'gray',   name: 'Серая',     bar: '#5a5a5a', bg: '#e0e0e0', btn: 'black' },
-    { id: 'dark',   name: 'Тёмная',    bar: '#1f1f1f', bg: '#0f1115', btn: 'white' },
-    { id: 'system', name: 'Системная (Автоопределение)', bar: null, bg: null, btn: null }
+    { id: 'base',   i18n: 'settings.theme.base',   bar: '#008000', bg: '#ffffff', btn: 'white' },
+    { id: 'light',  i18n: 'settings.theme.light',  bar: '#d9d9d9', bg: '#fafafa', btn: 'black' },
+    { id: 'gray',   i18n: 'settings.theme.gray',   bar: '#5a5a5a', bg: '#e0e0e0', btn: 'black' },
+    { id: 'dark',   i18n: 'settings.theme.dark',   bar: '#1f1f1f', bg: '#0f1115', btn: 'white' },
+    { id: 'system', i18n: 'settings.theme.system', bar: null,      bg: null,      btn: null }
   ];
 
   const COLORS = [
@@ -317,10 +443,12 @@
 
   const tabs = document.querySelectorAll('.tab');
   const slides = {
-    presets: document.getElementById('slide-presets'),
-    custom:  document.getElementById('slide-custom'),
-    effects: document.getElementById('slide-effects'),
-    lang:    document.getElementById('slide-lang')
+    presets:    document.getElementById('slide-presets'),
+    custom:     document.getElementById('slide-custom'),
+    effects:    document.getElementById('slide-effects'),
+    appearance: document.getElementById('slide-appearance'),
+    system:     document.getElementById('slide-system'),
+    lang:       document.getElementById('slide-lang')
   };
 
   function switchTab(name) {
@@ -328,33 +456,20 @@
     Object.keys(slides).forEach(function (k) {
       slides[k].classList.remove('hidden-right', 'hidden-left', 'active');
     });
-    if (name === 'presets') {
-      slides.presets.classList.add('active');
-      slides.custom.classList.add('hidden-right');
-      slides.effects.classList.add('hidden-right');
-      slides.lang.classList.add('hidden-right');
-    } else if (name === 'custom') {
-      slides.custom.classList.add('active');
-      slides.presets.classList.add('hidden-left');
-      slides.effects.classList.add('hidden-right');
-      slides.lang.classList.add('hidden-right');
-    } else if (name === 'effects') {
-      slides.effects.classList.add('active');
-      slides.presets.classList.add('hidden-left');
-      slides.custom.classList.add('hidden-left');
-      slides.lang.classList.add('hidden-right');
-    } else {
-      slides.lang.classList.add('active');
-      slides.presets.classList.add('hidden-left');
-      slides.custom.classList.add('hidden-left');
-      slides.effects.classList.add('hidden-left');
-    }
+    var order = ['presets', 'custom', 'effects', 'appearance', 'system', 'lang'];
+    var idx = order.indexOf(name);
+    order.forEach(function (key, i) {
+      if (i === idx) slides[key].classList.add('active');
+      else if (i < idx) slides[key].classList.add('hidden-left');
+      else slides[key].classList.add('hidden-right');
+    });
     showSelected();
   }
 
   tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
   switchTab(selected.mode === 'custom' ? 'custom' : 'presets');
 
+  // Пресеты
   const grid = document.getElementById('theme-grid');
   PRESETS.forEach(preset => {
     const card = document.createElement('div');
@@ -377,7 +492,8 @@
 
     const name = document.createElement('div');
     name.className = 'theme-name';
-    name.textContent = preset.name;
+    name.setAttribute('data-i18n', preset.i18n);
+    name.textContent = (window.Lang && window.Lang.t) ? window.Lang.t(preset.i18n) : preset.id;
 
     card.appendChild(preview);
     card.appendChild(name);
@@ -400,6 +516,7 @@
     grid.appendChild(card);
   });
 
+  // Палитры
   function buildPalette(containerId, key, target) {
     const container = document.getElementById(containerId);
     COLORS.forEach(color => {
@@ -442,15 +559,129 @@
   buildPalette('palette-text-bar',  'textBar',  'textBar');
   buildPalette('palette-text-page', 'textPage', 'textPage');
 
-  const glassCheckbox = document.getElementById('glass-checkbox');
-  glassCheckbox.checked = localStorage.getItem('glassEffect') === 'on';
-  glassCheckbox.addEventListener('change', () => {
-    const on = glassCheckbox.checked;
-    localStorage.setItem('glassEffect', on ? 'on' : 'off');
-    showSelected();
-  });
+  // Стекло
+  function updateGlassUI() {
+    var on = localStorage.getItem('glassEffect') === 'on';
+    var row = document.getElementById('toggle-glass');
+    if (row) row.classList.toggle('on', on);
+  }
+  var glassRow = document.getElementById('toggle-glass');
+  if (glassRow) {
+    glassRow.addEventListener('click', function () {
+      var on = localStorage.getItem('glassEffect') === 'on';
+      localStorage.setItem('glassEffect', on ? 'off' : 'on');
+      updateGlassUI();
+      showSelected();
+    });
+  }
+  updateGlassUI();
 
-  // ===== Язык =====
+  // Прозрачность стекла
+  function updateGlassOpacityUI() {
+    var cur = localStorage.getItem('uiGlassOpacity') || 'medium';
+    document.querySelectorAll('[data-glass]').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.glass === cur);
+    });
+  }
+  document.querySelectorAll('[data-glass]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      localStorage.setItem('uiGlassOpacity', btn.dataset.glass);
+      updateGlassOpacityUI();
+      if (window.Theme) window.Theme.refresh();
+    });
+  });
+  updateGlassOpacityUI();
+
+  // Шрифт
+  function updateFontUI() {
+    var cur = localStorage.getItem('uiFontSize') || 'medium';
+    document.querySelectorAll('[data-font]').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.font === cur);
+    });
+  }
+  document.querySelectorAll('[data-font]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      localStorage.setItem('uiFontSize', btn.dataset.font);
+      updateFontUI();
+      if (window.Theme) window.Theme.applyUI();
+    });
+  });
+  updateFontUI();
+
+  // Скругления
+  function updateRadiusUI() {
+    var cur = localStorage.getItem('uiRadius') || 'soft';
+    document.querySelectorAll('[data-radius]').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.radius === cur);
+    });
+  }
+  document.querySelectorAll('[data-radius]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      localStorage.setItem('uiRadius', btn.dataset.radius);
+      updateRadiusUI();
+      if (window.Theme) window.Theme.applyUI();
+    });
+  });
+  updateRadiusUI();
+
+  // Плотность
+  function updateDensityUI() {
+    var cur = localStorage.getItem('uiCardDensity') || 'auto';
+    document.querySelectorAll('[data-density]').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.density === cur);
+    });
+  }
+  document.querySelectorAll('[data-density]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      localStorage.setItem('uiCardDensity', btn.dataset.density);
+      updateDensityUI();
+      if (window.Theme) window.Theme.applyUI();
+    });
+  });
+  updateDensityUI();
+
+  // Переключатели
+  function setupToggle(id, key, invert) {
+    var row = document.getElementById(id);
+    if (!row) return;
+    function update() {
+      var val = localStorage.getItem(key);
+      var on = invert ? (val !== 'off') : (val === 'on');
+      row.classList.toggle('on', on);
+    }
+    row.addEventListener('click', function () {
+      var val = localStorage.getItem(key);
+      var currentOn;
+      if (invert) {
+        currentOn = val !== 'off';
+        localStorage.setItem(key, currentOn ? 'off' : 'on');
+      } else {
+        currentOn = val === 'on';
+        localStorage.setItem(key, currentOn ? 'off' : 'on');
+      }
+      update();
+      if (window.Theme) window.Theme.applyUI();
+    });
+    update();
+  }
+  setupToggle('toggle-animations', 'uiAnimations', true);
+  setupToggle('toggle-ultra', 'uiUltraSmooth', false);
+  setupToggle('toggle-compact', 'uiCompact', false);
+  setupToggle('toggle-pattern', 'uiPattern', false);
+  setupToggle('toggle-autoupdate', 'uiAutoUpdate', false);
+
+  // Сброс
+  var resetBtn = document.getElementById('reset-all');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      if (confirm('Сбросить все настройки? Сайт вернётся к значениям по умолчанию.')) {
+        localStorage.clear();
+        location.reload();
+      }
+    });
+  }
+
+  // Язык
   const langBtns = document.querySelectorAll('.lang-btn');
   const currentLangDisplay = document.getElementById('current-lang-display');
 
@@ -461,7 +692,6 @@
       currentLangDisplay.textContent = cur === 'ru' ? 'Русский' : 'English';
     }
   }
-
   langBtns.forEach(btn => {
     btn.addEventListener('click', function () {
       const lang = btn.dataset.lang;
@@ -469,12 +699,11 @@
       updateLangUI();
     });
   });
-
   document.addEventListener('langChanged', updateLangUI);
   document.addEventListener('langReady', updateLangUI);
   updateLangUI();
 
-  // ===== Применить =====
+  // Применить
   document.getElementById('apply-btn').addEventListener('click', () => {
     localStorage.setItem('themeMode', selected.mode);
 
