@@ -31,10 +31,8 @@
   h2 { margin-top: 30px; }
 
   .install-step {
-    display: flex;
-    gap: 18px;
-    padding: 20px;
-    border-radius: 14px;
+    display: flex; gap: 18px;
+    padding: 20px; border-radius: 14px;
     background: var(--card);
     margin-bottom: 16px;
     border: 2px solid var(--card);
@@ -49,35 +47,26 @@
   }
   .install-step-num {
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     background: var(--bar);
     color: var(--bar-text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 1.2rem;
   }
   .install-step-body { flex: 1; }
   .install-step-title {
-    font-weight: bold;
-    font-size: 1.05rem;
-    margin: 0 0 6px;
+    font-weight: bold; font-size: 1.05rem; margin: 0 0 6px;
   }
   .install-step-desc {
-    margin: 0;
-    opacity: 0.85;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    margin: 0; opacity: 0.85; font-size: 0.95rem; line-height: 1.5;
   }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <h1 data-i18n="install.title">Установка — UXNTWWW.io</h1>
+  <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
   <nav class="top-nav"></nav>
 </div>
 
@@ -111,6 +100,8 @@
 
 </div>
 
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
