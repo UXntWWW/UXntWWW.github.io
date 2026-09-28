@@ -12,7 +12,6 @@
 
   function getTrail() {
     var p = (window.location.pathname.split('/').pop() || 'index.html').replace('.html', '');
-
     var home = t('breadcrumbs.home', t('nav.home', 'Главная'));
 
     var map = {
