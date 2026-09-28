@@ -493,8 +493,9 @@ const PRESETS = [
     const name = document.createElement('div');
     name.className = 'theme-name';
     name.setAttribute('data-i18n', preset.i18n);
-    name.textContent = (window.Lang && window.Lang.t) ? window.Lang.t(preset.i18n) : preset.id;
-
+    const tr = (window.Lang && window.Lang.t) ? window.Lang.t(preset.i18n) : null;
+    name.textContent = (tr && tr !== preset.i18n) ? tr : preset.fallback;
+    
     card.appendChild(preview);
     card.appendChild(name);
 
