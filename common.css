@@ -979,3 +979,401 @@ body.ultra-smooth .old-versions {
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--btn-hover, var(--bar)); }
 body.glass-mode ::-webkit-scrollbar-thumb { background: rgba(150, 150, 160, 0.5); }
+
+/* ============================================================
+   АДАПТИВ ПОД ТЕЛЕФОНЫ
+   ============================================================ */
+
+/* ===== Safe Area для iPhone (не залезает под чёлку) ===== */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+.top-bar {
+  padding-top: calc(20px + env(safe-area-inset-top));
+  padding-left: calc(15px + env(safe-area-inset-left));
+  padding-right: calc(15px + env(safe-area-inset-right));
+}
+
+/* ===== Планшеты и меньше (≤ 900px) ===== */
+@media (max-width: 900px) {
+  .content { padding: 16px; }
+
+  .top-bar { padding: 16px 14px; }
+  .top-bar h1 { font-size: 1.2rem; }
+
+  .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tab { padding: 10px 18px; font-size: 0.95rem; }
+
+  .program-cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+  .stats-grid { grid-template-columns: 1fr; }
+
+  .code-card { padding: 20px; }
+
+  .search-wrap { max-width: 100%; }
+
+  .broom-img { width: 180px; height: 180px; }
+}
+
+/* ===== Телефоны (≤ 700px) ===== */
+@media (max-width: 700px) {
+  html { font-size: 15px; }
+
+  .content { padding: 14px; }
+
+  /* ===== Шапка ===== */
+  .top-bar {
+    padding: 14px 12px;
+    padding-top: calc(14px + env(safe-area-inset-top));
+  }
+  .top-bar h1 { font-size: 1.1rem; }
+
+  /* Навигация — на всю ширину, кнопки крупнее */
+  .top-nav {
+    position: static;
+    transform: none;
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .nav-btn {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    flex: 1 1 auto;
+    min-width: calc(50% - 6px);
+    justify-content: center;
+  }
+  .nav-help-wrap {
+    flex: 1 1 auto;
+    min-width: calc(50% - 6px);
+  }
+  .nav-help-wrap .nav-help-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Выпадашка — на всю ширину */
+  .nav-help-menu {
+    left: 0;
+    right: 0;
+    min-width: 0;
+    width: 100%;
+    transform: translateY(-10px);
+  }
+  .nav-help-wrap.open .nav-help-menu {
+    transform: translateY(0);
+  }
+  .nav-help-menu a {
+    padding: 14px 18px;
+    font-size: 1rem;
+  }
+
+  /* ===== Карточки программ ===== */
+  .program-cards {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .program-card {
+    padding: 16px;
+    gap: 10px;
+  }
+  .program-card-icon { width: 56px; height: 56px; }
+  .program-card-title { font-size: 1.1rem; }
+  .program-card-desc { font-size: 0.9rem; }
+  .program-card-meta { font-size: 0.8rem; }
+  .program-card-btn {
+    padding: 12px 18px;
+    font-size: 0.95rem;
+  }
+
+  /* Кнопка "В избранное" — крупнее */
+  .favorite-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  /* ===== Кнопки скачивания ===== */
+  .zip-btn, .exe-btn, .torrent-btn, .github-btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0 0 0;
+    padding: 14px 20px;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .btn, .apply-btn, .toggle-old-versions {
+    padding: 14px 22px;
+    font-size: 1rem;
+  }
+
+  /* ===== Поиск ===== */
+  .search-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .search-input {
+    padding: 14px 16px;
+    font-size: 1rem;
+  }
+  .refresh-btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
+    font-size: 1.3rem;
+  }
+
+  /* ===== Верхнее изображение (веник) ===== */
+  .broom-img {
+    float: none;
+    display: block;
+    margin: 20px auto;
+    width: 140px;
+    height: 140px;
+  }
+
+  /* ===== Крошки ===== */
+  .breadcrumbs {
+    font-size: 0.85rem;
+    gap: 6px;
+  }
+
+  /* ===== Поделиться ===== */
+  .share-bar {
+    padding: 14px 16px;
+    gap: 8px;
+  }
+  .share-label {
+    width: 100%;
+    margin: 0 0 4px 0;
+  }
+  .share-btn {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+
+  /* ===== Хлебные крошки ===== */
+  .bc-sep, .bc-current {
+    white-space: nowrap;
+  }
+
+  /* ===== Скриншоты ===== */
+  .screenshots {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .screenshots img {
+    border-width: 1px;
+  }
+
+  /* ===== FAQ ===== */
+  .faq-q {
+    padding: 16px 18px;
+    font-size: 1rem;
+  }
+  .faq-a {
+    padding: 0 18px;
+    font-size: 0.95rem;
+  }
+  .faq-item.open .faq-a {
+    padding: 14px 18px;
+  }
+
+  /* ===== Форма контактов ===== */
+  .contact-form input,
+  .contact-form textarea {
+    padding: 14px 16px;
+    font-size: 1rem;
+  }
+  .contact-form button {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  /* ===== Статистика ===== */
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .stat-card {
+    padding: 18px;
+  }
+  .stat-value { font-size: 1.3rem; }
+  .stat-card-title { font-size: 1rem; }
+
+  /* Коддинг */
+  .code-card { padding: 18px; }
+  .code-total-wrap .stat-value { font-size: 1.7rem; }
+  .code-row-head { font-size: 0.85rem; }
+  .code-percent { min-width: 44px; }
+
+  /* ===== Настройки ===== */
+  .tabs {
+    border-bottom-width: 1px;
+    margin-bottom: 18px;
+  }
+  .tab {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .theme-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .theme-card { padding: 12px; }
+  .theme-preview { height: 50px; }
+
+  .palette-title { font-size: 0.95rem; }
+  .palette-hint { font-size: 0.85rem; }
+  .palette { gap: 8px; }
+  .swatch { width: 38px; height: 38px; }
+
+  .opt-btn {
+    flex: 1 1 calc(33.333% - 6px);
+    min-width: 0;
+    padding: 12px 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .toggle-row {
+    padding: 14px 16px;
+  }
+  .toggle-row-title { font-size: 0.95rem; }
+  .toggle-row-desc { font-size: 0.8rem; }
+
+  .lang-btn {
+    flex: 1 1 0;
+    padding: 12px 14px;
+    justify-content: center;
+    text-align: center;
+  }
+  .lang-switcher {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* ===== Установка ===== */
+  .install-step {
+    padding: 16px;
+    gap: 12px;
+  }
+  .install-step-num {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+  .install-step-title { font-size: 1rem; }
+  .install-step-desc { font-size: 0.9rem; }
+
+  /* ===== Кнопка "Вверх" ===== */
+  #back-to-top {
+    top: auto;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    right: 16px;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+
+  /* ===== Оверлей скриншотов ===== */
+  #screenshot-overlay img {
+    border-radius: 8px;
+  }
+
+  /* ===== Уведомление ===== */
+  #toast {
+    width: calc(100% - 24px);
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ===== Отзывы ===== */
+  .rating-summary {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .rating-stars-display { font-size: 1.4rem; }
+  .rating-value { font-size: 1.2rem; }
+  .write-review-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  /* Модалка рейтинга */
+  .rating-modal {
+    padding: 22px;
+    margin: 10px;
+  }
+  .rating-stars-input { font-size: 2rem; }
+  .rating-modal-actions {
+    flex-direction: column;
+  }
+  .rating-modal-actions button {
+    width: 100%;
+    padding: 12px 18px;
+  }
+}
+
+/* ===== Очень маленькие телефоны (≤ 380px) ===== */
+@media (max-width: 380px) {
+  html { font-size: 14px; }
+
+  .top-bar h1 { font-size: 1rem; }
+
+  .nav-btn {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
+  .nav-help-wrap { min-width: 100%; flex: 1 1 100%; }
+
+  .theme-grid { grid-template-columns: 1fr; }
+
+  .opt-btn {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .share-btn {
+    flex: 1 1 100%;
+  }
+
+  .stat-value { font-size: 1.2rem; }
+}
+
+/* ===== Отключение hover-эффектов на тач-устройствах ===== */
+@media (hover: none) and (pointer: coarse) {
+  .program-card:hover,
+  .stat-card:hover,
+  .theme-card:hover,
+  .screenshots img:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .nav-btn:hover,
+  .zip-btn:hover,
+  .btn:hover {
+    opacity: 1;
+  }
+  body.ultra-smooth .program-card:hover,
+  body.ultra-smooth .stat-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  body.ultra-smooth .program-card:hover .program-card-icon {
+    transform: none;
+  }
+}
