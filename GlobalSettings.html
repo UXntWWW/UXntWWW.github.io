@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Настройки — UXNTWWW.io</title>
+<title data-i18n-title="site.title.settings">Настройки — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<script src="lang.js"></script>
 <link rel="stylesheet" href="common.css">
 <link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
@@ -29,7 +30,7 @@
 
   .content { padding: 20px; max-width: 820px; margin: 0 auto; }
 
-  .slider { position: relative; overflow: hidden; min-height: 900px; }
+  .slider { position: relative; overflow: hidden; min-height: 1000px; }
   .slide {
     position: absolute; top: 0; left: 0; width: 100%;
     transition: transform .35s ease, opacity .35s ease;
@@ -102,21 +103,54 @@
   .preview-text { margin: 0; opacity: 0.85; font-size: 0.9rem; }
 
   .actions { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* Языковой переключатель */
+  .lang-switcher {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .lang-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid var(--nav-border);
+    background: var(--nav-fill);
+    color: var(--nav-text);
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity .2s, background .25s;
+  }
+  body.glass-mode .lang-btn {
+    background: var(--glass-bg);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .lang-btn:hover { opacity: 0.85; }
+  .lang-btn.active {
+    opacity: 1;
+    border-color: var(--btn-bg);
+    box-shadow: 0 0 0 3px var(--btn-bg);
+  }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <h1>Настройки — UXNTWWW.io</h1>
+  <h1 data-i18n="settings.title">Настройки — UXNTWWW.io</h1>
   <nav class="top-nav"></nav>
 </div>
 
 <div class="content">
 
   <div class="tabs">
-    <button class="tab active" data-tab="presets">Темы</button>
-    <button class="tab" data-tab="custom">Кастом</button>
-    <button class="tab" data-tab="effects">Эффекты</button>
+    <button class="tab active" data-tab="presets" data-i18n="settings.tab.themes">Темы</button>
+    <button class="tab" data-tab="custom" data-i18n="settings.tab.custom">Кастом</button>
+    <button class="tab" data-tab="effects" data-i18n="settings.tab.effects">Эффекты</button>
+    <button class="tab" data-tab="lang">Язык / Language</button>
   </div>
 
   <div class="slider">
@@ -130,20 +164,20 @@
     </div>
 
     <div class="slide hidden-right" id="slide-custom">
-      <p class="palette-title">Цвет шапки</p>
-      <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <p class="palette-title" data-i18n="settings.custom.colorBar">Цвет шапки</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.hover">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
       <div class="palette" id="palette-bar"></div>
 
-      <p class="palette-title">Цвет фона</p>
-      <p class="palette-hint">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
+      <p class="palette-title" data-i18n="settings.custom.colorBg">Цвет фона</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.hover">Наведи на квадратик — цвет применится сразу. Нажми, чтобы выбрать.</p>
       <div class="palette" id="palette-bg"></div>
 
-      <p class="palette-title">Цвет текста в шапке</p>
-      <p class="palette-hint">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом шапки.</p>
+      <p class="palette-title" data-i18n="settings.custom.textBar">Цвет текста в шапке</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.noMatchBar">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом шапки.</p>
       <div class="palette" id="palette-text-bar"></div>
 
-      <p class="palette-title">Цвет текста на странице</p>
-      <p class="palette-hint">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом фона.</p>
+      <p class="palette-title" data-i18n="settings.custom.textPage">Цвет текста на странице</p>
+      <p class="palette-hint" data-i18n="settings.custom.hint.noMatchBg">Наведи — применится сразу. Нельзя выбрать цвет, совпадающий с цветом фона.</p>
       <div class="palette" id="palette-text-page"></div>
 
       <div class="preview">
@@ -153,28 +187,38 @@
     </div>
 
     <div class="slide hidden-right" id="slide-effects">
-      <p class="palette-title">Стеклянный эффект</p>
-      <p class="palette-hint">Элементы сайта станут полупрозрачными, с размытием фона — как в iOS.</p>
+      <p class="palette-title" data-i18n="settings.effects.glass">Включить стекло (Glassmorphism)</p>
+      <p class="palette-hint" data-i18n="settings.effects.glassDesc">Кнопки, карточки, поля и уведомления станут стеклянными. Фон страницы — градиентный.</p>
 
       <label class="glass-toggle">
         <input type="checkbox" id="glass-checkbox">
         <div class="glass-toggle-text">
-          <span class="glass-toggle-title">Включить стекло (Glassmorphism)</span>
-          <span class="glass-toggle-desc">Кнопки, карточки, поля и уведомления станут стеклянными. Фон страницы — градиентный.</span>
+          <span class="glass-toggle-title" data-i18n="settings.effects.glass">Включить стекло (Glassmorphism)</span>
+          <span class="glass-toggle-desc" data-i18n="settings.effects.glassDesc">Кнопки, карточки, поля и уведомления станут стеклянными.</span>
         </div>
       </label>
+    </div>
 
-      <div class="preview">
-        <p class="preview-title">Как это выглядит</p>
-        <p class="preview-text">Кнопки в шапке, карточки программ, поля ввода, поиск, уведомления и окна получат эффект матового стекла с размытием.</p>
+    <div class="slide hidden-right" id="slide-lang">
+      <p class="palette-title">Язык сайта / Site language</p>
+      <p class="palette-hint">Выберите язык. Сайт автоматически определяет язык браузера при первом заходе.</p>
+
+      <div class="lang-switcher">
+        <button class="lang-btn" data-lang="ru">Русский</button>
+        <button class="lang-btn" data-lang="en">English</button>
+      </div>
+
+      <div class="preview" style="margin-top:26px;">
+        <p class="preview-title">Текущий язык / Current language</p>
+        <p class="preview-text" id="current-lang-display">—</p>
       </div>
     </div>
 
   </div>
 
   <div class="actions">
-    <button class="btn" id="apply-btn">Применить</button>
-    <a class="btn" href="index.html">Отмена</a>
+    <button class="btn" id="apply-btn" data-i18n="settings.apply">Применить</button>
+    <a class="btn" href="index.html" data-i18n="settings.cancel">Отмена</a>
   </div>
 
 </div>
@@ -206,17 +250,12 @@
   const savedTextPage = localStorage.getItem('colorTextPage') || '';
 
   const selected = {
-    mode: savedMode,
-    preset: savedPreset,
-    bar: savedBar,
-    bg: savedBg,
-    textBar: savedTextBar,
-    textPage: savedTextPage
+    mode: savedMode, preset: savedPreset,
+    bar: savedBar, bg: savedBg,
+    textBar: savedTextBar, textPage: savedTextPage
   };
 
-  function findPreset(id) {
-    return PRESETS.find(p => p.id === id) || PRESETS[0];
-  }
+  function findPreset(id) { return PRESETS.find(p => p.id === id) || PRESETS[0]; }
 
   function colorsFor(preset) {
     if (preset.id === 'system') {
@@ -228,12 +267,10 @@
     return { bar: preset.bar, bg: preset.bg, btn: preset.btn || 'white' };
   }
 
-  // Полный пересчёт — вызывает preview из theme.js
   function applyColors(bar, bg) {
     if (window.Theme && window.Theme.preview) {
       window.Theme.preview(bar, bg);
     }
-
     const root = document.documentElement.style;
     const textBar  = selected.textBar  || Theme.contrastColor(bar);
     const textPage = selected.textPage || Theme.contrastColor(bg);
@@ -244,9 +281,7 @@
     const fill = (function () {
       if (selected.mode === 'presets') {
         const p = findPreset(selected.preset);
-        if (p.id === 'system') {
-          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
-        }
+        if (p.id === 'system') return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
         return p.btn || 'white';
       }
       return 'white';
@@ -256,10 +291,7 @@
     root.setProperty('--nav-border', fill === 'black' ? '#ffffff' : '#000000');
   }
 
-  // Уведомление
-  let toastEl = null;
-  let toastTimer = null;
-
+  let toastEl = null, toastTimer = null;
   function showToast(text) {
     if (!toastEl) {
       toastEl = document.createElement('div');
@@ -270,9 +302,7 @@
     toastEl.querySelector('.toast-text').textContent = text;
     toastEl.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () {
-      toastEl.classList.remove('show');
-    }, 3000);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 3000);
   }
 
   function showSelected() {
@@ -286,40 +316,45 @@
   }
 
   const tabs = document.querySelectorAll('.tab');
-  const slidePresets = document.getElementById('slide-presets');
-  const slideCustom  = document.getElementById('slide-custom');
-  const slideEffects = document.getElementById('slide-effects');
+  const slides = {
+    presets: document.getElementById('slide-presets'),
+    custom:  document.getElementById('slide-custom'),
+    effects: document.getElementById('slide-effects'),
+    lang:    document.getElementById('slide-lang')
+  };
 
   function switchTab(name) {
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-
-    slidePresets.classList.remove('hidden-right', 'hidden-left', 'active');
-    slideCustom.classList.remove('hidden-right', 'hidden-left', 'active');
-    slideEffects.classList.remove('hidden-right', 'hidden-left', 'active');
-
+    Object.keys(slides).forEach(function (k) {
+      slides[k].classList.remove('hidden-right', 'hidden-left', 'active');
+    });
     if (name === 'presets') {
-      slidePresets.classList.add('active');
-      slideCustom.classList.add('hidden-right');
-      slideEffects.classList.add('hidden-right');
+      slides.presets.classList.add('active');
+      slides.custom.classList.add('hidden-right');
+      slides.effects.classList.add('hidden-right');
+      slides.lang.classList.add('hidden-right');
     } else if (name === 'custom') {
-      slideCustom.classList.add('active');
-      slidePresets.classList.add('hidden-left');
-      slideEffects.classList.add('hidden-right');
+      slides.custom.classList.add('active');
+      slides.presets.classList.add('hidden-left');
+      slides.effects.classList.add('hidden-right');
+      slides.lang.classList.add('hidden-right');
+    } else if (name === 'effects') {
+      slides.effects.classList.add('active');
+      slides.presets.classList.add('hidden-left');
+      slides.custom.classList.add('hidden-left');
+      slides.lang.classList.add('hidden-right');
     } else {
-      slideEffects.classList.add('active');
-      slidePresets.classList.add('hidden-left');
-      slideCustom.classList.add('hidden-left');
+      slides.lang.classList.add('active');
+      slides.presets.classList.add('hidden-left');
+      slides.custom.classList.add('hidden-left');
+      slides.effects.classList.add('hidden-left');
     }
     showSelected();
   }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-  });
-
+  tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.tab)));
   switchTab(selected.mode === 'custom' ? 'custom' : 'presets');
 
-  // Пресеты
   const grid = document.getElementById('theme-grid');
   PRESETS.forEach(preset => {
     const card = document.createElement('div');
@@ -365,14 +400,12 @@
     grid.appendChild(card);
   });
 
-  // Палитры
   function buildPalette(containerId, key, target) {
     const container = document.getElementById(containerId);
     COLORS.forEach(color => {
       const sw = document.createElement('div');
       sw.className = 'swatch';
       sw.style.background = color;
-
       if (selected[key] === color) sw.classList.add('active');
 
       sw.addEventListener('mouseenter', () => {
@@ -384,9 +417,7 @@
           document.documentElement.style.setProperty('--text-link', color);
         }
       });
-
       sw.addEventListener('mouseleave', showSelected);
-
       sw.addEventListener('click', () => {
         if (target === 'textBar' && Theme.colorsMatch(color, selected.bar)) {
           showToast('У вас установлена ' + Theme.colorName(selected.bar) + ' шапка. Этот цвет текста не виден.');
@@ -396,15 +427,12 @@
           showToast('У вас установлен ' + Theme.colorName(selected.bg) + ' фон. Этот цвет текста не виден.');
           return;
         }
-
         selected[key] = color;
         selected.mode = 'custom';
-
         document.querySelectorAll('#' + containerId + ' .swatch').forEach(s => s.classList.remove('active'));
         sw.classList.add('active');
         showSelected();
       });
-
       container.appendChild(sw);
     });
   }
@@ -414,17 +442,39 @@
   buildPalette('palette-text-bar',  'textBar',  'textBar');
   buildPalette('palette-text-page', 'textPage', 'textPage');
 
-  // Стекло
   const glassCheckbox = document.getElementById('glass-checkbox');
   glassCheckbox.checked = localStorage.getItem('glassEffect') === 'on';
-
   glassCheckbox.addEventListener('change', () => {
     const on = glassCheckbox.checked;
     localStorage.setItem('glassEffect', on ? 'on' : 'off');
     showSelected();
   });
 
-  // Применить
+  // ===== Язык =====
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const currentLangDisplay = document.getElementById('current-lang-display');
+
+  function updateLangUI() {
+    const cur = window.Lang ? window.Lang.get() : 'ru';
+    langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === cur));
+    if (currentLangDisplay) {
+      currentLangDisplay.textContent = cur === 'ru' ? 'Русский' : 'English';
+    }
+  }
+
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const lang = btn.dataset.lang;
+      if (window.Lang) window.Lang.set(lang);
+      updateLangUI();
+    });
+  });
+
+  document.addEventListener('langChanged', updateLangUI);
+  document.addEventListener('langReady', updateLangUI);
+  updateLangUI();
+
+  // ===== Применить =====
   document.getElementById('apply-btn').addEventListener('click', () => {
     localStorage.setItem('themeMode', selected.mode);
 
