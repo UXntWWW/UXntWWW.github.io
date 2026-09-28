@@ -34,6 +34,15 @@
   }
   .top-bar h1 { margin: 0; font-size: 1.4rem; }
   .content { padding: 20px; max-width: 1100px; margin: 0 auto; }
+
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 36px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 </style>
 </head>
 <body>
@@ -83,13 +92,28 @@
 
   </div>
 
+  <!-- ===== Коддинг ===== -->
+  <h2 class="section-title">
+    <span>💻</span>
+    <span>Коддинг</span>
+  </h2>
+
+  <div class="stat-card scroll-animate code-card">
+    <div class="code-total-wrap">
+      <div class="code-total-label">Всего строк кода</div>
+      <div class="stat-value loading" id="code-total">—</div>
+    </div>
+
+    <div class="code-bars" id="code-bars"></div>
+  </div>
+
 </div>
 
 <script>
 (function () {
   'use strict';
 
-  const GOATCOUNTER_CODE = 'uxntwww'; // твой subdomain GoatCounter
+  const GOATCOUNTER_CODE = 'uxntwww';
   const GITHUB_OWNER = 'UXntWWW';
   const GITHUB_REPO = 'UXntWWW.github.io';
 
@@ -97,9 +121,8 @@
     return Number(n).toLocaleString('ru-RU');
   }
 
-  // ===== Просмотры через GoatCounter =====
+  // ===== Просмотры =====
   function loadViews() {
-    // Total за всё время
     fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TOTAL.json', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (data) {
@@ -114,9 +137,7 @@
         if (el) { el.textContent = '—'; el.classList.remove('loading'); }
       });
 
-    // Сегодня — через публичную страницу
-    // GoatCounter не даёт публичный API для "today", 
-    // поэтому оставим только Total, а Today заполним через публичный JSON (если доступно)
+    // Сегодня — приблизительно через публичный эндпоинт
     fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TODAY.json', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (data) {
@@ -132,7 +153,7 @@
       });
   }
 
-  // ===== Скачивания через GitHub API =====
+  // ===== Скачивания =====
   function loadDownloads() {
     fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/releases', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
@@ -140,18 +161,14 @@
         let total = 0;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
         let todayCount = 0;
 
         releases.forEach(function (rel) {
           const relDate = new Date(rel.published_at);
           const relToday = relDate >= today;
-
           (rel.assets || []).forEach(function (asset) {
             const count = asset.download_count || 0;
             total += count;
-            // GitHub не даёт точную дату скачивания — 
-            // считаем "сегодня" как скачивания с релиза, опубликованного сегодня
             if (relToday) todayCount += count;
           });
         });
@@ -169,10 +186,10 @@
         }
       })
       .catch(function () {
-        const totalEl = document.getElementById('downloads-total');
-        const todayEl = document.getElementById('downloads-today');
-        if (totalEl) { totalEl.textContent = '—'; totalEl.classList.remove('loading'); }
-        if (todayEl) { todayEl.textContent = '—'; todayEl.classList.remove('loading'); }
+        const t = document.getElementById('downloads-total');
+        const td = document.getElementById('downloads-today');
+        if (t) { t.textContent = '—'; t.classList.remove('loading'); }
+        if (td) { td.textContent = '—'; td.classList.remove('loading'); }
       });
   }
 
@@ -189,6 +206,7 @@
 })();
 </script>
 
+<script src="code-stats.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
