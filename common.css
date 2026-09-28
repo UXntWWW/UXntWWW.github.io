@@ -90,10 +90,20 @@ body.glass-mode #back-to-top:hover { background: var(--glass-bg-2); }
   transform: translateY(0);
 }
 
+/* Задержки для карточек */
+.program-card:nth-child(1).scroll-animate { transition-delay: 0s; }
+.program-card:nth-child(2).scroll-animate { transition-delay: 0.1s; }
+.program-card:nth-child(3).scroll-animate { transition-delay: 0.2s; }
+.program-card:nth-child(4).scroll-animate { transition-delay: 0.3s; }
+.program-card:nth-child(5).scroll-animate { transition-delay: 0.4s; }
+
 /* ===== Поиск ===== */
 .search-wrap {
   margin: 20px 0 30px;
   max-width: 500px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 .search-input {
   width: 100%;
@@ -121,6 +131,36 @@ body.glass-mode .search-input {
   padding: 20px;
   opacity: 0.7;
   font-style: italic;
+}
+
+/* ===== Кнопка "Обновить" ===== */
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 2px solid var(--nav-border, #000);
+  background: var(--nav-fill, #fff);
+  color: var(--nav-text, #000);
+  cursor: pointer;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  transition: transform .3s, opacity .2s;
+}
+body.glass-mode .refresh-btn {
+  background: var(--glass-bg);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+.refresh-btn:hover { opacity: 0.85; }
+.refresh-btn.spinning { animation: spin .8s linear infinite; }
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ===== Скриншоты ===== */
@@ -292,6 +332,7 @@ body.glass-mode .btn {
   margin-top: 30px;
 }
 .program-card {
+  position: relative;
   background: var(--card);
   border: 2px solid var(--card);
   border-radius: 16px;
@@ -396,6 +437,46 @@ body.glass-mode .program-card-btn {
 }
 .program-card-btn:hover { opacity: 0.85; }
 
+/* Кнопка "В избранное" */
+.favorite-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.08);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s, transform .2s;
+}
+.favorite-btn:hover { transform: scale(1.1); background: rgba(0,0,0,0.15); }
+.favorite-btn.active { color: #f5b301; }
+
+/* ===== Скелетоны загрузки ===== */
+.skeleton {
+  background: linear-gradient(90deg, rgba(128,128,128,0.15) 25%, rgba(128,128,128,0.25) 50%, rgba(128,128,128,0.15) 75%);
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s infinite;
+  border-radius: 8px;
+}
+@keyframes skeletonPulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-line {
+  height: 14px;
+  margin: 8px 0;
+}
+.skeleton-line.short { width: 40%; }
+.skeleton-line.medium { width: 70%; }
+.skeleton-line.long { width: 100%; }
+
 /* ===== Уведомление ===== */
 #toast {
   position: fixed;
@@ -479,6 +560,7 @@ body.glass-mode #screenshot-overlay {
   display: flex; gap: 8px;
   border-bottom: 2px solid var(--card);
   margin-bottom: 24px;
+  overflow-x: auto;
 }
 body.glass-mode .tabs { border-bottom-color: var(--glass-border); }
 .tab {
@@ -487,6 +569,7 @@ body.glass-mode .tabs { border-bottom-color: var(--glass-border); }
   border: none; border-bottom: 3px solid transparent;
   font-size: 1rem; font-family: inherit;
   transition: opacity .2s, border-color .2s;
+  white-space: nowrap;
 }
 .tab:hover { opacity: 1; }
 .tab.active { opacity: 1; border-bottom-color: var(--btn-bg); }
@@ -824,6 +907,9 @@ body.glass-mode .nav-help-menu a {
 .nav-help-wrap.open .nav-help-menu a:nth-child(3) {
   transition: opacity .3s ease .19s, transform .3s ease .19s, background .2s;
 }
+.nav-help-wrap.open .nav-help-menu a:nth-child(4) {
+  transition: opacity .3s ease .26s, transform .3s ease .26s, background .2s;
+}
 .nav-help-menu a:hover {
   background: var(--card);
 }
@@ -885,4 +971,106 @@ body.glass-mode .toggle-old-versions {
 .old-versions.open {
   max-height: 5000px;
   opacity: 1;
+}
+
+/* ===== Карточки статистики ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+.stat-card {
+  background: var(--card);
+  border: 2px solid var(--card);
+  border-radius: 16px;
+  padding: 22px;
+  transition: transform .25s, background .25s;
+}
+body.glass-mode .stat-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+.stat-card:hover { transform: translateY(-4px); }
+.stat-card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stat-card-icon { font-size: 1.4rem; }
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--card);
+}
+body.glass-mode .stat-row { border-bottom-color: var(--glass-border); }
+.stat-row:last-child { border-bottom: none; }
+.stat-label {
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.stat-value.loading { opacity: 0.4; }
+
+/* ===== Языковой переключатель ===== */
+.lang-switcher {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.lang-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid var(--nav-border);
+  background: var(--nav-fill);
+  color: var(--nav-text);
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .2s, background .25s;
+}
+body.glass-mode .lang-btn {
+  background: var(--glass-bg);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.lang-btn:hover { opacity: 0.85; }
+.lang-btn.active {
+  opacity: 1;
+  border-color: var(--btn-bg);
+  box-shadow: 0 0 0 3px var(--btn-bg);
+}
+
+/* ===== Кастомный скроллбар ===== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bar);
+  border-radius: 10px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--btn-hover, var(--bar));
+}
+body.glass-mode ::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 160, 0.5);
 }
