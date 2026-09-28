@@ -8,7 +8,6 @@
   "nav.help.about": "About",
   "nav.help.install": "Installation",
 
-  "site.title": "UXNTWWW.io — File Site",
   "site.title.main": "Home — UXNTWWW.io",
   "site.title.files": "PCCleaner Download — UXNTWWW.io",
   "site.title.files1": "UXWEditor Download — UXNTWWW.io",
@@ -27,7 +26,7 @@
 
   "card.version": "Version",
   "card.size": "Size",
-  "card.updated": "Last update",
+  "card.updated": "Updated",
   "card.safe": "Safe",
   "card.safe.ok": "Verified",
   "card.downloads": "Downloads",
@@ -53,7 +52,6 @@
   "settings.tab.themes": "Themes",
   "settings.tab.custom": "Custom",
   "settings.tab.effects": "Effects",
-  "settings.theme.title": "Themes",
   "settings.theme.base": "Base",
   "settings.theme.light": "Light",
   "settings.theme.gray": "Gray",
