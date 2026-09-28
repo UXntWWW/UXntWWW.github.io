@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>О сайте — UXNTWWW.io</title>
+<title data-i18n-title="site.title.about">О сайте — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<script src="lang.js"></script>
 <link rel="stylesheet" href="common.css">
 <link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
@@ -34,38 +35,41 @@
 <body>
 
 <div class="top-bar">
-  <h1>О сайте — UXNTWWW.io</h1>
-  <nav class="top-nav">
-    <a href="index.html">Главная</a>
-    <a href="contacts.html">Контакты</a>
-    <a href="faq.html">FAQ</a>
-    <a href="GlobalSettings.html">Настройки</a>
-  </nav>
+  <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
+  <nav class="top-nav"></nav>
 </div>
 
 <div class="content fade-in">
 
-  <h2>Что это за сайт</h2>
-  <p>UXNTWWW.io — сайт с файлами и утилитами для Windows. Здесь публикуются небольшие программы для чистки системы, редактирования файлов и других задач.</p>
+  <h2 data-i18n="about.h1">Что это за сайт</h2>
+  <p data-i18n="about.p1">UXNTWWW.io — сайт с файлами и утилитами для Windows. Здесь публикуются небольшие программы для чистки системы, редактирования файлов и других задач.</p>
 
-  <h2>Что публикуется</h2>
-  <p>Все файлы на сайте — авторские утилиты, которые я разрабатываю и поддерживаю. Основные проекты:</p>
+  <h2 data-i18n="about.h2">Что публикуется</h2>
+  <p data-i18n="about.p2">Все файлы на сайте — авторские утилиты, которые я разрабатываю и поддерживаю. Основные проекты:</p>
   <ul>
-    <li><b>UXNTWWW SYSTEM TOOLKIT (PCCleaner)</b> — утилита для очистки системы.</li>
-    <li><b>UXWEditor Free</b> — редактор файлов .uxw и других текстовых форматов.</li>
+    <li data-i18n="about.li1">UXNTWWW SYSTEM TOOLKIT (PCCleaner) — утилита для очистки системы.</li>
+    <li data-i18n="about.li2">UXWEditor Free — редактор файлов .uxw и других текстовых форматов.</li>
   </ul>
 
-  <h2>Безопасность</h2>
-  <p>Все файлы проверяются перед публикацией. Скачивание доступно как с сайта, так и через GitHub Releases — там можно посмотреть исходники и историю изменений.</p>
+  <h2 data-i18n="about.h3">Безопасность</h2>
+  <p data-i18n="about.p3">Все файлы проверяются перед публикацией. Скачивание доступно как с сайта, так и через GitHub Releases — там можно посмотреть исходники и историю изменений.</p>
 
-  <h2>Обратная связь</h2>
-  <p>Если нашли баг или есть предложение — посмотрите страницу <a href="contacts.html">Контакты</a>.</p>
+  <h2 data-i18n="about.h4">Обратная связь</h2>
+  <p>
+    <span data-i18n="about.p4">Если нашли баг или есть предложение — посмотрите страницу</span>
+    <a href="contacts.html" data-i18n="about.contacts">Контакты</a>.
+  </p>
 
-  <h2>Исходный код</h2>
-  <p>Сайт и релизы лежат на GitHub: <a href="https://github.com/UXntWWW/UXntWWW.github.io">UXntWWW/UXntWWW.github.io</a></p>
+  <h2 data-i18n="about.h5">Исходный код</h2>
+  <p>
+    <span data-i18n="about.p5">Сайт и релизы лежат на GitHub:</span>
+    <a href="https://github.com/UXntWWW/UXntWWW.github.io">UXntWWW/UXntWWW.github.io</a>
+  </p>
 
 </div>
 
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
