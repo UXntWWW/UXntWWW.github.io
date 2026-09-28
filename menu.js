@@ -119,26 +119,19 @@
   }
 
   function refreshTexts() {
-    // Обновляем все тексты внутри .top-nav
     document.querySelectorAll('.top-nav [data-i18n]').forEach(function (el) {
       var key = el.dataset.i18n;
-      if (window.Lang && window.Lang.t) {
-        var v = window.Lang.t(key);
-        if (v && v !== key) el.textContent = v;
-      }
+      var v = t(key, el.textContent);
+      el.textContent = v;
     });
-  }
-
-  function init() {
-    buildNav();
   }
 
   document.addEventListener('langChanged', refreshTexts);
   document.addEventListener('langReady', refreshTexts);
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', buildNav);
   } else {
-    init();
+    buildNav();
   }
 })();
