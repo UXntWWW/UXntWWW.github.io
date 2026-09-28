@@ -124,7 +124,7 @@
     var size = localStorage.getItem('uiFontSize') || 'medium';
     var px = size === 'small' ? '14px' : (size === 'large' ? '18px' : '16px');
     document.documentElement.style.setProperty('--font-size-base', px);
-    document.documentElement.style.fontSize = px;
+    // НЕ ставим fontSize на html, чтобы не ломать адаптив
   }
 
   function applyRadius() {
@@ -239,7 +239,6 @@
         root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.7)');
         root.setProperty('--glass-shadow', '0 8px 32px rgba(0, 0, 0, 0.1)');
       }
-
       applyGlassOpacity();
 
       if (glassDark) {
