@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Главная — UXNTWWW.io</title>
+<title data-i18n-title="site.title.main">Главная — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<script src="lang.js"></script>
 <link rel="stylesheet" href="common.css">
 <link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
@@ -35,38 +36,78 @@
   .content { padding: 20px; max-width: 1100px; margin: 0 auto; }
   .intro { margin-bottom: 20px; }
   .intro p { margin: 6px 0; }
+
+  .recent-section {
+    margin-top: 40px;
+  }
+  .recent-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .recent-list {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .recent-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background: var(--card);
+    border: 2px solid var(--card);
+    color: var(--text);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: opacity .2s;
+  }
+  body.glass-mode .recent-item {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .recent-item:hover { opacity: 0.85; }
+  .recent-item-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
 </style>
 </head>
 <body>
 
  <div class="top-bar">
    <h1>UXNTWWW.io - Сайт с файлами</h1>
-   <nav class="top-nav">
-     <a href="about.html">О сайте</a>
-     <a href="contacts.html">Контакты</a>
-     <a href="faq.html">FAQ</a>
-     <a href="GlobalSettings.html">Настройки</a>
-   </nav>
+   <nav class="top-nav"></nav>
  </div>
 
  <div class="content fade-in">
 
    <div class="intro">
-     <p>Приветствую,ты попал(а) на сайт файлов и программ.</p>
-     <p>Все файлы АБСОЛЮТНО проверены!</p>
-     <p>Приятного использования!</p>
+     <p data-i18n="index.intro1">Приветствую,ты попал(а) на сайт файлов и программ.</p>
+     <p data-i18n="index.intro2">Все файлы АБСОЛЮТНО проверены!</p>
+     <p data-i18n="index.intro3">Приятного использования!</p>
    </div>
 
    <div class="search-wrap">
-     <input type="text" id="search-programs" class="search-input" placeholder="Поиск программ...">
+     <input type="text" id="search-programs" class="search-input" data-i18n="index.search.placeholder" placeholder="Поиск программ...">
+     <button type="button" class="refresh-btn" id="refresh-btn" title="Обновить">↻</button>
    </div>
 
    <div class="program-cards" id="program-cards">
 
-     <!-- ===== PCCleaner ===== -->
      <div class="program-card scroll-animate"
           data-name="PCCleaner"
           data-desc="Для чистки пк"
+          data-desc-en="For PC cleaning"
           data-version="1.3"
           data-totaldata="12.4 MB, 13.08.2026"
           data-link="files.html"
@@ -75,10 +116,10 @@
           data-github-repo="UXntWWW.github.io">
      </div>
 
-     <!-- ===== UXWEditor ===== -->
      <div class="program-card scroll-animate"
           data-name="UXWEditor"
           data-desc="Для редактирования текста"
+          data-desc-en="For text editing"
           data-version="1.0"
           data-totaldata="8.5 MB, 21.07.2026"
           data-link="files1.html"
@@ -87,6 +128,15 @@
           data-github-repo="UXntWWW.github.io">
      </div>
 
+   </div>
+
+   <!-- Недавно смотрели -->
+   <div class="recent-section" id="recent-section" style="display:none;">
+     <h3 class="recent-title">
+       <span>🕒</span>
+       <span data-i18n="index.recent.title">Недавно смотрели</span>
+     </h3>
+     <div class="recent-list" id="recent-list"></div>
    </div>
 
  </div>
@@ -113,40 +163,72 @@
 
   function buildCard(card, version, total) {
     const name = card.dataset.name;
-    const desc = card.dataset.desc;
+    const lang = window.Lang ? window.Lang.get() : 'ru';
+    const desc = (lang === 'en' && card.dataset.descEn) ? card.dataset.descEn : card.dataset.desc;
     const link = card.dataset.link;
     const icon = card.dataset.icon;
     const owner = card.dataset.githubOwner;
     const repo = card.dataset.githubRepo;
     const td = parseTotal(total || card.dataset.totaldata);
 
+    // Проверяем избранное
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const isFav = favorites.indexOf(name) !== -1;
+
     card.innerHTML =
+      '<button type="button" class="favorite-btn' + (isFav ? ' active' : '') + '" data-name="' + name + '">' + (isFav ? '★' : '☆') + '</button>' +
       '<img class="program-card-icon" src="' + icon + '" alt="' + name + '">' +
       '<h3 class="program-card-title">' + name +
         '<span class="program-card-version">v' + (version || '—') + '</span>' +
       '</h3>' +
       '<p class="program-card-desc">' + desc + '</p>' +
       '<div class="program-card-meta">' +
-        '<div class="program-card-meta-row"><span>Размер:</span><span>' + td.size + '</span></div>' +
-        '<div class="program-card-meta-row"><span>Последнее обновление:</span><span>' + td.date + '</span></div>' +
-        '<div class="program-card-meta-row"><span>Безопасно:</span>' +
-          '<span class="program-card-safe"><span class="program-card-safe-icon">✓</span>Проверено</span>' +
+        '<div class="program-card-meta-row"><span data-i18n="card.size">Размер:</span><span>' + td.size + '</span></div>' +
+        '<div class="program-card-meta-row"><span data-i18n="card.updated">Обновлено:</span><span>' + td.date + '</span></div>' +
+        '<div class="program-card-meta-row"><span data-i18n="card.safe">Безопасно:</span>' +
+          '<span class="program-card-safe"><span class="program-card-safe-icon">✓</span><span data-i18n="card.safe.ok">Проверено</span></span>' +
         '</div>' +
-        '<div class="program-card-meta-row"><span>Скачиваний:</span>' +
+        '<div class="program-card-meta-row"><span data-i18n="card.downloads">Скачиваний:</span>' +
           '<span class="program-card-downloads" data-owner="' + owner + '" data-repo="' + repo + '">—</span>' +
         '</div>' +
       '</div>' +
-      '<a href="' + link + '" class="program-card-btn">Открыть</a>';
+      '<a href="' + link + '" class="program-card-btn" data-i18n="card.open">Открыть</a>';
+
+    // Избранное
+    const favBtn = card.querySelector('.favorite-btn');
+    favBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      let favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+      const idx = favs.indexOf(name);
+      if (idx === -1) favs.push(name);
+      else favs.splice(idx, 1);
+      localStorage.setItem('favorites', JSON.stringify(favs));
+      favBtn.classList.toggle('active');
+      favBtn.textContent = favBtn.classList.contains('active') ? '★' : '☆';
+    });
+
+    // Сохраняем в "недавно смотрели" при клике на "Открыть"
+    card.querySelector('.program-card-btn').addEventListener('click', function () {
+      let recent = JSON.parse(localStorage.getItem('recent') || '[]');
+      recent = recent.filter(x => x.name !== name);
+      recent.unshift({ name: name, link: link, icon: icon });
+      recent = recent.slice(0, 3);
+      localStorage.setItem('recent', JSON.stringify(recent));
+    });
   }
 
   const cards = document.querySelectorAll('.program-card');
 
-  cards.forEach(function (card, i) {
-    Promise.all([fetchText(versionFiles[i]), fetchText(totalFiles[i])]).then(function (res) {
-      buildCard(card, res[0], res[1]);
-      loadDownloadCounts();
+  function loadAll() {
+    cards.forEach(function (card, i) {
+      Promise.all([fetchText(versionFiles[i]), fetchText(totalFiles[i])]).then(function (res) {
+        buildCard(card, res[0], res[1]);
+        loadDownloadCounts();
+        if (window.Lang && window.Lang.apply) window.Lang.apply();
+      });
     });
-  });
+  }
 
   let countsLoaded = false;
   function loadDownloadCounts() {
@@ -173,6 +255,7 @@
     });
   }
 
+  // Поиск с подсветкой
   const searchInput = document.getElementById('search-programs');
   if (searchInput) {
     searchInput.addEventListener('input', function () {
@@ -184,6 +267,64 @@
         card.style.display = match ? '' : 'none';
       });
     });
+  }
+
+  // Кнопка "Обновить"
+  const refreshBtn = document.getElementById('refresh-btn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', function () {
+      refreshBtn.classList.add('spinning');
+      countsLoaded = false;
+      loadAll();
+      setTimeout(function () { refreshBtn.classList.remove('spinning'); }, 800);
+    });
+  }
+
+  // Недавно смотрели
+  function loadRecent() {
+    const recent = JSON.parse(localStorage.getItem('recent') || '[]');
+    if (!recent.length) return;
+
+    const section = document.getElementById('recent-section');
+    const list = document.getElementById('recent-list');
+    if (!section || !list) return;
+
+    section.style.display = 'block';
+    list.innerHTML = '';
+
+    recent.forEach(function (item) {
+      const a = document.createElement('a');
+      a.href = item.link;
+      a.className = 'recent-item';
+      a.innerHTML = '<img src="' + item.icon + '" class="recent-item-icon" alt="">' + item.name;
+      list.appendChild(a);
+    });
+  }
+
+  function init() {
+    loadAll();
+    loadRecent();
+  }
+
+  document.addEventListener('langChanged', function () {
+    // Перестроить карточки с новым языком
+    cards.forEach(function (card) {
+      const name = card.dataset.name;
+      if (card.querySelector('.program-card-title')) {
+        // Уже построена — просто обновим desc
+        const lang = window.Lang ? window.Lang.get() : 'ru';
+        const desc = (lang === 'en' && card.dataset.descEn) ? card.dataset.descEn : card.dataset.desc;
+        const descEl = card.querySelector('.program-card-desc');
+        if (descEl) descEl.textContent = desc;
+      }
+    });
+    if (window.Lang && window.Lang.apply) window.Lang.apply();
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 })();
 </script>
