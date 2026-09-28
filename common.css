@@ -891,14 +891,28 @@ body.compact-mode .search-wrap { margin: 14px 0 18px; }
 body.compact-mode h2 { font-size: 1.1rem; }
 body.compact-mode .program-card-desc { font-size: 0.9rem; }
 
+/* Паттерн на фоне — цвет зависит от темы */
 body.pattern-bg {
-  background-image: radial-gradient(circle, rgba(128,128,128,0.12) 1px, transparent 1px);
+  --pattern-color: rgba(0, 0, 0, 0.12);
+  background-image: radial-gradient(circle, var(--pattern-color) 1px, transparent 1px);
   background-size: 24px 24px;
   background-attachment: fixed;
 }
+
+/* Если тема тёмная (--bg тёмный) — точки светлые */
+body.pattern-bg[data-dark-bg="true"] {
+  --pattern-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Если тема светлая — точки серые (по умолчанию) */
+body.pattern-bg[data-light-bg="true"] {
+  --pattern-color: rgba(0, 0, 0, 0.14);
+}
+
+/* Стекло + паттерн */
 body.pattern-bg.glass-mode {
   background-image:
-    radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px),
+    radial-gradient(circle, var(--pattern-color) 1px, transparent 1px),
     var(--page-gradient);
   background-size: 24px 24px, 100% 100%;
   background-attachment: fixed, fixed;
