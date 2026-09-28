@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Контакты — UXNTWWW.io</title>
+<title data-i18n-title="site.title.contacts">Контакты — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<script src="lang.js"></script>
 <link rel="stylesheet" href="common.css">
 <link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
@@ -34,49 +35,50 @@
 <body>
 
 <div class="top-bar">
-  <h1>Контакты — UXNTWWW.io</h1>
-  <nav class="top-nav">
-    <a href="index.html">Главная</a>
-    <a href="about.html">О сайте</a>
-    <a href="faq.html">FAQ</a>
-    <a href="GlobalSettings.html">Настройки</a>
-  </nav>
+  <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
+  <nav class="top-nav"></nav>
 </div>
 
 <div class="content fade-in">
 
-  <h2>Как связаться</h2>
-  <p>По любым вопросам — отзывы, баги, идеи — можно написать одним из способов ниже.</p>
+  <h2 data-i18n="contacts.h1">Как связаться</h2>
+  <p data-i18n="contacts.p1">По любым вопросам — отзывы, баги, идеи — можно написать одним из способов ниже.</p>
 
-  <h2>GitHub</h2>
-  <p>Самый быстрый способ — открыть issue в репозитории:<br>
+  <h2 data-i18n="contacts.h2">GitHub</h2>
+  <p>
+    <span data-i18n="contacts.p2">Самый быстрый способ — открыть issue в репозитории:</span><br>
     <a href="https://github.com/UXntWWW/UXntWWW.github.io/issues">github.com/UXntWWW/UXntWWW.github.io/issues</a>
   </p>
 
-  <h2>Форма обратной связи</h2>
-  <p>Заполни форму — сообщение отправится на почту.</p>
+  <h2 data-i18n="contacts.h3">Форма обратной связи</h2>
+  <p data-i18n="contacts.p3">Заполни форму — сообщение отправится на почту.</p>
   <form class="contact-form" action="https://formspree.io/f/mzezjlnz" method="POST">
-    <label>Ваше имя
+    <label>
+      <span data-i18n="contacts.form.name">Ваше имя</span>
       <input type="text" name="name" required>
     </label>
-    <label>Email или способ связи
+    <label>
+      <span data-i18n="contacts.form.contact">Email или способ связи</span>
       <input type="text" name="contact" required>
     </label>
-    <label>Сообщение
+    <label>
+      <span data-i18n="contacts.form.message">Сообщение</span>
       <textarea name="message" required></textarea>
     </label>
-    <button type="submit">Отправить</button>
+    <button type="submit" data-i18n="contacts.form.send">Отправить</button>
   </form>
 
-  <h2>Другие способы</h2>
+  <h2 data-i18n="contacts.h4">Другие способы</h2>
   <ul>
-    <li>Email: <a href="mailto:dndjych@gmail.com">dndjych@gmail.com</a></li>
-    <li>Telegram: <a href="https://t.me/uxntwww">@uxntwww</a></li>
-    <li>Discord: скоро будет</li>
+    <li><span data-i18n="contacts.email">Email</span>: <a href="mailto:dndjych@gmail.com">dndjych@gmail.com</a></li>
+    <li><span data-i18n="contacts.telegram">Telegram</span>: <a href="https://t.me/uxntwww">@uxntwww</a></li>
+    <li><span data-i18n="contacts.discord">Discord</span>: скоро будет</li>
   </ul>
 
 </div>
 
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
