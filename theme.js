@@ -120,6 +120,67 @@
     return localStorage.getItem('glassEffect') === 'on';
   }
 
+  function applyFontSize() {
+    var size = localStorage.getItem('uiFontSize') || 'medium';
+    var px = size === 'small' ? '14px' : (size === 'large' ? '18px' : '16px');
+    document.documentElement.style.setProperty('--font-size-base', px);
+    document.documentElement.style.fontSize = px;
+  }
+
+  function applyRadius() {
+    var r = localStorage.getItem('uiRadius') || 'soft';
+    var radius = r === 'sharp' ? '4px' : (r === 'round' ? '24px' : '16px');
+    var radiusSmall = r === 'sharp' ? '2px' : (r === 'round' ? '12px' : '10px');
+    document.documentElement.style.setProperty('--radius', radius);
+    document.documentElement.style.setProperty('--radius-small', radiusSmall);
+  }
+
+  function applyAnimations() {
+    var on = localStorage.getItem('uiAnimations') !== 'off';
+    document.body.classList.toggle('no-animations', !on);
+  }
+
+  function applyUltraSmooth() {
+    var on = localStorage.getItem('uiUltraSmooth') === 'on';
+    document.body.classList.toggle('ultra-smooth', on);
+  }
+
+  function applyCompact() {
+    var on = localStorage.getItem('uiCompact') === 'on';
+    document.body.classList.toggle('compact-mode', on);
+  }
+
+  function applyPattern() {
+    var on = localStorage.getItem('uiPattern') === 'on';
+    document.body.classList.toggle('pattern-bg', on);
+  }
+
+  function applyCardDensity() {
+    var d = localStorage.getItem('uiCardDensity') || 'auto';
+    var w = '280px';
+    if (d === '1') w = '100%';
+    else if (d === '2') w = '400px';
+    else if (d === '3') w = '260px';
+    document.documentElement.style.setProperty('--card-min-width', w);
+  }
+
+  function applyGlassOpacity() {
+    var o = localStorage.getItem('uiGlassOpacity') || 'medium';
+    var blur = o === 'weak' ? '10px' : (o === 'strong' ? '30px' : '20px');
+    document.documentElement.style.setProperty('--glass-blur', 'blur(' + blur + ') saturate(180%)');
+  }
+
+  function applyAllUI() {
+    applyFontSize();
+    applyRadius();
+    applyAnimations();
+    applyUltraSmooth();
+    applyCompact();
+    applyPattern();
+    applyCardDensity();
+    applyGlassOpacity();
+  }
+
   function apply(bar, bg) {
     const root = document.documentElement.style;
 
@@ -129,7 +190,6 @@
     root.setProperty('--btn-bg',    bar);
     root.setProperty('--btn-hover', shade(bar, -0.2));
 
-    // Кнопки — по теме
     const mode = localStorage.getItem('themeMode') || 'presets';
     const presetId = localStorage.getItem('presetName') || 'base';
     let fill = 'white';
@@ -148,7 +208,6 @@
     root.setProperty('--nav-text',   navText);
     root.setProperty('--nav-border', navBorder);
 
-    // Поля ввода
     const bgDark = isDark(bg);
     if (bgDark) {
       root.setProperty('--input-bg',     '#ffffff');
@@ -160,13 +219,11 @@
       root.setProperty('--input-border', '#3a3d44');
     }
 
-    // Текст
     const tc = getTextColors(bar, bg);
     root.setProperty('--bar-text', tc.barText);
     root.setProperty('--text',     tc.pageText);
     root.setProperty('--text-link', tc.pageText);
 
-    // ===== Стекло =====
     const glass = getGlass();
     const glassDark = isDark(bg);
 
@@ -182,7 +239,8 @@
         root.setProperty('--glass-border', 'rgba(255, 255, 255, 0.7)');
         root.setProperty('--glass-shadow', '0 8px 32px rgba(0, 0, 0, 0.1)');
       }
-      root.setProperty('--glass-blur',   'blur(20px) saturate(180%)');
+
+      applyGlassOpacity();
 
       if (glassDark) {
         const gradColor  = shade(bar, -0.35);
@@ -205,6 +263,8 @@
     if (document.body) {
       document.body.classList.toggle('glass-mode', glass);
     }
+
+    applyAllUI();
   }
 
   function boot() {
@@ -239,12 +299,9 @@
     getColors: getColors,
     getTextColors: getTextColors,
     refresh: boot,
-
-    // Предпросмотр для настроек — пересчитывает всё (стекло, градиент),
-    // не трогая localStorage.
+    applyUI: applyAllUI,
     preview: function (bar, bg) {
       apply(bar, bg);
-
       const root = document.documentElement.style;
       const customBarText  = localStorage.getItem('colorTextBar');
       const customPageText = localStorage.getItem('colorTextPage');
