@@ -40,30 +40,17 @@
 
   .recent-section { margin-top: 40px; }
   .recent-title {
-    font-size: 1.1rem;
-    font-weight: bold;
+    font-size: 1.1rem; font-weight: bold;
     margin: 0 0 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
   }
-  .recent-list {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+  .recent-list { display: flex; gap: 12px; flex-wrap: wrap; }
   .recent-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    background: var(--card);
-    border: 2px solid var(--card);
-    color: var(--text);
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.9rem;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 10px;
+    background: var(--card); border: 2px solid var(--card);
+    color: var(--text); text-decoration: none;
+    font-weight: bold; font-size: 0.9rem;
     transition: opacity .2s;
   }
   body.glass-mode .recent-item {
@@ -73,18 +60,13 @@
     -webkit-backdrop-filter: var(--glass-blur);
   }
   .recent-item:hover { opacity: 0.85; }
-  .recent-item-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    object-fit: cover;
-  }
+  .recent-item-icon { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
 </style>
 </head>
 <body>
 
  <div class="top-bar">
-   <h1>UXNTWWW.io - Сайт с файлами</h1>
+   <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
    <nav class="top-nav"></nav>
  </div>
 
@@ -321,6 +303,7 @@
 
 <script src="breadcrumbs.js"></script>
 <script src="share.js"></script>
+<script src="reviews.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
