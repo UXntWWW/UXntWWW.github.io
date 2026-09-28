@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="site.title.stats">Статистика — UXNTWWW.io</title>
+<script src="theme.js"></script>
+<script src="lang.js"></script>
+<link rel="stylesheet" href="common.css">
+<link rel="icon" type="image/png" href="GlobalIconFav.png">
+<style>
+  :root {
+    --bg: #ffffff; --text: #000000;
+    --bar: #008000; --bar-text: #ffffff;
+    --card: #f2f2f2;
+    --nav-fill: #ffffff; --nav-text: #000000; --nav-border: #000000;
+    --input-bg: #1a1d24; --input-text: #ffffff; --input-border: #3a3d44;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: sans-serif;
+    background: var(--bg); color: var(--text);
+    transition: background .25s, color .25s;
+  }
+  .top-bar {
+    background-color: var(--bar);
+    border: 4px solid var(--bar);
+    color: var(--bar-text);
+    padding: 20px 15px;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    transition: background-color .25s, border-color .25s, color .25s;
+  }
+  .top-bar h1 { margin: 0; font-size: 1.4rem; }
+  .content { padding: 20px; max-width: 1100px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1 data-i18n="stats.title">Статистика — UXNTWWW.io</h1>
+  <nav class="top-nav"></nav>
+</div>
+
+<div class="content fade-in">
+
+  <p class="reviews-subtitle" data-i18n="stats.subtitle">Просмотры сайта и скачивания программ</p>
+
+  <div class="stats-grid">
+
+    <!-- Карточка "Просмотры" -->
+    <div class="stat-card scroll-animate">
+      <h3 class="stat-card-title">
+        <span class="stat-card-icon">👁</span>
+        <span data-i18n="stats.views">Просмотры</span>
+      </h3>
+      <div class="stat-row">
+        <span class="stat-label" data-i18n="stats.views.today">Сегодня</span>
+        <span class="stat-value loading" id="views-today">—</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label" data-i18n="stats.views.total">Всего</span>
+        <span class="stat-value loading" id="views-total">—</span>
+      </div>
+    </div>
+
+    <!-- Карточка "Скачивания" -->
+    <div class="stat-card scroll-animate">
+      <h3 class="stat-card-title">
+        <span class="stat-card-icon">⬇</span>
+        <span data-i18n="stats.downloads">Скачивания</span>
+      </h3>
+      <div class="stat-row">
+        <span class="stat-label" data-i18n="stats.downloads.today">Сегодня</span>
+        <span class="stat-value loading" id="downloads-today">—</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label" data-i18n="stats.downloads.total">Всего</span>
+        <span class="stat-value loading" id="downloads-total">—</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const GOATCOUNTER_CODE = 'uxntwww'; // твой subdomain GoatCounter
+  const GITHUB_OWNER = 'UXntWWW';
+  const GITHUB_REPO = 'UXntWWW.github.io';
+
+  function formatNumber(n) {
+    return Number(n).toLocaleString('ru-RU');
+  }
+
+  // ===== Просмотры через GoatCounter =====
+  function loadViews() {
+    // Total за всё время
+    fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TOTAL.json', { cache: 'no-cache' })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(function (data) {
+        const el = document.getElementById('views-total');
+        if (el && data && data.count !== undefined) {
+          el.textContent = formatNumber(data.count);
+          el.classList.remove('loading');
+        }
+      })
+      .catch(function () {
+        const el = document.getElementById('views-total');
+        if (el) { el.textContent = '—'; el.classList.remove('loading'); }
+      });
+
+    // Сегодня — через публичную страницу
+    // GoatCounter не даёт публичный API для "today", 
+    // поэтому оставим только Total, а Today заполним через публичный JSON (если доступно)
+    fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TODAY.json', { cache: 'no-cache' })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(function (data) {
+        const el = document.getElementById('views-today');
+        if (el && data && data.count !== undefined) {
+          el.textContent = formatNumber(data.count);
+          el.classList.remove('loading');
+        }
+      })
+      .catch(function () {
+        const el = document.getElementById('views-today');
+        if (el) { el.textContent = '—'; el.classList.remove('loading'); }
+      });
+  }
+
+  // ===== Скачивания через GitHub API =====
+  function loadDownloads() {
+    fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/releases', { cache: 'no-cache' })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(function (releases) {
+        let total = 0;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        let todayCount = 0;
+
+        releases.forEach(function (rel) {
+          const relDate = new Date(rel.published_at);
+          const relToday = relDate >= today;
+
+          (rel.assets || []).forEach(function (asset) {
+            const count = asset.download_count || 0;
+            total += count;
+            // GitHub не даёт точную дату скачивания — 
+            // считаем "сегодня" как скачивания с релиза, опубликованного сегодня
+            if (relToday) todayCount += count;
+          });
+        });
+
+        const totalEl = document.getElementById('downloads-total');
+        const todayEl = document.getElementById('downloads-today');
+
+        if (totalEl) {
+          totalEl.textContent = total > 0 ? formatNumber(total) : '0';
+          totalEl.classList.remove('loading');
+        }
+        if (todayEl) {
+          todayEl.textContent = todayCount > 0 ? formatNumber(todayCount) : '0';
+          todayEl.classList.remove('loading');
+        }
+      })
+      .catch(function () {
+        const totalEl = document.getElementById('downloads-total');
+        const todayEl = document.getElementById('downloads-today');
+        if (totalEl) { totalEl.textContent = '—'; totalEl.classList.remove('loading'); }
+        if (todayEl) { todayEl.textContent = '—'; todayEl.classList.remove('loading'); }
+      });
+  }
+
+  function init() {
+    loadViews();
+    loadDownloads();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<script src="menu.js"></script>
+<script src="scroll-animate.js"></script>
+<script src="back-to-top.js"></script>
+</body>
+</html>
