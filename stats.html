@@ -36,19 +36,16 @@
   .content { padding: 20px; max-width: 1100px; margin: 0 auto; }
 
   .section-title {
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.2rem; font-weight: bold;
     margin: 36px 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: flex; align-items: center; gap: 10px;
   }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <h1 data-i18n="stats.title">Статистика — UXNTWWW.io</h1>
+  <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
   <nav class="top-nav"></nav>
 </div>
 
@@ -58,7 +55,6 @@
 
   <div class="stats-grid">
 
-    <!-- Карточка "Просмотры" -->
     <div class="stat-card scroll-animate">
       <h3 class="stat-card-title">
         <span class="stat-card-icon">👁</span>
@@ -74,7 +70,6 @@
       </div>
     </div>
 
-    <!-- Карточка "Скачивания" -->
     <div class="stat-card scroll-animate">
       <h3 class="stat-card-title">
         <span class="stat-card-icon">⬇</span>
@@ -92,18 +87,16 @@
 
   </div>
 
-  <!-- ===== Коддинг ===== -->
   <h2 class="section-title">
     <span>💻</span>
-    <span>Коддинг</span>
+    <span data-i18n="stats.coding">Коддинг</span>
   </h2>
 
   <div class="stat-card scroll-animate code-card">
     <div class="code-total-wrap">
-      <div class="code-total-label">Всего строк кода</div>
+      <div class="code-total-label" data-i18n="stats.code.total">Всего строк кода</div>
       <div class="stat-value loading" id="code-total">—</div>
     </div>
-
     <div class="code-bars" id="code-bars"></div>
   </div>
 
@@ -121,8 +114,8 @@
     return Number(n).toLocaleString('ru-RU');
   }
 
-  // ===== Просмотры =====
-  function loadViews() {
+  function loadStats() {
+    // Просмотры
     fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TOTAL.json', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (data) {
@@ -137,7 +130,6 @@
         if (el) { el.textContent = '—'; el.classList.remove('loading'); }
       });
 
-    // Сегодня — приблизительно через публичный эндпоинт
     fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TODAY.json', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (data) {
@@ -151,10 +143,8 @@
         const el = document.getElementById('views-today');
         if (el) { el.textContent = '—'; el.classList.remove('loading'); }
       });
-  }
 
-  // ===== Скачивания =====
-  function loadDownloads() {
+    // Скачивания
     fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/releases', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (releases) {
@@ -193,9 +183,11 @@
       });
   }
 
+  // Публичная функция для автообновления
+  window.loadStats = loadStats;
+
   function init() {
-    loadViews();
-    loadDownloads();
+    loadStats();
   }
 
   if (document.readyState === 'loading') {
@@ -207,6 +199,8 @@
 </script>
 
 <script src="code-stats.js"></script>
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
