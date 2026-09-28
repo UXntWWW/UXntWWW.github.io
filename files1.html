@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UXWEditor Download — UXNTWWW.io</title>
+<title data-i18n-title="site.title.files1">UXWEditor Download — UXNTWWW.io</title>
 <script src="theme.js"></script>
+<script src="lang.js"></script>
 <link rel="stylesheet" href="common.css">
 <link rel="icon" type="image/png" href="GlobalIconFav.png">
 <style>
@@ -82,29 +83,23 @@
 
 <div class="top-bar">
   <h1>UXNTWWW.io - Сайт с файлами</h1>
-  <nav class="top-nav">
-    <a href="index.html">Главная</a>
-    <a href="about.html">О сайте</a>
-    <a href="contacts.html">Контакты</a>
-    <a href="faq.html">FAQ</a>
-    <a href="GlobalSettings.html">Настройки</a>
-  </nav>
+  <nav class="top-nav"></nav>
 </div>
 
 <div class="content fade-in">
 
   <div class="search-wrap">
-    <input type="text" id="search" class="search-input" placeholder="Поиск по странице...">
+    <input type="text" id="search" class="search-input" data-i18n="files.search.placeholder" placeholder="Поиск по странице...">
   </div>
 
   <div class="version-block" data-version-file="version1.txt" data-totaldata-file="totaldata1.txt">
     <h2>Скачать UXWEditor Free v<span class="version-value">1.0</span></h2>
     <div class="version-meta">
-      <span>Версия: <b class="version-value">1.0</b></span>
+      <span data-i18n="card.version">Версия</span>: <b class="version-value">1.0</b>
       <span>·</span>
-      <span>Размер: <b class="size-value">—</b></span>
+      <span data-i18n="card.size">Размер</span>: <b class="size-value">—</b>
       <span>·</span>
-      <span>Обновлено: <b class="date-value">—</b></span>
+      <span data-i18n="card.updated">Обновлено</span>: <b class="date-value">—</b>
     </div>
     <p>~ Здесь вы можете скачать утилиту совместимую с будущими файлами в PCCleaner --- .uxw.</p>
     <h1>Что за программа?</h1>
@@ -125,10 +120,10 @@
     <h1>ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
     <img src="icon.png" class="broom-img" alt="UXWEditor Icon">
     <br>
-    <a href="UXNTWWW.zip" download class="zip-btn">Скачать.zip</a>
-    <a href="UXWEditor_Setup.exe" download class="exe-btn">Скачать.exe</a>
-    <a href="UXWEditor_Setup.torrent" download class="torrent-btn">Скачать.torrent</a>
-    <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.0.0" class="github-btn">Скачать на гитхаб</a>
+    <a href="UXNTWWW.zip" download class="zip-btn" data-i18n="files.download.zip">Скачать.zip</a>
+    <a href="UXWEditor_Setup.exe" download class="exe-btn" data-i18n="files.download.exe">Скачать.exe</a>
+    <a href="UXWEditor_Setup.torrent" download class="torrent-btn" data-i18n="files.download.torrent">Скачать.torrent</a>
+    <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/v1.0.0" class="github-btn" data-i18n="files.download.github">Скачать на гитхаб</a>
   </div>
 
 </div>
@@ -162,43 +157,13 @@
       }
     });
   })();
-
-  (function () {
-    const input = document.getElementById('search');
-    if (!input) return;
-
-    const blocks = Array.from(document.querySelectorAll('.version-block'));
-    if (!blocks.length) return;
-
-    const empty = document.createElement('div');
-    empty.className = 'search-empty';
-    empty.textContent = 'Ничего не найдено.';
-    empty.style.display = 'none';
-    blocks[0].parentNode.insertBefore(empty, blocks[0]);
-
-    input.addEventListener('input', function () {
-      const q = input.value.trim().toLowerCase();
-      let found = 0;
-
-      blocks.forEach(function (block) {
-        const text = block.textContent.toLowerCase();
-        const match = !q || text.includes(q);
-        block.style.display = match ? '' : 'none';
-        if (match) found++;
-      });
-
-      document.querySelectorAll('.page-divider').forEach(function (hr) {
-        hr.style.display = q ? 'none' : '';
-      });
-
-      empty.style.display = (q && found === 0) ? 'block' : 'none';
-    });
-  })();
 </script>
 
 <script src="screenshots.js"></script>
+<script src="search-highlight.js"></script>
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
 <script src="menu.js"></script>
-<script src="reviews.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
 </body>
