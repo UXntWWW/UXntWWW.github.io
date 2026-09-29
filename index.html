@@ -85,6 +85,7 @@
 
    <div class="program-cards" id="program-cards">
 
+     <!-- ===== PCCleaner ===== -->
      <div class="program-card scroll-animate"
           data-name="PCCleaner"
           data-desc="Для чистки пк"
@@ -97,6 +98,7 @@
           data-github-repo="UXntWWW.github.io">
      </div>
 
+     <!-- ===== UXWEditor ===== -->
      <div class="program-card scroll-animate"
           data-name="UXWEditor"
           data-desc="Для редактирования текста"
@@ -105,6 +107,19 @@
           data-totaldata="8.5 MB, 21.07.2026"
           data-link="files1.html"
           data-icon="icon.png"
+          data-github-owner="UXntWWW"
+          data-github-repo="UXntWWW.github.io">
+     </div>
+
+     <!-- ===== wAppInstaller ===== -->
+     <div class="program-card scroll-animate"
+          data-name="wAppInstaller"
+          data-desc="Для установки программ"
+          data-desc-en="For installing programs"
+          data-version="2.0"
+          data-totaldata="250 KB, 29.09.2026"
+          data-link="files2.html"
+          data-icon="wapp.png"
           data-github-owner="UXntWWW"
           data-github-repo="UXntWWW.github.io">
      </div>
@@ -125,8 +140,8 @@
 (function () {
   'use strict';
 
-  const versionFiles = ['version.txt', 'version1.txt'];
-  const totalFiles   = ['totaldata.txt', 'totaldata1.txt'];
+  const versionFiles = ['version.txt', 'version1.txt', 'version2.txt'];
+  const totalFiles   = ['totaldata.txt', 'totaldata1.txt', 'totaldata2.txt'];
 
   function fetchText(url) {
     return fetch(url, { cache: 'no-cache' })
