@@ -257,5 +257,17 @@
   "faq.q5": "Can I use it commercially?",
   "faq.a5": "Yes, the programs are free. The only condition — don't claim them as your own and don't sell them.",
   "faq.q6": "Where to see the source code?",
-  "faq.a6": "On GitHub:"
+  "faq.a6": "On GitHub:",
+
+  "site.title.files2": "wAppInstaller Download — UXNTWWW.io",
+  "wapp.desc": "~ Here you can download a utility for fast installation of popular apps.",
+  "wapp.what": "What is this program?",
+  "wapp.about1": "~ Installs applications through winget with one button.",
+  "wapp.about2": "~ Features:",
+  "wapp.f1": "~ Catalog of programs (browsers, messengers, media, dev, utilities, games and more).",
+  "wapp.f2": "~ Search by name or ID.",
+  "wapp.f3": "~ Bulk install, uninstall, reinstall.",
+  "wapp.f4": "~ Update all installed programs.",
+  "wapp.f5": "~ Silent install mode — no windows.",
+  "wapp.f6": "~ Auto-download of winget if not installed."
 }
