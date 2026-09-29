@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n-title="site.title.files1">wAppInstaller Download — UXNTWWW.io</title>
+<script src="theme.js"></script>
+<script src="lang.js"></script>
+<link rel="stylesheet" href="common.css">
+<link rel="icon" type="image/png" href="GlobalIconFav.png">
+<style>
+  :root {
+    --bg: #ffffff; --text: #000000;
+    --bar: #008000; --bar-text: #ffffff;
+    --card: #f2f2f2;
+    --nav-fill: #ffffff; --nav-text: #000000; --nav-border: #000000;
+    --input-bg: #1a1d24; --input-text: #ffffff; --input-border: #3a3d44;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: sans-serif;
+    background: var(--bg); color: var(--text);
+    transition: background .25s, color .25s;
+  }
+  .top-bar {
+    background-color: var(--bar);
+    border: 4px solid var(--bar);
+    color: var(--bar-text);
+    padding: 20px 15px;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    transition: background-color .25s, border-color .25s, color .25s;
+  }
+  .top-bar h1 { margin: 0; font-size: 1.4rem; }
+  .content { padding: 20px; position: relative; max-width: 1100px; margin: 0 auto; }
+
+  .version-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin: 4px 0 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: var(--card);
+  }
+  body.glass-mode .version-meta {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .version-meta span { white-space: nowrap; }
+
+  .broom-img {
+    float: right;
+    width: 256px;
+    height: 256px;
+    margin-left: 20px;
+  }
+
+  .version-block {
+    overflow: hidden;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+  }
+
+  @media (max-width: 700px) {
+    .broom-img { float: none; display: block; margin: 20px auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1 data-i18n="site.header">UXNTWWW.io - Сайт с файлами</h1>
+  <nav class="top-nav"></nav>
+</div>
+
+<div class="content fade-in">
+
+  <div class="search-wrap">
+    <input type="text" id="search" class="search-input" data-i18n="files.search.placeholder" placeholder="Поиск по странице...">
+  </div>
+
+  <div class="version-block" data-version-file="version1.txt" data-totaldata-file="totaldata1.txt">
+    <h2 data-i18n="editor.title">Скачать wAppInstaller 2.0(FE)</h2>
+    <div class="version-meta">
+      <span><span data-i18n="card.version">Версия</span>: <b class="version-value">2.0</b></span>
+      <span>·</span>
+      <span><span data-i18n="card.size">Размер</span>: <b class="size-value">—</b></span>
+      <span>·</span>
+      <span><span data-i18n="card.updated">Обновлено</span>: <b class="date-value">—</b></span>
+    </div>
+    <p data-i18n="editor.desc">Тут можно установить программу устанавливающую другие программы.</p>
+    <h1 data-i18n="editor.what">Что за программа?</h1>
+    <p data-i18n="editor.about1">Эта программа позволяет установить приложение из списка.</p>
+    <p data-i18n="editor.about2">Эта программа выполняет функции:</p>
+    <p data-i18n="editor.f1">Установки.</p>
+    <p data-i18n="editor.f2">Переустановки.</p>
+    <p data-i18n="editor.f3">Удаления.</p>
+    <p data-i18n="editor.f4">Темная/Светлая тема, поиск и установка.</p>
+    <p data-i18n="editor.f5">Поддержка русского и английского языка.</p>
+
+    <h1 data-i18n="editor.screenshots">Скриншоты</h1>
+    <div class="screenshots">
+      <img src="screens/inst-1.png" alt="wAppInstaller — главное окно">
+      <img src="screens/inst-2.png" alt="wAppInstaller — поиск">
+      <img src="screens/inst-3.png" alt="wAppInstaller — установка">
+    </div>
+
+    <h1 data-i18n="editor.verified">ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ</h1>
+    <img src="wapp.png" class="wapp-img" alt="wAppInstaller Icon">
+    <br>
+    <a href="wAppInstaller_Setup.exe" download class="exe-btn" data-i18n="files.download.exe">Скачать.exe</a>
+    <a href="https://github.com/UXntWWW/UXntWWW.github.io/releases/tag/2.0.0" class="github-btn" data-i18n="files.download.github">Скачать на гитхаб</a>
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    const block = document.querySelector('.version-block[data-version-file]');
+    if (!block) return;
+    const vFile = block.dataset.versionFile;
+    const tFile = block.dataset.totaldataFile;
+
+    function fetchText(url) {
+      return fetch(url, { cache: 'no-cache' })
+        .then(r => r.ok ? r.text() : Promise.reject())
+        .then(t => t.trim())
+        .catch(() => null);
+    }
+
+    Promise.all([fetchText(vFile), fetchText(tFile)]).then(function (res) {
+      if (res[0]) {
+        block.querySelectorAll('.version-value').forEach(el => el.textContent = res[0]);
+      }
+      if (res[1]) {
+        const parts = res[1].split(',').map(s => s.trim());
+        const size = parts[0] || '—';
+        const date = parts[1] || '—';
+        const sizeEl = block.querySelector('.size-value');
+        const dateEl = block.querySelector('.date-value');
+        if (sizeEl) sizeEl.textContent = size;
+        if (dateEl) dateEl.textContent = date;
+      }
+    });
+  })();
+</script>
+
+<script src="screenshots.js"></script>
+<script src="search-highlight.js"></script>
+<script src="breadcrumbs.js"></script>
+<script src="share.js"></script>
+<script src="reviews.js"></script>
+<script src="menu.js"></script>
+<script src="scroll-animate.js"></script>
+<script src="back-to-top.js"></script>
+</body>
+</html>
