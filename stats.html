@@ -55,35 +55,17 @@
 
   <div class="stats-grid">
 
-// ===== Просмотры — LibreCounter =====
-fetch('https://librecounter.org/uxntwww.github.io/siteStats?days=365', { cache: 'no-cache' })
-  .then(function (r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(function (data) {
-    var totalEl = document.getElementById('views-total');
-    if (!totalEl) return;
+    <div class="stat-card scroll-animate">
+      <h3 class="stat-card-title">
+        <span class="stat-card-icon">👁</span>
+        <span data-i18n="stats.views">Просмотры</span>
+      </h3>
+      <div class="stat-row">
+        <span class="stat-label" data-i18n="stats.views.total">Всего</span>
+        <span class="stat-value loading" id="views-total">—</span>
+      </div>
+    </div>
 
-    // data.total — число просмотров
-    var total = data && typeof data.total === 'number' ? data.total : 0;
-
-    totalEl.textContent = total > 0 ? total.toLocaleString('ru-RU') : '0';
-    totalEl.classList.remove('loading');
-
-    // Отладка — что пришло
-    console.log('LibreCounter data:', data);
-  })
-  .catch(function (err) {
-    console.error('LibreCounter error:', err);
-    var totalEl = document.getElementById('views-total');
-    if (totalEl) {
-      totalEl.textContent = '—';
-      totalEl.classList.remove('loading');
-    }
-  });
-
-    <!-- ===== Скачивания ===== -->
     <div class="stat-card scroll-animate">
       <h3 class="stat-card-title">
         <span class="stat-card-icon">⬇</span>
@@ -129,22 +111,30 @@ fetch('https://librecounter.org/uxntwww.github.io/siteStats?days=365', { cache: 
   }
 
   function loadStats() {
-    // ===== Просмотры — LibreCounter (только «Всего») =====
+
+    // ===== Просмотры — LibreCounter =====
     fetch('https://librecounter.org/' + LIBRECOUNTER_SITE + '/siteStats?days=365', { cache: 'no-cache' })
-      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
       .then(function (data) {
+        console.log('LibreCounter data:', data);
+
         var totalEl = document.getElementById('views-total');
-        if (totalEl && data && data.total !== undefined) {
-          totalEl.textContent = formatNumber(data.total);
-          totalEl.classList.remove('loading');
-        } else if (totalEl) {
+        if (!totalEl) return;
+
+        var total = (data && typeof data.total === 'number') ? data.total : 0;
+        totalEl.textContent = total > 0 ? formatNumber(total) : '0';
+        totalEl.classList.remove('loading');
+      })
+      .catch(function (err) {
+        console.error('LibreCounter error:', err);
+        var totalEl = document.getElementById('views-total');
+        if (totalEl) {
           totalEl.textContent = '—';
           totalEl.classList.remove('loading');
         }
-      })
-      .catch(function () {
-        var totalEl = document.getElementById('views-total');
-        if (totalEl) { totalEl.textContent = '—'; totalEl.classList.remove('loading'); }
       });
 
     // ===== Скачивания — GitHub Releases =====
