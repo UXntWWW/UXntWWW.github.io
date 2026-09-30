@@ -260,6 +260,7 @@
   "faq.a6": "On GitHub:",
 
   "site.title.files2": "wAppInstaller Download — UXNTWWW.io",
+  "wapp.title": "Download wAppInstaller 2.0(FE)",
   "wapp.desc": "~ Here you can download a utility for fast installation of popular apps.",
   "wapp.what": "What is this program?",
   "wapp.about1": "~ Installs applications through winget with one button.",
@@ -269,5 +270,7 @@
   "wapp.f3": "~ Bulk install, uninstall, reinstall.",
   "wapp.f4": "~ Update all installed programs.",
   "wapp.f5": "~ Silent install mode — no windows.",
-  "wapp.f6": "~ Auto-download of winget if not installed."
+  "wapp.f6": "~ Auto-download of winget if not installed.",
+  "wapp.screenshots": "Screenshots",
+  "wapp.verified": "ALL FILES VERIFIED"
 }
