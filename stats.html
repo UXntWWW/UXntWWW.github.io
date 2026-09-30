@@ -106,7 +106,7 @@
 (function () {
   'use strict';
 
-  const GOATCOUNTER_CODE = 'uxntwww';
+  const LIBRECOUNTER_SITE = 'uxntwww.github.io';
   const GITHUB_OWNER = 'UXntWWW';
   const GITHUB_REPO = 'UXntWWW.github.io';
 
@@ -115,36 +115,54 @@
   }
 
   function loadStats() {
-    // Просмотры
-    fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TOTAL.json', { cache: 'no-cache' })
+    // ===== Просмотры — LibreCounter =====
+    fetch('https://librecounter.org/' + LIBRECOUNTER_SITE + '/siteStats?days=365', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (data) {
-        const el = document.getElementById('views-total');
-        if (el && data && data.count !== undefined) {
-          el.textContent = formatNumber(data.count);
-          el.classList.remove('loading');
+        var totalEl = document.getElementById('views-total');
+        var todayEl = document.getElementById('views-today');
+
+        // «Всего»
+        if (totalEl && data && data.total !== undefined) {
+          totalEl.textContent = formatNumber(data.total);
+          totalEl.classList.remove('loading');
+        } else if (totalEl) {
+          totalEl.textContent = '—';
+          totalEl.classList.remove('loading');
+        }
+
+        // «Сегодня» — вычисляем из data.pages / data.days
+        var todayCount = 0;
+        if (data && data.pages && data.pages.length) {
+          // Если есть разбивка по страницам — берём только главную
+          var homepage = data.pages.find(function (p) {
+            return p.url === '/index.html' || p.url === '/' || p.url === '';
+          });
+          if (homepage && homepage.today !== undefined) {
+            todayCount = homepage.today;
+          }
+        }
+        // Если API даёт days — берём последний день
+        if (data && data.days && data.days.length) {
+          var last = data.days[data.days.length - 1];
+          if (last && last.date === new Date().toISOString().slice(0, 10)) {
+            todayCount = last.count || 0;
+          }
+        }
+
+        if (todayEl) {
+          todayEl.textContent = todayCount > 0 ? formatNumber(todayCount) : '0';
+          todayEl.classList.remove('loading');
         }
       })
       .catch(function () {
-        const el = document.getElementById('views-total');
-        if (el) { el.textContent = '—'; el.classList.remove('loading'); }
+        var totalEl = document.getElementById('views-total');
+        var todayEl = document.getElementById('views-today');
+        if (totalEl) { totalEl.textContent = '—'; totalEl.classList.remove('loading'); }
+        if (todayEl) { todayEl.textContent = '—'; todayEl.classList.remove('loading'); }
       });
 
-    fetch('https://' + GOATCOUNTER_CODE + '.goatcounter.com/counter/TODAY.json', { cache: 'no-cache' })
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(function (data) {
-        const el = document.getElementById('views-today');
-        if (el && data && data.count !== undefined) {
-          el.textContent = formatNumber(data.count);
-          el.classList.remove('loading');
-        }
-      })
-      .catch(function () {
-        const el = document.getElementById('views-today');
-        if (el) { el.textContent = '—'; el.classList.remove('loading'); }
-      });
-
-    // Скачивания
+    // ===== Скачивания — GitHub Releases =====
     fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/releases', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (releases) {
@@ -183,7 +201,6 @@
       });
   }
 
-  // Публичная функция для автообновления
   window.loadStats = loadStats;
 
   function init() {
