@@ -272,5 +272,8 @@
   "wapp.f5": "~ Silent install mode — no windows.",
   "wapp.f6": "~ Auto-download of winget if not installed.",
   "wapp.screenshots": "Screenshots",
-  "wapp.verified": "ALL FILES VERIFIED"
+  "wapp.verified": "ALL FILES VERIFIED",
+
+  "index.favorites": "Favorites",
+  "index.noFavorites": "No favorite programs"
 }
