@@ -55,21 +55,19 @@
 
   <div class="stats-grid">
 
+    <!-- ===== Просмотры ===== -->
     <div class="stat-card scroll-animate">
       <h3 class="stat-card-title">
         <span class="stat-card-icon">👁</span>
         <span data-i18n="stats.views">Просмотры</span>
       </h3>
       <div class="stat-row">
-        <span class="stat-label" data-i18n="stats.views.today">Сегодня</span>
-        <span class="stat-value loading" id="views-today">—</span>
-      </div>
-      <div class="stat-row">
         <span class="stat-label" data-i18n="stats.views.total">Всего</span>
         <span class="stat-value loading" id="views-total">—</span>
       </div>
     </div>
 
+    <!-- ===== Скачивания ===== -->
     <div class="stat-card scroll-animate">
       <h3 class="stat-card-title">
         <span class="stat-card-icon">⬇</span>
@@ -115,14 +113,11 @@
   }
 
   function loadStats() {
-    // ===== Просмотры — LibreCounter =====
+    // ===== Просмотры — LibreCounter (только «Всего») =====
     fetch('https://librecounter.org/' + LIBRECOUNTER_SITE + '/siteStats?days=365', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(function (data) {
         var totalEl = document.getElementById('views-total');
-        var todayEl = document.getElementById('views-today');
-
-        // «Всего»
         if (totalEl && data && data.total !== undefined) {
           totalEl.textContent = formatNumber(data.total);
           totalEl.classList.remove('loading');
@@ -130,36 +125,10 @@
           totalEl.textContent = '—';
           totalEl.classList.remove('loading');
         }
-
-        // «Сегодня» — вычисляем из data.pages / data.days
-        var todayCount = 0;
-        if (data && data.pages && data.pages.length) {
-          // Если есть разбивка по страницам — берём только главную
-          var homepage = data.pages.find(function (p) {
-            return p.url === '/index.html' || p.url === '/' || p.url === '';
-          });
-          if (homepage && homepage.today !== undefined) {
-            todayCount = homepage.today;
-          }
-        }
-        // Если API даёт days — берём последний день
-        if (data && data.days && data.days.length) {
-          var last = data.days[data.days.length - 1];
-          if (last && last.date === new Date().toISOString().slice(0, 10)) {
-            todayCount = last.count || 0;
-          }
-        }
-
-        if (todayEl) {
-          todayEl.textContent = todayCount > 0 ? formatNumber(todayCount) : '0';
-          todayEl.classList.remove('loading');
-        }
       })
       .catch(function () {
         var totalEl = document.getElementById('views-total');
-        var todayEl = document.getElementById('views-today');
         if (totalEl) { totalEl.textContent = '—'; totalEl.classList.remove('loading'); }
-        if (todayEl) { todayEl.textContent = '—'; todayEl.classList.remove('loading'); }
       });
 
     // ===== Скачивания — GitHub Releases =====
