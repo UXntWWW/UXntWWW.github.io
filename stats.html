@@ -55,17 +55,23 @@
 
   <div class="stats-grid">
 
+    <!-- ===== Просмотры ===== -->
     <div class="stat-card scroll-animate">
       <h3 class="stat-card-title">
         <span class="stat-card-icon">👁</span>
         <span data-i18n="stats.views">Просмотры</span>
       </h3>
       <div class="stat-row">
+        <span class="stat-label" data-i18n="stats.views.today">Сегодня</span>
+        <span class="stat-value loading" id="views-today">—</span>
+      </div>
+      <div class="stat-row">
         <span class="stat-label" data-i18n="stats.views.total">Всего</span>
         <span class="stat-value loading" id="views-total">—</span>
       </div>
     </div>
 
+    <!-- ===== Скачивания ===== -->
     <div class="stat-card scroll-animate">
       <h3 class="stat-card-title">
         <span class="stat-card-icon">⬇</span>
@@ -102,9 +108,11 @@
 (function () {
   'use strict';
 
-  const LIBRECOUNTER_SITE = 'uxntwww.github.io';
-  const GITHUB_OWNER = 'UXntWWW';
-  const GITHUB_REPO = 'UXntWWW.github.io';
+  // ===== Ссылка на твой Cloudflare Worker =====
+  var WORKER = 'https://super-art-217e.dndjych.workers.dev';
+
+  var GITHUB_OWNER = 'UXntWWW';
+  var GITHUB_REPO = 'UXntWWW.github.io';
 
   function formatNumber(n) {
     return Number(n).toLocaleString('ru-RU');
@@ -112,34 +120,47 @@
 
   function loadStats() {
 
-// ===== Просмотры — LibreCounter через свой Cloudflare Worker =====
-var WORKER = 'https://super-art-217e.dndjych.workers.dev';
-var TARGET = 'https://librecounter.org/uxntwww.github.io/siteStats?days=365';
-var PROXY_URL = WORKER + '/?url=' + encodeURIComponent(TARGET);
+    // ===== Просмотры — LibreCounter через Cloudflare Worker =====
+    var TARGET = 'https://librecounter.org/uxntwww.github.io/siteStats?days=365';
+    var PROXY_URL = WORKER + '/?url=' + encodeURIComponent(TARGET);
 
-fetch(PROXY_URL, { cache: 'no-cache' })
-  .then(function (r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(function (data) {
-    var totalEl = document.getElementById('views-total');
-    if (!totalEl) return;
+    fetch(PROXY_URL, { cache: 'no-cache' })
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        console.log('LibreCounter data:', data);
 
-    var total = (data && typeof data.total === 'number') ? data.total : 0;
-    totalEl.textContent = total > 0 ? total.toLocaleString('ru-RU') : '0';
-    totalEl.classList.remove('loading');
-    console.log('LibreCounter via Worker:', data);
-  })
-  .catch(function (err) {
-    console.error('Proxy error:', err);
-    var totalEl = document.getElementById('views-total');
-    if (totalEl) {
-      totalEl.textContent = '—';
-      totalEl.classList.remove('loading');
-    }
-  });
-    
+        var totalEl = document.getElementById('views-total');
+        var todayEl = document.getElementById('views-today');
+
+        // «Всего» — data.total
+        if (totalEl) {
+          var total = (data && typeof data.total === 'number') ? data.total : 0;
+          totalEl.textContent = total > 0 ? formatNumber(total) : '0';
+          totalEl.classList.remove('loading');
+        }
+
+        // «Сегодня» — последний день из byDay
+        if (todayEl) {
+          var todayCount = 0;
+          if (data && data.byDay && data.byDay.length) {
+            var last = data.byDay[data.byDay.length - 1];
+            todayCount = last ? (last.value || 0) : 0;
+          }
+          todayEl.textContent = formatNumber(todayCount);
+          todayEl.classList.remove('loading');
+        }
+      })
+      .catch(function (err) {
+        console.error('LibreCounter error:', err);
+        var totalEl = document.getElementById('views-total');
+        var todayEl = document.getElementById('views-today');
+        if (totalEl) { totalEl.textContent = '—'; totalEl.classList.remove('loading'); }
+        if (todayEl) { todayEl.textContent = '—'; todayEl.classList.remove('loading'); }
+      });
+
     // ===== Скачивания — GitHub Releases =====
     fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/releases', { cache: 'no-cache' })
       .then(r => r.ok ? r.json() : Promise.reject())
