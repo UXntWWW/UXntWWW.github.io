@@ -61,6 +61,43 @@
   }
   .recent-item:hover { opacity: 0.85; }
   .recent-item-icon { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; }
+
+  /* Кнопка "Избранное" */
+  .fav-filter-btn {
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 2px solid var(--nav-border, #000);
+    background: var(--nav-fill, #fff);
+    color: var(--nav-text, #000);
+    font-weight: bold;
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .25s, color .25s, border-color .25s, opacity .2s;
+  }
+  body.glass-mode .fav-filter-btn {
+    background: var(--glass-bg);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .fav-filter-btn:hover { opacity: 0.85; }
+  .fav-filter-btn.active {
+    background: var(--bar);
+    color: var(--bar-text);
+    border-color: var(--bar);
+  }
+
+  /* Сообщение "нет избранных" */
+  .no-favorites {
+    padding: 40px 20px;
+    text-align: center;
+    opacity: 0.7;
+    font-style: italic;
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -80,6 +117,7 @@
 
    <div class="search-wrap">
      <input type="text" id="search-programs" class="search-input" data-i18n="index.search.placeholder" placeholder="Поиск программ...">
+     <button type="button" class="fav-filter-btn" id="fav-filter-btn">★ <span data-i18n="index.favorites">Избранное</span></button>
      <button type="button" class="refresh-btn" id="refresh-btn" title="Обновить">↻</button>
    </div>
 
@@ -126,6 +164,10 @@
 
    </div>
 
+   <div class="no-favorites" id="no-favorites">
+     <span data-i18n="index.noFavorites">Нет избранных программ</span>
+   </div>
+
    <div class="recent-section" id="recent-section" style="display:none;">
      <h3 class="recent-title">
        <span>🕒</span>
@@ -142,6 +184,8 @@
 
   const versionFiles = ['version.txt', 'version1.txt', 'version2.txt'];
   const totalFiles   = ['totaldata.txt', 'totaldata1.txt', 'totaldata2.txt'];
+
+  let favFilterActive = false;
 
   function fetchText(url) {
     return fetch(url, { cache: 'no-cache' })
@@ -207,6 +251,9 @@
       localStorage.setItem('favorites', JSON.stringify(favs));
       favBtn.classList.toggle('active');
       favBtn.textContent = favBtn.classList.contains('active') ? '★' : '☆';
+
+      // Если включён фильтр избранного — пересчитать
+      if (favFilterActive) applyFilters();
     });
 
     card.querySelector('.program-card-btn').addEventListener('click', function () {
@@ -254,19 +301,49 @@
     });
   }
 
+  // ===== Фильтры: поиск + избранное =====
+  function applyFilters() {
+    const q = (document.getElementById('search-programs').value || '').trim().toLowerCase();
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let visibleCount = 0;
+
+    document.querySelectorAll('.program-card').forEach(function (card) {
+      const name = (card.dataset.name || '').toLowerCase();
+      const desc = (card.dataset.desc || '').toLowerCase();
+      const cardName = card.dataset.name;
+
+      const matchSearch = !q || name.includes(q) || desc.includes(q);
+      const matchFav = !favFilterActive || favorites.indexOf(cardName) !== -1;
+
+      const match = matchSearch && matchFav;
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+
+    // Сообщение "нет избранных"
+    const noFav = document.getElementById('no-favorites');
+    if (noFav) {
+      noFav.style.display = (favFilterActive && visibleCount === 0) ? 'block' : 'none';
+    }
+  }
+
+  // Поиск
   const searchInput = document.getElementById('search-programs');
   if (searchInput) {
-    searchInput.addEventListener('input', function () {
-      const q = searchInput.value.trim().toLowerCase();
-      document.querySelectorAll('.program-card').forEach(function (card) {
-        const name = (card.dataset.name || '').toLowerCase();
-        const desc = (card.dataset.desc || '').toLowerCase();
-        const match = !q || name.includes(q) || desc.includes(q);
-        card.style.display = match ? '' : 'none';
-      });
+    searchInput.addEventListener('input', applyFilters);
+  }
+
+  // Кнопка "Избранное"
+  const favBtn = document.getElementById('fav-filter-btn');
+  if (favBtn) {
+    favBtn.addEventListener('click', function () {
+      favFilterActive = !favFilterActive;
+      favBtn.classList.toggle('active', favFilterActive);
+      applyFilters();
     });
   }
 
+  // Обновление
   const refreshBtn = document.getElementById('refresh-btn');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', function () {
@@ -321,9 +398,5 @@
 <script src="menu.js"></script>
 <script src="scroll-animate.js"></script>
 <script src="back-to-top.js"></script>
-<!-- LibreCounter — только для главной -->
-<a href="https://librecounter.org/referer/show" style="position:fixed;bottom:10px;left:10px;opacity:0.5;z-index:9999;" target="_blank">
-  <img src="https://librecounter.org/counter.svg" referrerpolicy="unsafe-url" alt="LibreCounter" width="32" height="32">
-</a>
 </body>
 </html>
