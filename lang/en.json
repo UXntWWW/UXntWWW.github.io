@@ -274,6 +274,22 @@
   "wapp.screenshots": "Screenshots",
   "wapp.verified": "ALL FILES VERIFIED",
 
+  "site.title.files3": "TrueUXLocker Download — UXNTWWW.io"
+  "tuxl.title": "Download TrueUXLocker 0.3 Beta"
+  "tuxl.desc": "~ Here you can download the password manager program."
+  "tuxl.what": "What is this program?"
+  "tuxl.about1": "~ The program stores your passwords — securely."
+  "tuxl.about2": "~ Features:"
+  "tuxl.f1": "~ Hotkeys."
+  "tuxl.f2": "~ Search by login, note, site."
+  "tuxl.f3": "~ Password storage, editing, deletion."
+  "tuxl.f4": "~ Stores passwords directly on your PC = reliability."
+  "tuxl.f5": "~ Password transfer."
+  "tuxl.f6": "~ Password reset via recovery key."
+  "tuxl.f7": "~ Works in the browser via extension."
+  "tuxl.screenshots": "Screenshots"
+  "tuxl.verified": "ALL FILES VERIFIED"
+
   "index.favorites": "Favorites",
   "index.noFavorites": "No favorite programs"
 }
