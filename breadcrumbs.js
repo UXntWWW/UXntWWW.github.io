@@ -20,6 +20,7 @@
       'files1':   [{ name: home, href: 'index.html' }, { name: 'UXWEditor', href: 'files1.html' }],
       'files2':   [{ name: home, href: 'index.html' }, { name: 'wAppInstaller', href: 'files2.html' }],
       'TrueUXLockerDownload':   [{ name: home, href: 'index.html' }, { name: 'TrueUXLocker', href: 'TrueUXLockerDownload.html' }],
+      'SnakeXFiles':   [{ name: home, href: 'index.html' }, { name: 'SnakeX', href: 'SnakeXFiles.html' }],
       'about':    [{ name: home, href: 'index.html' }, { name: t('nav.help.about', 'О сайте'), href: 'about.html' }],
       'contacts': [{ name: home, href: 'index.html' }, { name: t('nav.help.contacts', 'Контакты'), href: 'contacts.html' }],
       'faq':      [{ name: home, href: 'index.html' }, { name: 'FAQ', href: 'faq.html' }],
