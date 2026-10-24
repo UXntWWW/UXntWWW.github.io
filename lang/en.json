@@ -290,6 +290,25 @@
   "tuxl.screenshots": "Screenshots",
   "tuxl.verified": "ALL FILES VERIFIED",
 
+  "site.title.files4": "SnakeX Download — UXNTWWW.io",
+  "snake.title": "Download SnakeX 1.0",
+  "snake.desc": "~ Here you can download a mini snake game on Python.",
+  "snake.what": "What is this game?",
+  "snake.about1": "~ A game about a snake",
+  "snake.about2": "~ Features:",
+  "snake.f1": "~ Choose snake color",
+  "snake.f2": "~ Choose snake shape",
+  "snake.f3": "~ Game modes",
+  "snake.f4": "~ High score",
+  "snake.f5": "~ Controls instructions",
+  "snake.f6": "~ Restart game, pause, exit",
+  "snake2.what": "Game modes?"
+  "snake.f7": "~ Classic",
+  "snake.f8": "~ Race",
+  "snake.f9": "~ Time attack (60s)",
+  "snake.screenshots": "Screenshots",
+  "snake.verified": "ALL FILES VERIFIED",
+  
   "index.favorites": "Favorites",
   "index.noFavorites": "No favorite programs"
 }
