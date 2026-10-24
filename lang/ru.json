@@ -289,6 +289,25 @@
   "tuxl.f7": "~ Работа в брузере по расширению.",
   "tuxl.screenshots": "Скриншоты",
   "tuxl.verified": "ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ",
+
+  "site.title.files4": "SnakeX Download — UXNTWWW.io",
+  "snake.title": "Скачать SnakeX 1.0",
+  "snake.desc": "~ Здесь вы можете скачать мини-игру змейку на Python.",
+  "snake.what": "Что за игра?",
+  "snake.about1": "~ Игра про змейку",
+  "snake.about2": "~ Функционал:",
+  "snake.f1": "~ Выбрать цвет змейки",
+  "snake.f2": "~ Выбрать форму змейки",
+  "snake.f3": "~ Режимы игры",
+  "snake.f4": "~ Рекорд по очкам",
+  "snake.f5": "~ Инструкция по управлению",
+  "snake.f6": "~ Рестарт игры, пауза, выход",
+  "snake2.what": "Режимы игры?"
+  "snake.f7": "~ Классический",
+  "snake.f8": "~ Гонка",
+  "snake.f9": "~ На время(60с)",
+  "snake.screenshots": "Скриншоты",
+  "snake.verified": "ВСЕ ФАЙЛЫ ПРОВЕРЕНЫ",
   
   "index.favorites": "Избранное",
   "index.noFavorites": "Нет избранных программ"
